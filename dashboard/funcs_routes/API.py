@@ -42,28 +42,3 @@ def API___utente(request, generate_password_hash, connPOSTGRES):
     
     except Exception as e:
             return str(e), 400
-
-def API___documento(request):
-    data = request.get_json()
-    id = data.get("Id")
-    TITOLO = data.get("Nome_file")
-    USER_GPT = data.get('User')
-    SYSTEM_GPT = data.get("System")
-    Ragionesociale = data.get("Ragionesociale")
-
-    with open(f"C:\\Users\\Utente\\Desktop\\presenze_lavoro\\esercizi\\progettoAndrea2\\gestioneErrori\\{TITOLO}.txt", "w", encoding="utf-8") as f:
-        f.write(f"{id}\n\n{USER_GPT}\n\n\n{SYSTEM_GPT}\n\n{Ragionesociale}")
-
-    '''
-    try: 
-        risposta = interact_with_chatgpt_prova(USER_GPT, SYSTEM_GPT, api_key, maxContent, creativita)
-        cur = connPOSTGRES.cursor()
-        cur.execute('INSERT INTO documenti (documento, token, nome_file, ragionesociale) VALUES (%s,%s,%s)',(risposta[0], risposta[1], TITOLO, Ragionesociale))
-        connPOSTGRES.commit()
-        cur.close()
-
-    except Exception as e:
-        return str(e), 400
-    '''
-
-    return "registrazione completata", 200

@@ -7,15 +7,12 @@ import re
 from functools import wraps
 #from .classDefinition import RegistrazioneForm,LoginForm
 from werkzeug.security import generate_password_hash, check_password_hash
-from dashboard.interazioneGPT.my_tt import N_token_cl100k_base #USER_GPT
-from dashboard.interazioneGPT.connGPT import interact_with_chatgpt_prova
 from datetime import datetime as dt
 #funzioni_per_semplificare
 from dashboard.funcs_routes.funcs1 import checkMese, Documenti__da_DB
 from dashboard.funcs_routes.Utenza import LOGIN, REGISTER, reset_password
 from dashboard.funcs_routes.Pagine_principali import principale___utente, principale___admin
-from dashboard.funcs_routes.Documenti_a_chatGPT import lavorazione_foglio, lavorazione_folder, dare_foglio, dare_folder
-from dashboard.funcs_routes.API import API___azienda, API___utente, API___documento
+from dashboard.funcs_routes.API import API___azienda, API___utente
 
 
 #*START
@@ -243,64 +240,6 @@ def b(a,b,c,d):
 
     return jsonify([abc])
 
-
-#---------> TOKENIZER
-api_key = ""
-maxContent = 4000
-creativita = 0
-
-#func file 
-@app.route('/carica_file2', methods=['POST'])
-def carica_file2():
-    documento = request.json
-    if documento:
-        TITOLO = documento.get('nome')[:-4]
-        user_gpt = documento.get('comando')
-        system_gpt = documento.get('file')
-        dare_foglio(system_gpt, user_gpt, TITOLO)
-
-    else:
-        return {"errore":"File non valido"}
-
-@app.route('/carica_file', methods=['POST'])
-def carica_file():
-    documento = request.json
-    if documento:
-        testo = documento.get("file")
-        lavorazione_foglio(re, testo, N_token_cl100k_base)
-    else:
-        return {"errore": "Nessun file selezionato."}
-
-#func cartella
-@app.route('/carica_folder2', methods=['POST'])
-def carica_folder2():
-    dati = request.json
-    #TEMPO
-    return dare_folder(dati)
-    
-@app.route('/carica_folder', methods=['POST'])
-def carica_folder():
-    try: 
-        lavorazione_folder(request, re, N_token_cl100k_base, jsonify)
-    except Exception as e: return {'status': str(e)}
-
-#pagina
-@app.route("/token")
-def token():
-    if session.get('demo') == "utente" or session.get('demo') == "admin":
-        u = session.get('utente')
-        users = session.get('users')
-        demo = session.get('demo')
-
-        l=len(session.get('notifica')[0]['altri'])
-        usersL = len(users)
-
-        nome = u['utente'][0]
-        return render_template("tok.html",Nmes = l, amici = users, N_amici =usersL -1, nome=nome, check = demo, ragionesociale=u['azienda'])
-    
-    elif session.get('demo') == True:
-        return render_template("tok.html", check=True)
-    
 
 
 #*************************************************************************************************** ADMIN
@@ -642,12 +581,6 @@ def registrazione_utente_api():
     except Exception as e:
         return str(e), 400
 
-@app.route("/registrazione_documento", methods=['POST'])
-def registrazione_documento_api():
-    try:
-        return API___documento(request)
-    except Exception as e:
-        return str(e), 400
 
  
 
