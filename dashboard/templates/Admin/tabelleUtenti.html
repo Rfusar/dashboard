@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>tabelle</title>
+
+    <!-- Custom fonts for this template -->
+    <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this page -->
+    <link href="../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <style>
+        input[type="radio"] {
+            /* Imposta il colore di sfondo del radio button */
+            background-color: #3498db;
+            /* Imposta il colore del bordo del radio button */
+            border-color: #3498db;
+            /* Imposta il colore del pallino centrale del radio button */
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        {% include "componenti/sidebar.html"%}
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                {% include "componenti/navbar.html"%}
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Utenti</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    {%if check == "admin"%}
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Cognome</th>
+                                            <th>Email</th>
+                                            <th>Ruolo</th>
+                                            <th>Elimina</th>
+                                            <th>Rendi Amministratore</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Cognome</th>
+                                            <th>Email</th>
+                                            <th>Ruolo</th>
+                                            <th>Elimina</th>
+                                            <th>Rendi Amministratore</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        {% for link in links %}
+                                        <tr>
+                                            <td class="nome_utente">{{ link[0]}}</td>
+                                            <td class="cognome_utente">{{ link[1]}}</td>
+                                            <td class="email_utente">{{ link[2]}}</td>
+                                            <td class="ruolo">{{ link[3]}}</td>
+                                            <td><input type="radio" class="DELETE" value="elimina"
+                                                    secondoCheck="true" /></td>
+                                            <td><input type="radio" class="MODIFY" value="modifica"
+                                                    secondoCheck="true" /></td>
+                                        </tr>
+                                        {% endfor %}
+
+                                        {%elif check == "superadmin"%}
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Azienda</th>
+                                                <th>Nome</th>
+                                                <th>Cognome</th>
+                                                <th>Email</th>
+                                                <th>ruolo</th>
+                                                <th>Elimina</th>
+                                                <th>Rendi Amministratore</th>
+                                            </tr>
+                                        </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Azienda</th>
+                                            <th>Nome</th>
+                                            <th>Cognome</th>
+                                            <th>Email</th>
+                                            <th>ruolo</th>
+                                            <th>Elimina</th>
+                                            <th>Rendi Amministratore</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        {% for link in links %}
+                                        <tr>
+                                            <td >{{ link[0]}}</td>
+                                            <td class="azienda_utente">{{ link[4]}}</td>
+                                            <td class="nome_utente">{{ link[1]}}</td>
+                                            <td class="cognome_utente">{{ link[2]}}</td>
+                                            <td class="email_utente">{{ link[3]}}</td>
+                                            <td class="ruolo">{{ link[5]}}</td>
+                                            <td><input type="radio" class="DELETE" value="elimina"
+                                                    secondoCheck="true" /></td>
+                                            <td><input type="radio" class="MODIFY" value="modifica"
+                                                    secondoCheck="true" /></td>
+                                        </tr>
+                                        {% endfor %}
+                                        {%endif%}
+                                    </tbody>
+
+                                </table>
+                                <button id="btn" class="btn btn-primary">ESEGUI</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="risposte"></div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2020</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="/logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "scripts.html" %}
+
+    <script src="../../static/js/Admin/index/script.js"></script>
+    <script src="../../static/js/Admin/index/elimina_rendiAdmin.js"></script>
+    <script src="../../static/js/Admin/index/invio_a_server.js"></script>
+
+    {%if check == "superadmin"%}
+    <script src="../../static/js/base/element.js"></script>
+    <script src="../../static/js/base/.script2.js"></script>
+    <script src="../../static/js/Admin/index/alter_table/alter_table___superadmin.js"></script>
+    {%elif check == "admin"%}
+    <script src="../../static/js/Admin/index/alter_table/alter_table___admin.js"></script>
+    {%endif%}
+
+
+
+
+</body>
+
+</html>

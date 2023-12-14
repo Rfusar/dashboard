@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            border: 1px solid black;
+        }
+
+        tr {
+            padding: 10px;
+            border: .5px solid black;
+        }
+
+        th,
+        td {
+            border: .5 solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 style="text-align: center;">DATI DATABASE</h1>
+    <div style="display: grid; grid-template-columns: auto ;">
+        <div>
+            <h3>ENTRATE/USCITE TOTALI</h3>
+            <table id="token"></table>
+        </div>
+        <div>
+            <h3>AZIENDE</h3>
+            <table id="companies"></table>
+        </div>
+        <div>
+            <h3>UTENTI</h3>
+            <table id="users"></table>
+        </div>
+
+    </div>
+
+
+</body>
+<script>
+    //[ [], [], ... ]
+    function creazione_tabella(titoli, TITOLI, elementi, righe, ID) {
+        function creazione_titoli(titoli, TITOLI) {
+            const tr = document.createElement('tr');
+            for (const titolo of titoli) {
+                const th = document.createElement('th')
+                th.textContent = titolo
+                tr.append(th)
+            }
+            TITOLI.push(tr)
+        }
+
+        function creazione_elementi(elementi, righe) {
+            for (const elemento of elementi) {
+                const tr = document.createElement('tr');
+                for (let i = 0; i < elemento.length; i++) {
+                    const td = document.createElement('td'); td.textContent = elemento[i]; tr.append(td)
+                    td.style.border = ".5px solid black"
+                    td.style.padding = "5px"
+                    td.style.textAlign = "center"
+                    righe.push(tr)
+                }
+            }
+        }
+
+        creazione_titoli(titoli, TITOLI)
+        creazione_elementi(elementi, righe)
+        for (const titolo of TITOLI) { document.querySelector(ID).append(titolo) }
+        for (const riga of righe) { document.querySelector(ID).append(riga) }
+    }
+
+
+    class Tabella {
+        constructor(utenti, aziende, token) {
+            this.utenti = utenti,
+                this.aziende = aziende,
+                this.token = token
+        }
+        users() {
+            const titoli = ["Nome", "Cognome", "Email", "Azienda"]
+            creazione_tabella(titoli, [], this.utenti, [], "#users")
+        }
+        companies() {
+            const titoli = ["Id", "Nome", "P.IVA", "Indirizzo", "Comune", "Provincia", "Cap", "Nazione", "Email", "Pec", "Telefono"]
+            creazione_tabella(titoli, [], this.aziende, [], "#companies")
+        }
+        cash() {
+            const titoli = ["Costo", "Guadagno", "Ricavo", "Token utilizzati"]
+            creazione_tabella(titoli, [], this.token, [], "#token")
+        }
+
+    }
+    fetch("/superadminCheck").then(res => res.json()).then(d => {
+        console.log(d)
+        new Tabella(d['utenti'], null, null).users()
+        new Tabella(null, d['aziende'], null).companies()
+    })
+
+    fetch("/dati").then(res => res.json()).then(d => {
+        let s = 0
+        for (let i of d[0]) { s += i }
+
+        let costo = (s * 0.004 * 1 / 1000).toFixed(2)
+        let vendita = (s * 0.004 * 1.335 / 1000).toFixed(2)
+        let ricavo = (vendita - costo).toFixed(2)
+
+        const cash = [`€${costo}`, `€${vendita}`, `€${ricavo}`, `${s}`]
+
+        new Tabella(null, null, [cash]).cash()
+        /*
+        document.querySelector('#costo').textContent = `COSTO: €${costo.toFixed(3)}`
+        document.querySelector('#guadagno').textContent = `VENDITA: €${vendita.toFixed(3)}`
+        document.querySelector('#ricavo').textContent = `GUADAGNO: €${ricavo.toFixed(3)}`
+        document.querySelector('#tokenUTILIZZATI').textContent = `TOEKN UTILIZZATI: €${s}`*/
+    })
+
+</script>
+
+</html>

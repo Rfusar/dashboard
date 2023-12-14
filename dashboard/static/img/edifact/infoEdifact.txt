@@ -1,0 +1,127 @@
+UNB =>  Questo segmento rappresenta l'intestazione del messaggio EDIFACT. Contiene informazioni come l'identificatore del mittente, 
+            l'identificatore del destinatario e la data/ora di creazione del messaggio.
+
+UNH =>  Questo segmento indica l'inizio di un nuovo insieme di dati e specifica il tipo di messaggio, nel nostro caso "FATTURA".
+
+BGM =>  Questo segmento rappresenta l'inizio del documento e contiene informazioni come il numero del documento e la versione 
+            del messaggio.
+
+DTM =>  Questo segmento indica la data associata al documento, ad esempio la data della fattura.
+
+NAD =>  Questo segmento rappresenta l'indirizzo di un soggetto coinvolto nella transazione. Nel messaggio di esempio, sono presenti 
+            segmenti NAD per il mittente e il destinatario.
+
+RFF =>  Questo segmento fornisce un riferimento a un valore specifico, ad esempio il riferimento alla partita IVA per il mittente e 
+            il destinatario.
+
+LIN =>  Questo segmento rappresenta una linea di dettaglio dell'ordine o della fattura e contiene informazioni come il numero di linea 
+            e la descrizione del prodotto.
+
+QTY =>  Questo segmento indica la quantità di prodotti nella linea.
+
+PRI =>  Questo segmento specifica il prezzo unitario del prodotto nella linea.
+
+ALC =>  Questo segmento indica l'importo dello sconto o l'importo lordo della linea.
+
+TAX =>  Questo segmento rappresenta l'IVA applicata alla linea.
+
+MOA =>  Questo segmento indica l'importo totale della linea o altri importi correlati.
+
+FTX =>  Questo segmento fornisce informazioni testuali aggiuntive.
+
+
+380 =>  codice per la fattura
++ =>    viene utilizzato come separatore tra i diversi elementi all'interno di un segmento
+: =>    viene utilizzato come separatore tra il codice dell'elemento e il suo valore all'interno di un segmento
+
+
+
+
+Struttura del messaggio EDIFACT:
+    UNB: Inizio del messaggio, contiene informazioni sull'origine e la destinazione del messaggio.
+    UNH: Intestazione del messaggio, specifica il tipo di messaggio e la versione.
+    Segmenti di dati: Contengono le informazioni effettive del messaggio, come i dati dei partner commerciali, le informazioni sul prodotto, le quantità, i prezzi, ecc.
+    UNT: Marcatura di fine messaggio, contiene il numero di segmenti nel messaggio.
+    UNZ: Fine del messaggio, contiene un contatore del numero totale di messaggi nella sequenza.
+
+Segmenti EDIFACT:
+    I segmenti sono la più piccola unità di informazione nel messaggio EDIFACT.
+    Ogni segmento ha un identificatore univoco che indica il tipo di informazione contenuta.
+    I segmenti sono composti da elementi separati da "+" e i valori degli elementi sono separati da ":".
+
+Codifica dei dati:
+    EDIFACT utilizza una codifica basata su caratteri ASCII per rappresentare i dati.
+    I caratteri consentiti includono lettere maiuscole, numeri e alcuni caratteri speciali.
+    Alcuni caratteri speciali hanno un significato specifico e devono essere correttamente gestiti.
+
+Schema dei messaggi EDIFACT:
+    Ogni tipo di messaggio EDIFACT ha una struttura predefinita che specifica i segmenti richiesti e l'ordine in cui devono apparire.
+    Gli schemi dei messaggi EDIFACT sono definiti nei manuali di implementazione specifici per ciascun tipo di messaggio.
+
+
+
+
+da documentazione miscrosoft 
+
+    1) Ricezione di un interscambio EDIFACT file flat dal partner commerciale Fabrikam.
+
+    2) Convalida dell'interscambio EDIFACT a fronte dello schema, disassemblaggio del messaggio in XML e rilascio del codice XML del messaggio nel MessageBox.
+
+    3) Generazione e rilascio nel MessageBox di un riconoscimento tecnico (ricezione del messaggio) per l'interscambio EDI ricevuto.
+
+    4) Generazione e rilascio nel MessageBox di un riconoscimento funzionale (accettazione o rifiuto dell'interscambio EDI ricevuto).
+
+    5) Prelievo del codice XML del messaggio tramite una porta di trasmissione FILE unidirezionale e assemblaggio dell'interscambio EDI del messaggio.
+
+    6) Trasmissione dell'interscambio EDI alla cartella locale Contoso.
+
+    7) Prelievo del riconoscimento tecnico tramite una porta di trasmissione FILE unidirezionale e assemblaggio dell'interscambio.
+
+    8) Trasmissione del riconoscimento tecnico alla cartella locale Fabrikam.
+
+    9) Prelievo del riconoscimento funzionale tramite una porta di trasmissione FILE unidirezionale e assemblaggio dell'interscambio.
+
+    10) Trasmissione del riconoscimento funzionale a Fabrikam.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#                       ----------------------------------------------------------------############# LINK ##########--------------------------------------------------------------
+
+
+EDI = https://www.blackbridge.it/trasferimento-file-gestito/goanywhere-mft/translation/formato-edi/#:~:text=X12%20%C3%A8%20un%20tipo%20di,scambio%20di%20dati%20tra%20societ%C3%A0.
+
+edifact_info = https://learn.microsoft.com/it-it/biztalk/core/walkthrough-edifact--receive-edi-interchanges-and-send-an-acknowledgement
+
+
+
+
+
+BizTalk = https://it.wikipedia.org/wiki/Microsoft_BizTalk_Server
+
+riconoscimento = Acknowledgement = https://en.wikipedia.org/wiki/Acknowledgement_(data_networks)

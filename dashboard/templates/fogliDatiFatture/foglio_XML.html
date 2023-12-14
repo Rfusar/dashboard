@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Visualizza XML come testo</title>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      fetch('/xml_text')
+        .then(response => response.text())
+        .then(xmlText => {
+          const preElement = document.getElementById('xml-content');
+          preElement.textContent = xmlText;
+        })
+        .catch(error => console.error(error));
+    });
+  </script>
+</head>
+
+<body>
+  <pre id="xml-content"></pre>
+</body>
+
+</html>

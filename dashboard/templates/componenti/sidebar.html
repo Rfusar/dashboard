@@ -1,0 +1,163 @@
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+        {%if check == true%}
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-laugh-wink"></i>
+        </div>
+        {%else%}
+        <div class="sidebar-brand-text mx-3">{{ ragionesociale }}</div>
+        {% endif %}
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    {%if check == "superadmin"%}
+    <li class="nav-item active">
+        <a class="nav-link" href="{{url_for('superadmin')}}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>{{nome}}</span></a>
+    </li>
+    {%elif check == "utente" or check == "admin"%}
+    <li class="nav-item active">
+        <a class="nav-link" href="{{url_for('HOME')}}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>{{nome}}</span></a>
+    </li>
+    {%elif check == true%}
+    <li class="nav-item active">
+        <a class="nav-link" href="{{url_for('home')}}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a>
+    </li>
+    {%endif%}
+
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Addons
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    {%if check == true%}
+    <li class="nav-item" style="cursor: pointer;">
+        <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
+            aria-controls="collapsePages">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Pages</span>
+        </a>
+        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Login Screens:</h6>
+                <a class="collapse-item" href="{{url_for('login')}}">Login</a>
+                <a class="collapse-item" href="{{url_for('registrazione')}}">Register</a>
+                <a class="collapse-item" href="{{url_for('resetPassword')}}">Forgot Password</a>
+            </div>
+        </div>
+    </li>
+
+
+    {%elif check == "superadmin"%}
+    <li class="nav-item" style="cursor: pointer;">
+        <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsePages0" aria-expanded="true"
+            aria-controls="collapsePages">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Utenza</span>
+        </a>
+        <div id="collapsePages0" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="/superadmin/aziende"><i
+                        class="fas fa-fw fa-table"></i><span>  Aziende</span></a>
+                <a class="collapse-item" href="/superadmin/utenti"><i
+                        class="fas fa-fw fa-table"></i><span>  Utenti</span></a>
+            </div>
+        </div>
+    </li>
+    {% endif%}
+
+
+
+    {%if check == true %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('charts')}}">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Statistiche</span></a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('table')}}">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Fatture</span></a>
+    </li>
+
+
+    {%elif check == "utente"%}
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('charts')}}">
+            <i class="fas fa-laugh-wink"></i>
+            <span>Statistiche</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/token">
+            <i class="fas fa-laugh-wink"></i>
+            <span>Processa</span></a>
+    </li>
+
+
+    {%elif check == "admin" %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('charts')}}">
+            <i class="fas fa-laugh-wink"></i>
+            <span>Statistiche</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('table')}}">
+            <i class="fas fa-laugh-wink"></i>
+            <span>Documenti</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/admin">
+            <i class="fas fa-laugh-wink"></i>
+            <span>Utenti</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/Tickets">
+            <i class="fas fa-laugh-wink"></i>
+            <span>Tickets</span></a>
+    </li>
+
+    
+    {%elif check == "superadmin"%}
+    <li class="nav-item">
+        <a class="nav-link" href="/Help" target="_blank">
+            <i class="fas fa-laugh-wink"></i>
+            <span>Query_api</span></a>
+    </li>
+    {%endif%}
+
+    <!--cose comuni in tutte l'utenze-->
+    {%if check == "utente" or check == "admin" or check == "superadmin"%}
+    <li class="nav-item">
+        <a class="nav-link" href="/logout">
+            <i class="fas fa-laugh-wink"></i>
+            <span>logout</span></a>
+    </li>
+    {%endif%}
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+
+
+</ul>
+<!-- End of Sidebar -->

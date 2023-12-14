@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="riccardo fusaro">
+
+    <title> {{title}} </title>
+
+    <!-- Custom fonts for this template-->
+
+    <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="static/css/sb-admin-2.min.css" rel="stylesheet">
+
+
+</head>
+
+<body id="page-top">
+
+
+    {% include "componenti/wrapper.html" %}
+
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="/logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--SCHERMATA CHAT-->
+    <div style="padding:10px;width: 500px;height: 400px;position:sticky;bottom: 3px;left:10px;background-color:rgba(124, 88, 255, 0.927);overflow: hidden;display: none; flex-direction: column;gap:27px;border-radius: 15px;border: 3px solid #000000;"
+        class="Chat">
+        <div id="displayRicevente" style="display: flex; flex-direction: row;justify-content: space-between;">
+
+            <div style="color: rgb(255, 255, 255);font-weight: 800;font-size: larger;">
+                <i id="STATO"></i>
+                <span id="nomeChat"></span>
+            </div>
+
+            <input type="text" style="width: 20px;height: 20px;" maxLength='1' id='attributoMessaggio'>
+
+            <button style="position: relative; right: 0px;"
+                class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm" id="BTNEXIT">x</button>
+
+        </div>
+        <div class="display"
+            style="border-radius: 10px;height: 400px;width: 470px;background-color: aliceblue;padding:3px;overflow-y: auto;"
+            id="DISPLAY">
+
+
+
+
+        </div>
+        <div class="displayDestinatario" style="display: flex;flex-direction: row;">
+            <input type="text" id="USER" style="height: 30px; width: 425px;border-radius: 5px;">
+            <button id="INVIA" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> send</button>
+        </div>
+    </div>
+
+
+
+    {% include "scripts.html" %}
+
+    <script src="../static/vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="../static/js/demo/chart-area-demo.js"></script>
+    <script src="../static/js/demo/chart-pie-demo.js"></script>
+    <script src="../static/js/demo/chart-bar-demo.js"></script>
+
+    <script src="../static/js/base/script1.js"></script>
+    <script src="../static/js/base/.script2.js"></script>
+
+    <script src="../static/js/base/element.js"></script>
+
+
+
+
+</body>
+
+</html>

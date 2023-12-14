@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Visualizza JSON come testo</title>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      fetch('/json_text')
+        .then(response => response.text())
+        .then(jsonText => {
+          const preElement = document.getElementById('json-content');
+          preElement.textContent = jsonText;
+        })
+        .catch(error => console.error(error));
+    });
+  </script>
+</head>
+
+<body>
+  <pre id="json-content"></pre>
+
+
+  <script>
+/*
+    fetch("/richiestaJson")
+        .then(res => res.json())
+        .then(data => {
+
+            console.log(data)
+        })
+*/
+</script>
+</body>
+
+</html>
