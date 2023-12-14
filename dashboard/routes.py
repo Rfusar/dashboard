@@ -1,9 +1,8 @@
 from dashboard import app
 from flask import render_template,jsonify,request,session, redirect, url_for
-from database.DB import connPOSTGRES, checkToken
+from database.DB import connPOSTGRES
 from database.DBchat import chat, readChat,notifica, readNotifica, allNotifica
-from database.DBuser import listaColleghi #, ruoloUtente
-import re
+from database.DBuser import listaColleghi
 from functools import wraps
 #from .classDefinition import RegistrazioneForm,LoginForm
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -101,28 +100,9 @@ def charts():
 @app.route("/dati")
 def dati():
     MESI = ["Gen","Feb","Mar","Apr","Mag","Giu","Lug","Ago","Set","Ott","Nov","Dic"]
-    if session.get('demo') == "utente" or session.get('demo') == "admin":
-        cur = connPOSTGRES.cursor()
-        cur.execute("SELECT token, data FROM documenti WHERE ragionesociale = %s",(session.get('utente')['azienda'], ))
-        dati = cur.fetchall()
-        cur.close()
-        
-        ultimo_check = checkToken(dati, MESI)    
-        return jsonify(ultimo_check, MESI)
-    
-    elif session.get("demo") == "superadmin":
-        cur = connPOSTGRES.cursor()
-        cur.execute("SELECT token, data FROM documenti")
-        dati = cur.fetchall()
-        cur.close()
-        
-        ultimo_check = checkToken(dati, MESI)    
-        return jsonify(ultimo_check, MESI)
 
-    
-    elif session.get('demo') == True:
-        links=[1000,1200,1300,1500,1200,1700,1200,1400,1100,1200,1300,1200]
-        return jsonify(links, MESI)
+    links=[1000,1200,1300,1500,1200,1700,1200,1400,1100,1200,1300,1200]
+    return jsonify(links, MESI)
 
 #--------> TABELLE   
 @app.route("/tableInfo", methods=["GET","POST"])
@@ -156,45 +136,6 @@ def table():
 
     elif session.get('demo') == True:
             return render_template("tables.html", check=True)
-
-@app.route("/catalogo")
-def catalogo():
-    if session.get('demo') == "utente" or session.get('demo') == "admin":
-        users = session.get('users')
-        l=len(session['notifica'][0]['altri'])
-        usersL = len(users)
-        demo = session.get('demo')
-        u = session.get('utente')
-        '''        
-        try:
-            cur = connPOSTGRES.cursor()
-            cur.execute("""
-            SELECT 
-                documento->>'id',
-                documento->>'dataDocumento',
-                documento->>'tipo',
-                documento->>'nomeAzienda',
-                documento->>'aziendaCode',
-                documento->>'status',
-                documento->>'sapResponse',
-                documento->>'officeCode',
-                documento->>'act'
-            FROM documenti
-            """)
-            links = cur.fetchall()
-            cur.close()
-        
-
-
-        except:
-            return render_template("informazioni/404.html")
-        '''
-
-
-        return render_template("catalogo.html",Nmes = l, amici = users, N_amici =usersL -1, nome=u['utente'][0],check=demo, ragionesociale=u['azienda']) #links = links
-    
-    elif session.get('demo') == True:
-        return render_template("catalogo.html",check=True)
 
 
 #---------> MESSAGGI
@@ -326,8 +267,7 @@ def superadminCheck():
             'token':  tokenAll,
             'aziende': aziende
            }
-    
-
+        
         return jsonify(result)
     
     else: return {"mess": "non puoi"}
@@ -411,7 +351,7 @@ def utenti___superadmin():
         for i in dq: 
             if i[1] == u['utente'][0]: continue    
             for x in access:
-                if x[0] == i[1] :#and x[1] != "superuser":
+                if x[0] == i[1]:
                     utente = [i[0], i[1], i[2], i[3], i[4], x[1]]
             link.append(utente)
         try:
@@ -465,8 +405,9 @@ def HELP():
 def prova():
     dati = request.json
     risposte = []
-    for utente in dati:
+    cur = connPOSTGRES.cursor()
 
+    for utente in dati:
         azienda = utente.get('azienda')
         nome = utente.get('nome')
         cognome = utente.get('cognome')
@@ -474,13 +415,12 @@ def prova():
         modifica = utente.get('modifica')
         elimina = utente.get('elimina')
 
-        cur = connPOSTGRES.cursor()
         check = ""
-
         #superadmin
         if session.get("demo") == "superadmin": 
             if elimina:
                 #cur.execute("DELETE FROM utenti WHERE nome = %s and cognome = %s and email = %s", (nome, cognome, email))
+                #cur.execute("DELETE FROM ruoli WHERE nome = %s and ragionesociale = %s", (nome, azienda))
                 check += "eliminato"
 
             elif  modifica:
@@ -490,22 +430,7 @@ def prova():
             risposta = f"L'utente {nome} {cognome}, lavora presso: {azienda}; {check} con successo"
             risposte.append(risposta)
 
-        #admin
-        elif session.get("demo") == "admin":
-            if elimina:
-                #cur.execute("DELETE FROM utenti WHERE nome = %s and cognome = %s and email = %s", (nome, cognome, email))
-                check += "eliminato"
-
-            elif  modifica:
-                #cur.execute("UPDATE ruoli SET livello = 'admin' WHERE nome = %s and cognome = %s and email = %s", (nome, cognome, email))
-                check += "reso admin"
-        
-            risposta = f"L'utente {nome} {cognome}, {check} con successo"
-            risposte.append(risposta)
-
-
-        cur.close()
-
+    cur.close()
     return jsonify(risposte)
 
 #Check
@@ -519,7 +444,8 @@ def mes():
         c1 = session.get('demo')
         
         return jsonify(u, m, a, a1, c1)
-    except: ...
+    
+    except: return {"Ti è andata male"}
 
 
 #capacita d'interagire con DB
@@ -532,6 +458,7 @@ def requires_auth(f):
         if not auth or not check_credentials(auth.username, auth.password):
             return ('Credenziali non valide. Effettua il login.', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
         return f(*args, **kwargs)
+    
     return decorated
 
 @app.route("/check/dati", methods=['POST'])
@@ -541,10 +468,10 @@ def checkDati():
     try:
         cur.execute(query['query'])
         res =  cur.fetchall()
+        return jsonify(res)
     
-    except: return {"errore": "query non esguita"}
+    except: return {"errore": "query non eseguita"}
 
-    return jsonify(res)
 
 @app.route('/check/provaAuth')
 @requires_auth
@@ -568,21 +495,11 @@ def Ticket():
 
 #*************************************************************************************************** API
 @app.route("/registrazione_azienda", methods=['POST'])
-def registrazione_azienda_api():
-    try:
-        return API___azienda(request, connPOSTGRES)
-    except Exception as e:
-        return str(e), 400
+def registrazione_azienda_api(): return API___azienda(request, connPOSTGRES)
+
 
 @app.route("/registrazione_utente", methods=['POST'])
-def registrazione_utente_api():
-    try:
-        return API___utente(request, generate_password_hash, connPOSTGRES)
-    except Exception as e:
-        return str(e), 400
-
-
- 
+def registrazione_utente_api(): return API___utente(request, generate_password_hash, connPOSTGRES)
 
 '''
 COSE DA FARE:

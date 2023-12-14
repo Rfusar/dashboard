@@ -10,14 +10,15 @@ def API___azienda(request, connPOSTGRES):
     Email = data.get('Email')
     Pec = data.get('Pec')
     Telefono = data.get('Tel')
-
-    cur = connPOSTGRES.cursor()
-    cur.execute("INSERT INTO azienda (ragionesociale, partitaiva, indirizzo, comune, provincia, cap, nazione, email, pec, tel) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", 
-                    (Ragionesociale, Partitaiva, Indirizzo, Comune, Provincia, Cap, Nazione, Email, Pec, Telefono))
-    connPOSTGRES.commit()
-    cur.close()
-
-    return "registrazione completata", 200
+    try:
+        cur = connPOSTGRES.cursor()
+        cur.execute("INSERT INTO azienda (ragionesociale, partitaiva, indirizzo, comune, provincia, cap, nazione, email, pec, tel) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", 
+                        (Ragionesociale, Partitaiva, Indirizzo, Comune, Provincia, Cap, Nazione, Email, Pec, Telefono))
+        connPOSTGRES.commit()
+        cur.close()
+        return "registrazione completata", 200
+    
+    except Exception as e: return str(e), 400
 
 def API___utente(request, generate_password_hash, connPOSTGRES):
     data = request.get_json()
@@ -40,5 +41,4 @@ def API___utente(request, generate_password_hash, connPOSTGRES):
         cur.close()
         return "registrazione completata", 200
     
-    except Exception as e:
-            return str(e), 400
+    except Exception as e: return str(e), 400
