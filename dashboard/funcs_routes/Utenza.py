@@ -13,21 +13,19 @@ def LOGIN(connPOSTGRES, email, listaColleghi, session, check_password_hash, pass
             if i['email'] == email: session['utente'] = i
 
         utenteRuolo = session.get('utente')['ruolo']
+        
         #colleghi
-        for i in utenti:
-            if utenteRuolo == "admin":
-                colleghiAzienda = []
-                for utentiAzienda in utenti:
-                    if utentiAzienda['ruolo'] != "superadmin":
-                        colleghiAzienda.append(utentiAzienda)
-                session['users'] = colleghiAzienda
+        colleghiAzienda = []
+        if utenteRuolo == "superadmin":
+            for utentiAzienda in utenti: colleghiAzienda.append(utentiAzienda)
 
-            elif utenteRuolo == "utente":
-                colleghiAzienda = []
-                for utentiAzienda in utenti:
-                    if utentiAzienda['ruolo'] == "utente":
-                        colleghiAzienda.append(utentiAzienda)
-                session['users'] = colleghiAzienda
+        elif utenteRuolo == "admin":
+            for utentiAzienda in utenti: colleghiAzienda.append(utentiAzienda) if utentiAzienda['ruolo'] != "superadmin" else None    
+
+        elif utenteRuolo == "utente":
+            for utentiAzienda in utenti: colleghiAzienda.append(utentiAzienda) if utentiAzienda['ruolo'] == "utente" else None     
+
+        session['users'] = colleghiAzienda
 
         #livello utente
         session['demo'] = utenteRuolo
@@ -35,7 +33,6 @@ def LOGIN(connPOSTGRES, email, listaColleghi, session, check_password_hash, pass
         if check_password_hash(u[0][0], password):
             #INDIRIZZAMENTO A PAGINA PRINCIPALE
             ruoli = ["utente", "admin", "superadmin"]
-
             for i in range(len(ruoli)): 
                 if session.get('utente')['ruolo'] == ruoli[i]: return redirect(url_for('HOME'))   
   
@@ -45,7 +42,6 @@ def LOGIN(connPOSTGRES, email, listaColleghi, session, check_password_hash, pass
     except:
         return redirect(url_for('login'))
     
-
 
 def REGISTER(generate_password_hash, password, connPOSTGRES, redirect, url_for, nome, cognome, telefono, RG, email):
     p = generate_password_hash(password)
@@ -75,4 +71,5 @@ def reset_password(generate_password_hash, password, connPOSTGRES, email, redire
         return redirect(url_for('login'))
 
     except:
-        return redirect(url_for('resetPassword'))  
+        return redirect(url_for('resetPassword')) 
+

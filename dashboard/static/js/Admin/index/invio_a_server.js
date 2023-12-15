@@ -1,5 +1,4 @@
 function manda_a_SERVER(path, oggetto) {
-
     if (path == "/modificaDB") {
         fetch(path, {
             method: 'POST',

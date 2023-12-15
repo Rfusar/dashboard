@@ -1,4 +1,4 @@
-btnESEGUI.addEventListener("click", () => {
+document.querySelector("#btn").addEventListener("click", () => {
     const aziende = document.querySelectorAll(".azienda_utente")
     const nomi = document.querySelectorAll(".nome_utente")
     const cognomi = document.querySelectorAll(".cognome_utente")

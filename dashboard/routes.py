@@ -11,7 +11,7 @@ from datetime import datetime as dt
 from dashboard.funcs_routes.funcs1 import checkMese, Documenti__da_DB
 from dashboard.funcs_routes.Utenza import LOGIN, REGISTER, reset_password
 from dashboard.funcs_routes.Pagine_principali import principale___utente, principale___admin, principale__superadmin
-from dashboard.funcs_routes.API import API___azienda, API___utente
+from dashboard.funcs_routes.API import API___azienda
 
 
 #*START
@@ -49,10 +49,8 @@ def logicaLogin():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password'] 
-        try:
-            return LOGIN(connPOSTGRES, email, listaColleghi, session, check_password_hash, password, redirect, url_for)
-        except Exception as e:
-            print(str(e))
+
+        return LOGIN(connPOSTGRES, email, listaColleghi, session, check_password_hash, password, redirect, url_for)
            
 #-----> resetPassword
 @app.route("/resetPassword")
@@ -91,14 +89,19 @@ def charts():
     if session.get('demo') == "utente" or session.get('demo') == "admin":
         u = session.get('utente')
         users = session.get('users')
-        demo = session.get('demo')
+
         try: 
             l=len(session['notifica'][0]['altri'])
         except: l = 0
         usersL = len(users)
-
-        nome = u['utente'][0]
-        return render_template("charts.html",Nmes = l, amici = users, N_amici =usersL -1, nome=nome, check = demo, ragionesociale=u['azienda'])
+        
+        return render_template("charts.html",
+                               Nmes = l, 
+                               amici = users, 
+                               N_amici =usersL -1, 
+                               nome=u['utente'][0], 
+                               check = session.get('demo'), 
+                               ragionesociale=u['azienda'])
     
     elif session.get('demo') == True:
         return render_template("charts.html", check = True)
@@ -128,7 +131,6 @@ def table():
     if session.get('demo') == "utente" or session.get('demo') == "admin":
         u = session.get('utente')
         users = session.get('users')
-        demo = session.get('demo')
 
         try:
             l=len(session['notifica'][0]['altri'])
@@ -136,10 +138,17 @@ def table():
         usersL = len(users)
 
         cur = connPOSTGRES.cursor()
-        links = Documenti__da_DB(cur, session, "MUTUI")
+        #links = Documenti__da_DB(cur, session, "MUTUI")
         cur.close()
 
-        return render_template("tables.html",Nmes = l, amici = users, N_amici =usersL -1, links = links, nome = u['utente'][0], check= demo, ragionesociale=u['azienda'])
+        return render_template("tables.html",
+                               Nmes = l, 
+                               amici = users, 
+                               N_amici =usersL -1, 
+                               links = [], 
+                               nome = u['utente'][0], 
+                               check= session.get('demo'), 
+                               ragionesociale=u['azienda'])
 
     elif session.get('demo') == True:
             return render_template("tables.html", check=True)
@@ -149,35 +158,47 @@ def table():
 def utenti___superadmin(): 
     if session.get('demo') == "admin" or session.get('demo') == "superadmin":
         u = session.get('utente')
-        users = session.get('users')
         demo = session.get('demo')
 
-        link = []
+        query = """SELECT 
+                        utenti.ragionesociale,
+                        utenti.nome, 
+                        utenti.cognome, 
+                        utenti.email, 
+                        ruoli.livello 
+                    FROM utenti 
+                    JOIN ruoli 
+                    ON utenti.email = ruoli.email"""
+
+        cur = connPOSTGRES.cursor()
         if session.get("demo") == "admin":
-            for i in users: 
-                if i['utente'][0] == u['utente'][0]: continue    
-                utente = [i['utente'][0], i['utente'][1], i['email'], i['ruolo']]
-                link.append(utente)
+            cur.execute(f"{query} WHERE ragionesociale = %s", (u['azienda']))
+            
         elif session.get("demo") == "superadmin":
-            for i in users: 
-                if i['utente'][0] == u['utente'][0]: continue    
-                utente = [i['azienda'], i['utente'][0], i['utente'][1], i['email'], i['ruolo']]
-                link.append(utente)
+            cur.execute(f"{query}")
+            
+        utenti = []
+        for i in cur.fetchall():
+            if i[1] == u['utente'][0]: continue
+            else: utenti.append(i)
+
+
+        cur.close()
 
 
         try:
             l=len(session.get('notifica')[0]['altri'])
         except: l = 0
-        usersL = len(users)
+        usersL = len(session.get('users'))
 
 
     return render_template("Admin/tabelleUtenti.html",
                            Nmes = l, 
-                           amici = users, 
+                           amici = session.get('users'), 
                            N_amici =usersL -1, 
                            nome=u['utente'][0], 
                            check = demo,
-                           links = link,
+                           links = utenti,
                            ragionesociale=u['azienda']
                            )
 
@@ -311,7 +332,6 @@ def superadminCheck():
     
     else: return {"mess": "non puoi"}
 
-
 @app.route("/Tickets")
 def Ticket():
     u = session.get('utente')
@@ -321,34 +341,38 @@ def Ticket():
         l=len(session['notifica'][0]['altri'])
     except: l = 0
     usersL = len(users)
-    nome = u['utente'][0]
-    demo = session.get('demo')
 
-    return render_template("/tickets.html",Nmes = l, amici = users, N_amici =usersL -1, links = [], nome = nome, check= demo, ragionesociale=u['azienda'])
+    return render_template("/tickets.html",
+                           Nmes = l, 
+                           amici = users, 
+                           N_amici =usersL -1, 
+                           links = [], 
+                           nome = u['utente'][0], 
+                           check= session.get('demo'), 
+                           ragionesociale=u['azienda'])
 
-
-#CHECK AZIENDE
 @app.route("/superadmin/aziende")
 def aziende___superadmin(): 
     if session.get('demo') == "superadmin":
-        demo = session.get('demo')
         u = session.get('utente')
         users = session.get('users')
 
         cur = connPOSTGRES.cursor()
         cur.execute("SELECT * FROM azienda")
         aziende = cur.fetchall()
+        cur.close()
 
         try:
             l=len(session.get('notifica')[0]['altri'])
         except:l =0
         usersL = len(users)
+
         return render_template("Admin/tabelleAziende.html", 
                                 Nmes = l, 
                                 amici = users, 
                                 N_amici =usersL -1, 
                                 nome=u['utente'][0],
-                                check = demo,
+                                check = session.get('demo'),
                                 links = aziende,
                                 ragionesociale=u['azienda']
                                 )
@@ -361,13 +385,12 @@ def check_aziende___superadmin():
             cur.execute("SELECT * FROM azienda")
             aziende = cur.fetchall()
             return jsonify(aziende)
+        
         except Exception as e:
             return jsonify(str(e))
 
-
 @app.route("/superadmin/report")
-def report___superadmin():
-    return render_template("Admin/report.html")
+def report___superadmin(): return render_template("Admin/report.html")
 
 
 
@@ -412,21 +435,24 @@ def prova():
         elimina = utente.get('elimina')
 
         check = ""
-        #superadmin
-        if session.get("demo") == "superadmin": 
+        if session.get("demo") == "superadmin" or session.get("demo") == "admin": 
             if elimina:
-                #cur.execute("DELETE FROM utenti WHERE nome = %s and cognome = %s and email = %s", (nome, cognome, email))
-                #cur.execute("DELETE FROM ruoli WHERE nome = %s and ragionesociale = %s", (nome, azienda))
+                cur.execute("DELETE FROM ruoli WHERE email = %s and ragionesociale = %s", (email, azienda))
+                connPOSTGRES.commit()
+                cur.execute("DELETE FROM utenti WHERE nome = %s and cognome = %s and email = %s and ragionesociale = %s", (nome, cognome, email, azienda))
+                connPOSTGRES.commit()
                 check += "eliminato"
 
             elif  modifica:
-                #cur.execute("UPDATE ruoli SET livello = 'admin' WHERE nome = %s and cognome = %s and email = %s", (nome, cognome, email))
+                cur.execute("UPDATE ruoli SET livello = 'admin' WHERE nome = %s and cognome = %s and email = %s", (nome, cognome, email))
+                connPOSTGRES.commit()
                 check += "reso admin"
 
             risposta = f"L'utente {nome} {cognome}, lavora presso: {azienda}; {check} con successo"
             risposte.append(risposta)
-
+    
     cur.close()
+    
     return jsonify(risposte)
 
 #Check
@@ -447,7 +473,7 @@ def mes():
 #capacita d'interagire con DB
 def requires_auth(f):
     def check_credentials(username, password):
-        return username == "ricky" and password == "password"
+        return username == "admintech" and password == "123456"
     @wraps(f)
     def decorated(*args, **kwargs):
         auth = request.authorization
@@ -468,11 +494,9 @@ def checkDati():
     
     except: return {"errore": "query non eseguita"}
 
-
 @app.route('/check/provaAuth')
 @requires_auth
-def pagina_protetta():
-    return render_template("Admin/sql.html")
+def pagina_protetta(): return render_template("Admin/sql.html")
 
 
 
@@ -480,14 +504,3 @@ def pagina_protetta():
 @app.route("/registrazione_azienda", methods=['POST'])
 def registrazione_azienda_api(): return API___azienda(request, connPOSTGRES)
 
-
-@app.route("/registrazione_utente", methods=['POST'])
-def registrazione_utente_api(): return API___utente(request, generate_password_hash, connPOSTGRES)
-
-'''
-COSE DA FARE:
-    -
-
-APPUNTI:
-    - /dati -> GRAFICO ---> utente, admin, superadmin
-'''

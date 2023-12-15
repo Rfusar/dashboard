@@ -16,22 +16,34 @@ def listaColleghi(RG, email) -> list[dict]:
             ogg = {"azienda": self.ragionesociale, "utente": nome_e_cognome, "email": self.email, "ruolo": self.ruolo}
             array.append(ogg)
 
-    cur = connPOSTGRES.cursor()
-    cur.execute('SELECT nome, cognome, ragionesociale, email FROM utenti WHERE ragionesociale = %s',(RG,))
-    u = cur.fetchall()
-    cur.execute('SELECT email, livello FROM ruoli WHERE ragionesociale = %s', (RG,))
-    r = cur.fetchall()
+    try:
+        cur = connPOSTGRES.cursor()
+        cur.execute('SELECT livello FROM ruoli WHERE email = %s', (email,))
+        utenteRuolo = cur.fetchone()
 
+        if utenteRuolo[0] == "superadmin": 
+            cur.execute('SELECT nome, cognome, ragionesociale, email FROM utenti')
+            u = cur.fetchall()
+            cur.execute('SELECT email, livello FROM ruoli')
+            r = cur.fetchall()
 
+        elif utenteRuolo[0] == "admin" or utenteRuolo[0] == "utente": 
+            cur.execute('SELECT nome, cognome, ragionesociale, email FROM utenti WHERE ragionesociale = %s', (RG,))
+            u = cur.fetchall()
+            cur.execute('SELECT email, livello FROM ruoli WHERE ragionesociale = %s', (RG,))
+            r = cur.fetchall()
 
-    USER = [] 
-    for i in u: 
-        for j in r:
-            if j[3] == i[0]:
-                User(i[0], i[1], i[2], i[3], j[1]).utente(USER); break
+        USER = [] 
+        for i in u: 
+            for j in r:
+                if j[0] == i[3]:
+                    User(i[0], i[1], i[2], i[3], j[1]).utente(USER); break
             
-    cur.close() 
-    return USER
+        cur.close() 
+        return USER
+    
+    except Exception as e:
+        print(str(e))
 
 
 

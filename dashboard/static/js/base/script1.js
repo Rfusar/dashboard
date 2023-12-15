@@ -35,6 +35,7 @@ btnNotifiche.addEventListener('mouseover', () => {
         })
     });
 })
+
 document.querySelector('#creaNotifica').addEventListener('click', () => {
     Chat.style.display = 'flex'
     document.querySelector('#STATO').innerHTML = ''
@@ -133,7 +134,7 @@ function checkAttributo() {
 
 //SEND
 btn.addEventListener('click', () => {
-    let ATtext = document.querySelector('#attributoMessaggio').value
+    //let ATtext = document.querySelector('#attributoMessaggio').value
 
     let risposta = document.querySelector('#USER').value
 

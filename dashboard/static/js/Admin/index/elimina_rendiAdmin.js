@@ -2,12 +2,9 @@ const fieldDEL = document.querySelectorAll(".DELETE")
 const fieldMOD = document.querySelectorAll(".MODIFY")
 const campi = [fieldDEL, fieldMOD]
 
-const btnESEGUI = document.querySelector("#btn")
-
 identificativo(campi)
 let ID_per_disattivazione = ""
 prova_perSemplificare(inputRadio, check)
-
 
 //func per semplificare le chiamate ad --const campi
 function prova_perSemplificare(func1, func2) {

@@ -28,21 +28,6 @@ def principale___utente(session, readChat, allNotifica, readNotifica, connPOSTGR
         l=len(notifiche)
     except: l = 0
     N_amici = len(amici)
-
-    #Token
-    cur = connPOSTGRES.cursor()
-    cur.execute("SELECT token, data FROM documenti WHERE ragionesociale = %s",(u['azienda'],))
-    tokens = cur.fetchall()
-
-    tokenTOT = 0
-    tokenMese = 0
-    for t in tokens: 
-        tokenTOT += t[0]
-        if dt.now().month == t[1]:
-            tokenMese+=t
-
-    cashAnnui = round((tokenTOT * 0.004 * 1.335 / 1000), 2)
-    cashMese = round((tokenMese * 0.004 * 1.335 / 1000), 2)
     
     
     return render_template('base.html',
@@ -58,12 +43,8 @@ def principale___utente(session, readChat, allNotifica, readNotifica, connPOSTGR
                        amici = amici,
                        N_amici =N_amici -1,
 
-                        spesaAnnua = f"{cashAnnui}€",
-                        spesaMensile = f"{cashMese}€",
-                        mese = checkMese(dt),
                         anno = dt.now().year
                        )
-
 
 def principale___admin(session, connPOSTGRES, render_template):
     u = session.get('utente')
@@ -71,7 +52,7 @@ def principale___admin(session, connPOSTGRES, render_template):
     demo = session.get('demo')
 
     cur = connPOSTGRES.cursor()
-    cur.execute('SELECT nome, livello FROM ruoli WHERE ragionesociale = %s', (u['azienda'],))
+    cur.execute('SELECT email, livello FROM ruoli WHERE ragionesociale = %s', (u['azienda'],))
     access = cur.fetchall()
     cur.close()
 
@@ -86,7 +67,8 @@ def principale___admin(session, connPOSTGRES, render_template):
     except: l = 0
     usersL = len(users)
 
-    return render_template("Admin/tabelleUtenti.html",
+    return render_template("base.html",
+                       title="IRON_BOX-dashboard",
                        Nmes = l, 
                        amici = users, 
                        N_amici =usersL -1, 
@@ -96,24 +78,24 @@ def principale___admin(session, connPOSTGRES, render_template):
                        ragionesociale = u['azienda']
                        )    
 
-
 def principale__superadmin(session, render_template):
     if session.get('demo') == "superadmin":
         u = session.get('utente')
         users = session.get('users')
         demo = session.get('demo')
 
-
         try:
             l=len(session.get('notifica')[0]['altri'])
         except: l = 0
+        
         usersL = len(users)
 
     return render_template("charts.html",
+                           title="IRON_BOX-dashboard",
                            Nmes = l, 
                            amici = users, 
                            N_amici =usersL -1, 
-                           nome=u['utente'][0], 
+                           nome= u['utente'][0], 
                            check = demo,
                            ragionesociale=u['azienda']
                            )

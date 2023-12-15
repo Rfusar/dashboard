@@ -1,4 +1,4 @@
-btnESEGUI.addEventListener("click", () => {
+document.querySelector("#btn").addEventListener("click", () => {
     const nomi = document.querySelectorAll(".nome_utente")
     const cognomi = document.querySelectorAll(".cognome_utente")
     const emails = document.querySelectorAll(".email_utente")
@@ -19,3 +19,4 @@ btnESEGUI.addEventListener("click", () => {
     //js/Admin/index/invio_a_server.js
     manda_a_SERVER("/modificaDB", utenti)
 })
+console.log(User)
