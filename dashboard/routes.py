@@ -182,9 +182,7 @@ def utenti___superadmin():
             if i[1] == u['utente'][0]: continue
             else: utenti.append(i)
 
-
         cur.close()
-
 
         try:
             l=len(session.get('notifica')[0]['altri'])
@@ -444,7 +442,7 @@ def prova():
                 check += "eliminato"
 
             elif  modifica:
-                cur.execute("UPDATE ruoli SET livello = 'admin' WHERE nome = %s and cognome = %s and email = %s", (nome, cognome, email))
+                cur.execute("UPDATE ruoli SET livello = 'admin' WHERE email = %s", (email,))
                 connPOSTGRES.commit()
                 check += "reso admin"
 
