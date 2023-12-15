@@ -26,6 +26,7 @@ document.querySelectorAll(".ruolo").forEach(e => {
         for (let i = 0; i < e.textContent.length; i++) { termine += e.textContent[i].toLocaleUpperCase() }
     }
     
+    
     //COLORI
     if (colore['colore'][0]) {
         if (colore['colore'][1]['utente'][0]) {

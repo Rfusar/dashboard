@@ -1,6 +1,6 @@
 from .DB import connPOSTGRES
 
-def listaColleghi(RG) -> list[dict]:
+def listaColleghi(RG, email) -> list[dict]:
 
     class User:
         def __init__(self, nome, cognome, ragionesociale, email, ruolo):
@@ -19,36 +19,20 @@ def listaColleghi(RG) -> list[dict]:
     cur = connPOSTGRES.cursor()
     cur.execute('SELECT nome, cognome, ragionesociale, email FROM utenti WHERE ragionesociale = %s',(RG,))
     u = cur.fetchall()
-    cur.execute('SELECT nome, livello FROM ruoli WHERE ragionesociale = %s', (RG,))
+    cur.execute('SELECT email, livello FROM ruoli WHERE ragionesociale = %s', (RG,))
     r = cur.fetchall()
+
+
 
     USER = [] 
     for i in u: 
         for j in r:
-            if j[0] == i[0]:
+            if j[3] == i[0]:
                 User(i[0], i[1], i[2], i[3], j[1]).utente(USER); break
             
     cur.close() 
     return USER
-'''
-def ruoloUtente(nome) -> dict:
-    class Admin:
-        def __init__(self, nome):
-            self.nome = nome
 
-        def creatore(self): ogg={"superadmin": self.nome}; return ogg
-        def amministratore(self): ogg={"admin": self.nome}; return ogg
-        def utente(self): ogg={"utente": self.nome}; return ogg
-
-    cur = connPOSTGRES.cursor()
-
-    cur.execute('SELECT livello FROM ruoli WHERE nome = %s',(nome,))
-    u = cur.fetchall()
-    
-    if u[0][0] == "superadmin": return Admin(nome).creatore()
-    elif u[0][0] == "admin": return Admin(nome).amministratore()
-    elif u[0][0] == "utente": return Admin(nome).utente()
-'''
 
 
 

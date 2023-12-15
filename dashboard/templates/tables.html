@@ -69,51 +69,11 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    {%if check == "superuser" %}
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Azienda</th>
-                                            <th>Nome</th>
-                                            <th>Cognome</th>
-                                            <th>Email</th>
-
-                                            <th>ruolo</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Azienda</th>
-                                            <th>Nome</th>
-                                            <th>Cognome</th>
-                                            <th>Email</th>
-
-                                            <th>ruolo</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        {% for link in links %}
-                                        <tr>
-                                            <td>{{ link[0]}}</td>
-                                            <td>{{ link[4]}}</td>
-                                            <td>{{ link[1]}}</td>
-                                            <td>{{ link[2]}}</td>
-                                            <td>{{ link[3]}}</td>
-                                            <td class="ruolo">{{ link[5]}}</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-
-
-
-
-                                    {%elif check == "utente" or check == "admin" %}
+                                    {%if check == "utente" or check == "admin" %}
                                     <thead>
                                         <tr>
                                             <th>ID</th>
                                             <th>Titolo</th>
-                                            <th>Azienda</th>
                                             <th>Categoria</th>
                                             <th>Anno di validita</th>
                                             <th>TAG</th>
@@ -125,7 +85,6 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Titolo</th>
-                                            <th>Azienda</th>
                                             <th>Categoria</th>
                                             <th>Anno di validita</th>
                                             <th>TAG</th>
@@ -137,14 +96,13 @@
 
                                         {% for link in links %}
                                         <tr>
-                                            <td class="IDDocumento"></td>
-                                            <td class="Ipoteca"></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td class="data"></td>
-                                            <td class="data"></td>
-                                            <td class="data"></td>
-                                            <td class="data"></td>
+                                            <td class="ID_documento"></td>
+                                            <td class="Titolo_documento"></td>
+                                            <td class="Categoria_documento"></td>
+                                            <td class="Anno_di_validita_documento"></td>
+                                            <td class="TAG_documento"></td>
+                                            <td class="File_documento"></td>
+                                            <td class="Data_documento"></td>
                                         </tr>
                                         {%endfor%}
                                     </tbody>

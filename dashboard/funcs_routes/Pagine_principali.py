@@ -65,9 +65,6 @@ def principale___utente(session, readChat, allNotifica, readNotifica, connPOSTGR
                        )
 
 
-
-
-
 def principale___admin(session, connPOSTGRES, render_template):
     u = session.get('utente')
     users = session.get('users')
@@ -98,3 +95,25 @@ def principale___admin(session, connPOSTGRES, render_template):
                        links = link,
                        ragionesociale = u['azienda']
                        )    
+
+
+def principale__superadmin(session, render_template):
+    if session.get('demo') == "superadmin":
+        u = session.get('utente')
+        users = session.get('users')
+        demo = session.get('demo')
+
+
+        try:
+            l=len(session.get('notifica')[0]['altri'])
+        except: l = 0
+        usersL = len(users)
+
+    return render_template("charts.html",
+                           Nmes = l, 
+                           amici = users, 
+                           N_amici =usersL -1, 
+                           nome=u['utente'][0], 
+                           check = demo,
+                           ragionesociale=u['azienda']
+                           )

@@ -10,7 +10,7 @@ from datetime import datetime as dt
 #funzioni_per_semplificare
 from dashboard.funcs_routes.funcs1 import checkMese, Documenti__da_DB
 from dashboard.funcs_routes.Utenza import LOGIN, REGISTER, reset_password
-from dashboard.funcs_routes.Pagine_principali import principale___utente, principale___admin
+from dashboard.funcs_routes.Pagine_principali import principale___utente, principale___admin, principale__superadmin
 from dashboard.funcs_routes.API import API___azienda, API___utente
 
 
@@ -74,11 +74,14 @@ def logout():
 #*************************************************************************************************** UTENTE
 @app.route("/HOME")
 def HOME():
-    if session.get('utente'):
+    if session.get('demo') == "utente":
         return principale___utente(session, readChat, allNotifica, readNotifica, connPOSTGRES, dt, render_template, checkMese)
     
-    elif session.get('admin'):
+    elif session.get('demo') == "admin":
         return principale___admin(session, connPOSTGRES, render_template)
+    
+    elif session.get('demo') == "superadmin":
+        return principale__superadmin(session, render_template)
 
 #PAGINE
 @app.route("/charts")
@@ -123,21 +126,58 @@ def table():
     if session.get('demo') == "utente" or session.get('demo') == "admin":
         u = session.get('utente')
         users = session.get('users')
+        demo = session.get('demo')
 
         try:
             l=len(session['notifica'][0]['altri'])
         except: l = 0
         usersL = len(users)
-        nome = u['utente'][0]
-        demo = session.get('demo')
 
         cur = connPOSTGRES.cursor()
         links = Documenti__da_DB(cur, session, "MUTUI")
         cur.close()
-        return render_template("tables.html",Nmes = l, amici = users, N_amici =usersL -1, links = links, nome = nome, check= demo, ragionesociale=u['azienda'])
+        
+        return render_template("tables.html",Nmes = l, amici = users, N_amici =usersL -1, links = links, nome = u['utente'][0], check= demo, ragionesociale=u['azienda'])
 
     elif session.get('demo') == True:
             return render_template("tables.html", check=True)
+
+#--------> CHECK UTENTI
+@app.route("/listaColleghi")
+def utenti___superadmin(): 
+    if session.get('demo') == "admin" or session.get('demo') == "superadmin":
+        u = session.get('utente')
+        users = session.get('users')
+        demo = session.get('demo')
+
+        link = []
+        if session.get("demo") == "admin":
+            for i in users: 
+                if i['utente'][0] == u['utente'][0]: continue    
+                utente = [i['utente'][0], i['utente'][1], i['email'], i['ruolo']]
+                link.append(utente)
+        elif session.get("demo") == "superadmin":
+            for i in users: 
+                if i['utente'][0] == u['utente'][0]: continue    
+                utente = [i['azienda'], i['utente'][0], i['utente'][1], i['email'], i['ruolo']]
+                link.append(utente)
+
+
+        try:
+            l=len(session.get('notifica')[0]['altri'])
+        except: l = 0
+        usersL = len(users)
+
+
+    return render_template("Admin/tabelleUtenti.html",
+                           Nmes = l, 
+                           amici = users, 
+                           N_amici =usersL -1, 
+                           nome=u['utente'][0], 
+                           check = demo,
+                           links = link,
+                           ragionesociale=u['azienda']
+                           )
 
 
 #---------> MESSAGGI
@@ -269,27 +309,6 @@ def superadminCheck():
     
     else: return {"mess": "non puoi"}
 
-@app.route("/superadmin")
-def superadmin():
-    if session.get('demo') == "superadmin":
-        u = session.get('utente')
-        users = session.get('users')
-        demo = session.get('demo')
-
-
-        try:
-            l=len(session.get('notifica')[0]['altri'])
-        except: l = 0
-        usersL = len(users)
-
-    return render_template("charts.html",
-                           Nmes = l, 
-                           amici = users, 
-                           N_amici =usersL -1, 
-                           nome=u['utente'][0], 
-                           check = demo,
-                           ragionesociale=u['azienda']
-                           )
 
 @app.route("/Tickets")
 def Ticket():
@@ -318,7 +337,6 @@ def aziende___superadmin():
         cur.execute("SELECT * FROM azienda")
         aziende = cur.fetchall()
 
-
         try:
             l=len(session.get('notifica')[0]['altri'])
         except:l =0
@@ -344,42 +362,6 @@ def check_aziende___superadmin():
         except Exception as e:
             return jsonify(str(e))
 
-#CHECK UTENTI
-@app.route("/superadmin/utenti")
-def utenti___superadmin(): 
-    if session.get('demo') == "superadmin":
-        u = session.get('utente')
-        users = session.get('users')
-        demo = session.get('demo')
-
-        cur = connPOSTGRES.cursor()
-        cur.execute('SELECT numero, nome, cognome, email, ragionesociale FROM utenti')
-        dq = cur.fetchall()
-        cur.execute('SELECT nome, livello FROM ruoli')
-        access = cur.fetchall()
-        cur.close()
-
-        link = []
-        for i in dq: 
-            if i[1] == u['utente'][0]: continue    
-            for x in access:
-                if x[0] == i[1]:
-                    utente = [i[0], i[1], i[2], i[3], i[4], x[1]]
-            link.append(utente)
-        try:
-            l=len(session.get('notifica')[0]['altri'])
-        except: l = 0
-        usersL = len(users)
-
-    return render_template("Admin/tabelleUtenti.html",
-                           Nmes = l, 
-                           amici = users, 
-                           N_amici =usersL -1, 
-                           nome=u['utente'][0], 
-                           check = demo,
-                           links = link,
-                           ragionesociale=u['azienda']
-                           )
 
 @app.route("/superadmin/report")
 def report___superadmin():
