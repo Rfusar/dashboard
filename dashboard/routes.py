@@ -49,8 +49,10 @@ def logicaLogin():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password'] 
-
-        return LOGIN(connPOSTGRES, email, listaColleghi, session, check_password_hash, password, redirect, url_for)
+        try:
+            return LOGIN(connPOSTGRES, email, listaColleghi, session, check_password_hash, password, redirect, url_for)
+        except Exception as e:
+            print(str(e))
            
 #-----> resetPassword
 @app.route("/resetPassword")
@@ -136,7 +138,7 @@ def table():
         cur = connPOSTGRES.cursor()
         links = Documenti__da_DB(cur, session, "MUTUI")
         cur.close()
-        
+
         return render_template("tables.html",Nmes = l, amici = users, N_amici =usersL -1, links = links, nome = u['utente'][0], check= demo, ragionesociale=u['azienda'])
 
     elif session.get('demo') == True:
