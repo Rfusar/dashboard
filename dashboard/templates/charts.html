@@ -195,7 +195,7 @@
             </div>
         </div>
 
-        {% include "scripts.html"%}
+        {% include "Scripts/principali.html" %}
 
         <script src="../static/vendor/chart.js/Chart.min.js"></script>
 
@@ -205,9 +205,9 @@
         <script src="../static/js/demo/chart-pie-demo.js"></script>
         <script src="../static/js/demo/chart-bar-demo.js"></script>
         {%elif check == "utente" or check == "admin"%}
-        <script src="../static/js/charts_costiToken/script.js"></script>
+
         {%elif check == "superadmin"%}
-        <script src="../static/js/Admin/index/tables.js"></script>
+
         {%endif%}
 </body>
 

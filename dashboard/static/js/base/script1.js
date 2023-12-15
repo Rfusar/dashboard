@@ -87,7 +87,7 @@ btnMessaggi.addEventListener('mouseover', () => {
                     mesIO.push(c[0][ab]['io'])
 
                     aSchermo(count1, mesIOL, User['email'], mesIO, "red", contenitori)
-                    aSchermo(count2, mesTUL, Amici[i+1]['email'], mesTU, "blue", contenitori)
+                    aSchermo(count2, mesTUL, Amici[i + 1]['email'], mesTU, "blue", contenitori)
                 }
             })()
         })
@@ -193,8 +193,6 @@ btn.addEventListener('click', () => {
                 .then(d => console.log(d))
             ATmiaNotifica = []
         }
-        else {
-            window.alert('compila tutti i campi necessari')
-        }
+        else { window.alert('compila tutti i campi necessari') }
     }, 500)
 })

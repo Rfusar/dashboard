@@ -26,8 +26,7 @@ def home():
 #*************************************************************************************************** UTENZA
 #-----> registrazione
 @app.route("/registrazione")
-def registrazione(): 
-    return render_template("user/register.html")
+def registrazione(): return render_template("user/register.html")
 
 @app.route("/fetchRegister", methods=["POST"])
 def logicaRegistrazione():
@@ -43,8 +42,7 @@ def logicaRegistrazione():
 
 #-----> login 
 @app.route("/login")
-def login():
-    return render_template("user/login.html")
+def login(): return render_template("user/login.html")
 
 @app.route("/fetchUtente", methods=["POST"])
 def logicaLogin():
@@ -56,8 +54,7 @@ def logicaLogin():
            
 #-----> resetPassword
 @app.route("/resetPassword")
-def resetPassword():
-    return render_template("user/forgot-password.html")
+def resetPassword(): return render_template("user/forgot-password.html")
 
 @app.route("/fetchResetPassword", methods=["POST"])
 def logicaResetPassword(email, password):
@@ -77,7 +74,11 @@ def logout():
 #*************************************************************************************************** UTENTE
 @app.route("/HOME")
 def HOME():
-    return principale___utente(session, readChat, allNotifica, readNotifica, connPOSTGRES, dt, render_template, checkMese)
+    if session.get('utente'):
+        return principale___utente(session, readChat, allNotifica, readNotifica, connPOSTGRES, dt, render_template, checkMese)
+    
+    elif session.get('admin'):
+        return principale___admin(session, connPOSTGRES, render_template)
 
 #PAGINE
 @app.route("/charts")
@@ -86,8 +87,9 @@ def charts():
         u = session.get('utente')
         users = session.get('users')
         demo = session.get('demo')
-
-        l=len(session['notifica'][0]['altri'])
+        try: 
+            l=len(session['notifica'][0]['altri'])
+        except: l = 0
         usersL = len(users)
 
         nome = u['utente'][0]
@@ -100,8 +102,8 @@ def charts():
 @app.route("/dati")
 def dati():
     MESI = ["Gen","Feb","Mar","Apr","Mag","Giu","Lug","Ago","Set","Ott","Nov","Dic"]
-
     links=[1000,1200,1300,1500,1200,1700,1200,1400,1100,1200,1300,1200]
+    
     return jsonify(links, MESI)
 
 #--------> TABELLE   
@@ -221,11 +223,6 @@ def adminCheck():
     
     else: return {"mess": "non puoi"}
 
-@app.route("/admin")
-def admin():
-    if session.get('demo') == "admin":
-        return principale___admin(session, connPOSTGRES, render_template)
-
 
 
 #*************************************************************************************************** SUPERADMIN
@@ -293,6 +290,21 @@ def superadmin():
                            check = demo,
                            ragionesociale=u['azienda']
                            )
+
+@app.route("/Tickets")
+def Ticket():
+    u = session.get('utente')
+    users = session.get('users')
+
+    try:
+        l=len(session['notifica'][0]['altri'])
+    except: l = 0
+    usersL = len(users)
+    nome = u['utente'][0]
+    demo = session.get('demo')
+
+    return render_template("/tickets.html",Nmes = l, amici = users, N_amici =usersL -1, links = [], nome = nome, check= demo, ragionesociale=u['azienda'])
+
 
 #CHECK AZIENDE
 @app.route("/superadmin/aziende")
@@ -478,19 +490,6 @@ def checkDati():
 def pagina_protetta():
     return render_template("Admin/sql.html")
 
-@app.route("/Tickets")
-def Ticket():
-    u = session.get('utente')
-    users = session.get('users')
-
-    try:
-        l=len(session['notifica'][0]['altri'])
-    except: l = 0
-    usersL = len(users)
-    nome = u['utente'][0]
-    demo = session.get('demo')
-
-    return render_template("/tickets.html",Nmes = l, amici = users, N_amici =usersL -1, links = [], nome = nome, check= demo, ragionesociale=u['azienda'])
 
 
 #*************************************************************************************************** API
