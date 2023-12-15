@@ -8,7 +8,7 @@ from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime as dt
 #funzioni_per_semplificare
-from dashboard.funcs_routes.funcs1 import checkMese, Documenti__da_DB
+from dashboard.funcs_routes.funcs1 import checkMese, Documenti__da_DB, Query, modify_DB
 from dashboard.funcs_routes.Utenza import LOGIN, REGISTER, reset_password
 from dashboard.funcs_routes.Pagine_principali import principale___utente, principale___admin, principale__superadmin
 from dashboard.funcs_routes.API import API___azienda
@@ -75,10 +75,10 @@ def logout():
 @app.route("/HOME")
 def HOME():
     if session.get('demo') == "utente":
-        return principale___utente(session, readChat, allNotifica, readNotifica, connPOSTGRES, dt, render_template, checkMese)
+        return principale___utente(session, readChat, allNotifica, readNotifica, dt, render_template, checkMese)
     
     elif session.get('demo') == "admin":
-        return principale___admin(session, connPOSTGRES, render_template)
+        return principale___admin(session, connPOSTGRES, render_template, dt, checkMese)
     
     elif session.get('demo') == "superadmin":
         return principale__superadmin(session, render_template)
@@ -118,11 +118,12 @@ def dati():
 @app.route("/tableInfo", methods=["GET","POST"])
 def tableInfo():
     DATI = {}
-
+    '''
     cur = connPOSTGRES.cursor()
     DOCUMENTI_MUTUI = Documenti__da_DB(cur, session, "MUTUI")
     DATI['documenti_mutuo'] = DOCUMENTI_MUTUI
     cur.close()
+    '''
 
     return jsonify(DATI)
 
@@ -156,32 +157,27 @@ def table():
 #--------> CHECK UTENTI
 @app.route("/listaColleghi")
 def utenti___superadmin(): 
+
+    def checkRitorno(nome, utenti, ruolo):
+        for i in cur.fetchall():
+            if i[nome] == u['utente'][0] or i[ruolo] == "superadmin": continue
+            else: utenti.append(i)
+
     if session.get('demo') == "admin" or session.get('demo') == "superadmin":
         u = session.get('utente')
         demo = session.get('demo')
 
-        query = """SELECT 
-                        utenti.ragionesociale,
-                        utenti.nome, 
-                        utenti.cognome, 
-                        utenti.email, 
-                        ruoli.livello 
-                    FROM utenti 
-                    JOIN ruoli 
-                    ON utenti.email = ruoli.email"""
-
         cur = connPOSTGRES.cursor()
+
+        utenti = []
         if session.get("demo") == "admin":
-            cur.execute(f"{query} WHERE ragionesociale = %s", (u['azienda']))
+            cur.execute(f"{Query()['listaColleghi_admin']} WHERE utenti.ragionesociale = '{u['azienda']}'")
+            checkRitorno(0,utenti,3)
             
         elif session.get("demo") == "superadmin":
-            cur.execute(f"{query}")
+            cur.execute(f"{Query()['listaColleghi_superadmin']}")
+            checkRitorno(1, utenti,4)
             
-        utenti = []
-        for i in cur.fetchall():
-            if i[1] == u['utente'][0]: continue
-            else: utenti.append(i)
-
         cur.close()
 
         try:
@@ -257,9 +253,6 @@ def adminCheck():
         cur.execute('SELECT nome FROM utenti WHERE ragionesociale = %s', (nomeAzienda,))
         nomiUSERS = cur.fetchall()
 
-        cur.execute("SELECT token FROM documenti WHERE ragionesociale = %s", (nomeAzienda,))
-        tokenAll = cur.fetchall()
-
         try:
             CHAT = {}
             for i in range(0, len(nomiUSERS)):
@@ -268,15 +261,9 @@ def adminCheck():
                 CHAT['chat'] = readChat(nomiUSERS[i+1][0], nomiUSERS[i][0])
         except:...
 
-        token = 0
-
-        for i in tokenAll:
-            token += i[0]
-
         result ={
             'utenti':nomiUSERS,
-                'chat':CHAT,
-            'token': token
+            'chat':CHAT,
            }
     
 
@@ -307,12 +294,6 @@ def superadminCheck():
                 CHAT['chat'] = readChat(nomiUSERS[i+1][0], nomiUSERS[i][0])
         except:...
 
-        cur.execute("SELECT token, ragionesociale FROM documenti")
-        tokenAll = cur.fetchall()
-        #SOMMA TOTALE
-        token = 0
-        for i in tokenAll: token += i[0]
-        
 
         cur.execute("SELECT * FROM azienda")
         aziende = cur.fetchall()
@@ -321,8 +302,6 @@ def superadminCheck():
         result ={
             'utenti':nomiUSERS,
             'chat':CHAT,
-            'tokenTOT': token,
-            'token':  tokenAll,
             'aziende': aziende
            }
         
@@ -394,36 +373,16 @@ def report___superadmin(): return render_template("Admin/report.html")
 
 #*************************************************************************************************** ALTRO
 #Help
-@app.route("/Help", methods=['GET'])
-def HELP():
-    u = session.get('utente')
-    demo = session.get('demo')
-   
-    try: 
-        l=len(session['notifica'][0]['altri'])
-    except: l = 0
-    
-    amici = session.get('users')
-    N_amici = len(amici)
-
-    return render_template('componenti/Help.html',
-                        check = demo, 
-                        nome= u['utente'][0], 
-                        cognome=u['utente'][1], 
-                        email=u['email'], 
-                        messaggio=session.get('notifica')[0]['altri'],
-                      
-                        Nmes = l,
-                        amici = amici,
-                        N_amici =N_amici -1)  
+@app.route("/Help")
+def HELP(): return render_template('componenti/Help.html')  
 
 #Prove
 @app.route("/modificaDB", methods=['POST'])
 def prova():
     dati = request.json
     risposte = []
-    cur = connPOSTGRES.cursor()
 
+    cur = connPOSTGRES.cursor()
     for utente in dati:
         azienda = utente.get('azienda')
         nome = utente.get('nome')
@@ -434,21 +393,8 @@ def prova():
 
         check = ""
         if session.get("demo") == "superadmin" or session.get("demo") == "admin": 
-            if elimina:
-                cur.execute("DELETE FROM ruoli WHERE email = %s and ragionesociale = %s", (email, azienda))
-                connPOSTGRES.commit()
-                cur.execute("DELETE FROM utenti WHERE nome = %s and cognome = %s and email = %s and ragionesociale = %s", (nome, cognome, email, azienda))
-                connPOSTGRES.commit()
-                check += "eliminato"
+            modify_DB(elimina, modifica, nome, cognome, email, azienda, cur, connPOSTGRES, risposte, check)
 
-            elif  modifica:
-                cur.execute("UPDATE ruoli SET livello = 'admin' WHERE email = %s", (email,))
-                connPOSTGRES.commit()
-                check += "reso admin"
-
-            risposta = f"L'utente {nome} {cognome}, lavora presso: {azienda}; {check} con successo"
-            risposte.append(risposta)
-    
     cur.close()
     
     return jsonify(risposte)
@@ -494,8 +440,8 @@ def checkDati():
 
 @app.route('/check/provaAuth')
 @requires_auth
-def pagina_protetta(): return render_template("Admin/sql.html")
-
+def pagina_protetta(): 
+    return render_template("Admin/sql.html")
 
 
 #*************************************************************************************************** API

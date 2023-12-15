@@ -1,4 +1,4 @@
-def principale___utente(session, readChat, allNotifica, readNotifica, connPOSTGRES, dt, render_template, checkMese):
+def principale___utente(session, readChat, allNotifica, readNotifica, dt, render_template, checkMese):
     #PRELIEVO CHAT
     amici = session.get('users')
     u = session.get('utente')
@@ -42,11 +42,11 @@ def principale___utente(session, readChat, allNotifica, readNotifica, connPOSTGR
                        Nmes = l,
                        amici = amici,
                        N_amici =N_amici -1,
-
+                        mese = checkMese(dt),
                         anno = dt.now().year
                        )
 
-def principale___admin(session, connPOSTGRES, render_template):
+def principale___admin(session, connPOSTGRES, render_template, dt, checkMese):
     u = session.get('utente')
     users = session.get('users')
     demo = session.get('demo')
@@ -75,7 +75,9 @@ def principale___admin(session, connPOSTGRES, render_template):
                        nome=u['utente'][0], 
                        check = demo,
                        links = link,
-                       ragionesociale = u['azienda']
+                       ragionesociale = u['azienda'],
+                       mese = checkMese(dt),
+                       anno = dt.now().year
                        )    
 
 def principale__superadmin(session, render_template):
