@@ -63,7 +63,7 @@ def lavorazione_folder(request, re, N_token_cl100k_base, jsonify):
 
 
 #*DARE A chatGPT
-def dare_foglio(system_gpt, user_gpt, TITOLO):
+def dare_foglio(system_gpt, user_gpt, TITOLO, api_key, maxContent, creativita, interact_with_chatgpt_prova, connPOSTGRES):
     with open("C:\\Users\\Utente\\Desktop\\presenze_lavoro\\esercizi\\progettoAndrea2\\SYSTEM.txt", "w", encoding="utf-8") as f: f.write(system_gpt)
     with open("C:\\Users\\Utente\\Desktop\\presenze_lavoro\\esercizi\\progettoAndrea2\\SYSTEM.txt", encoding="utf-8") as f: SYSTEM_GPT = f.read()
     with open("C:\\Users\\Utente\\Desktop\\presenze_lavoro\\esercizi\\progettoAndrea2\\USER.txt", "w", encoding="utf-8") as f: f.write(user_gpt)
@@ -81,9 +81,10 @@ def dare_foglio(system_gpt, user_gpt, TITOLO):
     except Exception as e:
         return {"status":f"{e}"}
     '''
+
     return {"status": f"{TITOLO}, eseguito"}
 
-def dare_folder(dati):
+def dare_folder(dati, api_key, maxContent, creativita, interact_with_chatgpt_prova, connPOSTGRES):
     secondiTOT = 25 * len(dati.get('documenti'))
     secondi = secondiTOT % 60
     minuti = secondiTOT / 60
@@ -104,9 +105,11 @@ def dare_folder(dati):
             cur.execute('INSERT INTO documenti (documento, token, nome_file) VALUES (%s,%s,%s)',(risposta[0], risposta[1], TITOLO))
             connPOSTGRES.commit()
             cur.close()
+            return {"status": f"aspetta circa 20/25sec per documento, cioè {int(minuti)}m {secondi}sec circa"}
 
         except Exception as e:
             return {"err": f"{e}"}
         '''
+    
                  
-    return {"status": f"aspetta circa 20/25sec per documento, cioè {int(minuti)}m {secondi}sec circa"}
+    #return {"status": f"check prova:\naspetta circa 20/25sec per documento, cioè {int(minuti)}m {secondi}sec circa"}

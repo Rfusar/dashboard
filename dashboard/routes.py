@@ -258,7 +258,7 @@ def carica_file2():
         TITOLO = documento.get('nome')[:-4]
         user_gpt = documento.get('comando')
         system_gpt = documento.get('file')
-        dare_foglio(system_gpt, user_gpt, TITOLO)
+        dare_foglio(system_gpt, user_gpt, TITOLO, api_key, maxContent, creativita, interact_with_chatgpt_prova, connPOSTGRES)
 
     else:
         return {"errore":"File non valido"}
@@ -276,8 +276,7 @@ def carica_file():
 @app.route('/carica_folder2', methods=['POST'])
 def carica_folder2():
     dati = request.json
-    #TEMPO
-    return dare_folder(dati)
+    return dare_folder(dati, api_key, maxContent, creativita, interact_with_chatgpt_prova, connPOSTGRES)
     
 @app.route('/carica_folder', methods=['POST'])
 def carica_folder():
