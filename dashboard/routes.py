@@ -18,7 +18,7 @@ from dashboard.funcs_routes.API import API___azienda
 @app.route("/")
 def home():
     session['demo'] = True
-    return render_template('index.html', check = True)
+    return render_template('index.html', check = True, title= "Repository_GDPR")
     
     
 
@@ -71,7 +71,7 @@ def logout():
     return redirect(url_for('home'))
 
 
-#*************************************************************************************************** UTENTE
+#*************************************************************************************************** Principale
 @app.route("/HOME")
 def HOME():
     if session.get('demo') == "utente":
@@ -154,47 +154,6 @@ def table():
     elif session.get('demo') == True:
             return render_template("tables.html", check=True)
 
-#--------> CHECK UTENTI
-@app.route("/listaColleghi")
-def utenti___superadmin(): 
-
-    def checkRitorno(nome, utenti, ruolo):
-        for i in cur.fetchall():
-            if i[nome] == u['utente'][0] or i[ruolo] == "superadmin": continue
-            else: utenti.append(i)
-
-    if session.get('demo') == "admin" or session.get('demo') == "superadmin":
-        u = session.get('utente')
-        demo = session.get('demo')
-
-        cur = connPOSTGRES.cursor()
-
-        utenti = []
-        if session.get("demo") == "admin":
-            cur.execute(f"{Query()['listaColleghi_admin']} WHERE utenti.ragionesociale = '{u['azienda']}'")
-            checkRitorno(0,utenti,3)
-            
-        elif session.get("demo") == "superadmin":
-            cur.execute(f"{Query()['listaColleghi_superadmin']}")
-            checkRitorno(1, utenti,4)
-            
-        cur.close()
-
-        try:
-            l=len(session.get('notifica')[0]['altri'])
-        except: l = 0
-        usersL = len(session.get('users'))
-
-
-    return render_template("Admin/tabelleUtenti.html",
-                           Nmes = l, 
-                           amici = session.get('users'), 
-                           N_amici =usersL -1, 
-                           nome=u['utente'][0], 
-                           check = demo,
-                           links = utenti,
-                           ragionesociale=u['azienda']
-                           )
 
 
 #---------> MESSAGGI
@@ -242,7 +201,7 @@ def b(a,b,c,d):
 
 
 
-#*************************************************************************************************** ADMIN
+#*************************************************************************************************** Pagine AMMINISTRATORI
 @app.route("/adminCheck")
 def adminCheck():
     if session.get('demo') == "admin":
@@ -271,57 +230,85 @@ def adminCheck():
     
     else: return {"mess": "non puoi"}
 
-
-
-#*************************************************************************************************** SUPERADMIN
 @app.route("/superadminCheck")
 def superadminCheck():
     if session.get('demo') == "superadmin":
         #CHECK CHAT
         cur = connPOSTGRES.cursor()
-        cur.execute('SELECT nome, cognome, email, ragionesociale FROM utenti')
-        nomiUSERS = cur.fetchall()
-        cur.execute("SELECT nome, livello FROM ruoli")
-        ruoli = cur.fetchall()
-        #finire
-        for i in range(len(ruoli)):
-            ...
+        users = session.get('users')
+        nomiUSERS = []
+        for U in users : nomiUSERS.append(U['utente'][0])
+
         try:
             CHAT = {}
-            for i in range(0, len(nomiUSERS)):
+            for i in range(len(nomiUSERS)):
                 if  i == len(nomiUSERS)-1: 
                     CHAT['chat'] = readChat(nomiUSERS[0][0], nomiUSERS[i][0])
                 CHAT['chat'] = readChat(nomiUSERS[i+1][0], nomiUSERS[i][0])
         except:...
 
-
         cur.execute("SELECT * FROM azienda")
         aziende = cur.fetchall()
         cur.close()
 
-        result ={
-            'utenti':nomiUSERS,
-            'chat':CHAT,
-            'aziende': aziende
-           }
+        result = { 'utenti': users, 'chat':CHAT, 'aziende': aziende }
         
         return jsonify(result)
     
     else: return {"mess": "non puoi"}
 
+#--------> CHECK UTENTI
+@app.route("/listaColleghi")
+def utenti___superadmin(): 
+
+    def checkRitorno(nome, utenti, ruolo):
+        for i in cur.fetchall():
+            if i[nome] == u['utente'][0] or i[ruolo] == "superadmin": continue
+            else: utenti.append(i)
+
+    if session.get('demo') == "admin" or session.get('demo') == "superadmin":
+        u = session.get('utente')
+
+        cur = connPOSTGRES.cursor()
+        utenti = []
+        if session.get("demo") == "admin":
+            cur.execute(f"{Query()['listaColleghi_admin']} WHERE utenti.ragionesociale = '{u['azienda']}' ")
+            checkRitorno(0,utenti,3)
+            
+        elif session.get("demo") == "superadmin":
+            cur.execute(f"{Query()['listaColleghi_superadmin']}")
+            checkRitorno(1, utenti,4)
+            
+        cur.close()
+
+        try:
+            l=len(session.get('notifica')[0]['altri'])
+        except: l = 0
+        usersL = len(session.get('users'))
+
+
+    return render_template("Admin/tabelleUtenti.html",
+                           Nmes = l, 
+                           amici = session.get('users'), 
+                           N_amici =usersL -1, 
+                           nome=u['utente'][0], 
+                           check = session.get('demo'),
+                           links = utenti,
+                           ragionesociale=u['azienda']
+                           )
+
 @app.route("/Tickets")
-def Ticket():
+def Tickets():
     u = session.get('utente')
-    users = session.get('users')
 
     try:
         l=len(session['notifica'][0]['altri'])
     except: l = 0
-    usersL = len(users)
+    usersL = len(session.get('users'))
 
     return render_template("/tickets.html",
                            Nmes = l, 
-                           amici = users, 
+                           amici = session.get('users'), 
                            N_amici =usersL -1, 
                            links = [], 
                            nome = u['utente'][0], 
@@ -332,24 +319,20 @@ def Ticket():
 def aziende___superadmin(): 
     if session.get('demo') == "superadmin":
         u = session.get('utente')
-        users = session.get('users')
+
+        cur = connPOSTGRES.cursor()
+        cur.execute("SELECT * FROM azienda")
+        aziende = cur.fetchall()
+        cur.close()
 
         try:
-            cur = connPOSTGRES.cursor()
-            cur.execute("SELECT * FROM azienda")
-            aziende = cur.fetchall()
-            cur.close()
-        except Exception as e: 
-            print(str(e))  
-
-        try:
-            l=len(session.get('notifica')[0]['altri'])
-        except:l =0
-        usersL = len(users)
+            l = len(session.get('notifica')[0]['altri'])
+        except:l = 0
+        usersL = len(session.get('users'))
 
         return render_template("Admin/tabelleAziende.html", 
                                 Nmes = l, 
-                                amici = users, 
+                                amici = session.get('users'), 
                                 N_amici =usersL -1, 
                                 nome=u['utente'][0],
                                 check = session.get('demo'),
@@ -360,14 +343,10 @@ def aziende___superadmin():
 @app.route("/superadmin/checkAziende", methods=["POST"])
 def check_aziende___superadmin():
     if session.get('demo') == "superadmin":
-        try:
-            cur = connPOSTGRES.cursor()
-            cur.execute("SELECT * FROM azienda")
-            aziende = cur.fetchall()
-            return jsonify(aziende)
-        
-        except Exception as e:
-            return jsonify(str(e))
+        cur = connPOSTGRES.cursor()
+        cur.execute("SELECT * FROM azienda")
+        aziende = cur.fetchall()
+        return jsonify(aziende)
 
 @app.route("/superadmin/report")
 def report___superadmin(): return render_template("Admin/report.html")
@@ -379,9 +358,8 @@ def report___superadmin(): return render_template("Admin/report.html")
 @app.route("/Help")
 def HELP(): return render_template('componenti/Help.html')  
 
-#Prove
 @app.route("/modificaDB", methods=['POST'])
-def prova():
+def modificaDB():
     dati = request.json
     risposte = []
 
@@ -453,3 +431,10 @@ def pagina_protetta():
 @app.route("/registrazione_azienda", methods=['POST'])
 def registrazione_azienda_api(): return API___azienda(request, connPOSTGRES)
 
+
+'''
+COSE DA FARE:
+    - Gestione tickets
+    - Query Documenti (voce: file)
+
+'''

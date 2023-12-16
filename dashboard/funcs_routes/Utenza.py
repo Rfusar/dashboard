@@ -11,35 +11,25 @@ def LOGIN(connPOSTGRES, email, listaColleghi, session, check_password_hash, pass
         #utente
         for i in utenti: 
             if i['email'] == email: session['utente'] = i
-
-        utenteRuolo = session.get('utente')['ruolo']
         
         #colleghi
-        colleghiAzienda = []
-        if utenteRuolo == "superadmin":
-            for utentiAzienda in utenti: colleghiAzienda.append(utentiAzienda)
-
-        elif utenteRuolo == "admin":
-            for utentiAzienda in utenti: colleghiAzienda.append(utentiAzienda) if utentiAzienda['ruolo'] != "superadmin" else None    
-
-        elif utenteRuolo == "utente":
-            for utentiAzienda in utenti: colleghiAzienda.append(utentiAzienda) if utentiAzienda['ruolo'] == "utente" else None     
-
-        session['users'] = colleghiAzienda
+        session['users'] = utenti
 
         #livello utente
-        session['demo'] = utenteRuolo
+        session['demo'] = session.get('utente')['ruolo']
             
         if check_password_hash(u[0][0], password):
             #INDIRIZZAMENTO A PAGINA PRINCIPALE
             ruoli = ["utente", "admin", "superadmin"]
             for i in range(len(ruoli)): 
-                if session.get('utente')['ruolo'] == ruoli[i]: return redirect(url_for('HOME'))   
+                if session.get('utente')['ruolo'] == ruoli[i]: 
+                    return redirect(url_for('HOME'))   
   
         else:
             return redirect(url_for('login'))
             
-    except:
+    except Exception as e:
+        print(str(e))
         return redirect(url_for('login'))
     
 

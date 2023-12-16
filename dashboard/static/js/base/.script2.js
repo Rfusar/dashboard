@@ -2,7 +2,7 @@ const connChat = () => {
     class chatAmico {
         constructor(tu, io) {
             this.tu = tu,
-            this.io = io
+                this.io = io
         }
     }
 
@@ -20,7 +20,7 @@ const connChat = () => {
                                 chat[amicoNome] = [];
                             }
                             chat[amicoNome].push(f);
-                            
+
                         }
                     }
                 }
@@ -40,19 +40,6 @@ const checkChat = (utente) => {
 window.addEventListener('load', () => {
     if (User['nome'] == 'ricky') {
         document.addEventListener("keydown", (event) => {
-
-            if (event.ctrlKey && event.key == 'ù') {
-                fetch('/api/query')
-                    .then(response => response.json())
-                    .then(data => {
-
-                        console.log(data);
-                    })
-                    .catch(error => {
-                        console.error('Si è verificato un errore:', error);
-                    });
-
-            }
 
             if (event.ctrlKey && event.key == 'à') {
                 fetch('/CHECKPROVA')
@@ -90,13 +77,6 @@ window.addEventListener('load', () => {
 
             }
 
-        });
-
-    }
-    else {
-
-        document.addEventListener("keydown", (event) => {
-
             if (event.ctrlKey && event.key == 'ù') {
                 fetch('/check/provaAuth')
                     .then(response => {
@@ -118,9 +98,6 @@ window.addEventListener('load', () => {
 
             }
 
-
-
         });
-
     }
 })
