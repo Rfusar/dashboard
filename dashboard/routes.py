@@ -2,7 +2,7 @@ from dashboard import app
 from flask import render_template,jsonify,request,session, redirect, url_for
 from database.DB import connPOSTGRES, checkToken
 from database.DBchat import chat, readChat,notifica, readNotifica, allNotifica
-from database.DBuser import listaColleghi #, ruoloUtente
+from database.DBuser import listaColleghi
 import re
 from functools import wraps
 #from .classDefinition import RegistrazioneForm,LoginForm
@@ -25,13 +25,10 @@ def home():
     return render_template('index.html', check = True)
     
     
-
-
 #*************************************************************************************************** UTENZA
 #-----> registrazione
 @app.route("/registrazione")
 def registrazione(): return render_template("user/register.html")
-
 @app.route("/fetchRegister", methods=["POST"])
 def logicaRegistrazione():
     if request.method == 'POST':
@@ -47,7 +44,6 @@ def logicaRegistrazione():
 #-----> login 
 @app.route("/login")
 def login(): return render_template("user/login.html")
-
 @app.route("/fetchUtente", methods=["POST"])
 def logicaLogin():
     if request.method == 'POST':
@@ -59,7 +55,6 @@ def logicaLogin():
 #-----> resetPassword
 @app.route("/resetPassword")
 def resetPassword(): return render_template("user/forgot-password.html")
-
 @app.route("/fetchResetPassword", methods=["POST"])
 def logicaResetPassword(email, password):
     if request.method == "POST":
@@ -307,10 +302,6 @@ def token():
     elif session.get('demo') == True:
         return render_template("tok.html", check=True)
     
-
-
-
-
 
 #*************************************************************************************************** ADMIN
 @app.route("/adminCheck")
@@ -583,13 +574,3 @@ def registrazione_documento_api():
         return API___documento(request)
     except Exception as e:
         return str(e), 400
-
- 
-
-'''
-COSE DA FARE:
-    -
-
-APPUNTI:
-    - /dati -> GRAFICO ---> utente, admin, superadmin
-'''

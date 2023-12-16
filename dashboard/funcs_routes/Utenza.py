@@ -7,7 +7,7 @@ def LOGIN(connPOSTGRES, email, listaColleghi, session, check_password_hash, pass
         cur.execute("SELECT nome, ragionesociale FROM utenti WHERE password = %s", (u[0][0],))
         a = cur.fetchall()
 
-        utenti = listaColleghi(a[0][1])
+        utenti = listaColleghi(a[0][1], email)
         #utente
         for i in utenti: 
             if i['email'] == email: session['utente'] = i

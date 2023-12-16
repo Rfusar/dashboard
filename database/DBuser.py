@@ -1,6 +1,6 @@
 from .DB import connPOSTGRES
 
-def listaColleghi(RG) -> list[dict]:
+def listaColleghi(RG, email) -> list[dict]:
 
     class User:
         def __init__(self, nome, cognome, ragionesociale, email, ruolo):
@@ -17,38 +17,34 @@ def listaColleghi(RG) -> list[dict]:
             array.append(ogg)
 
     cur = connPOSTGRES.cursor()
-    cur.execute('SELECT nome, cognome, ragionesociale, email FROM utenti WHERE ragionesociale = %s',(RG,))
-    u = cur.fetchall()
-    cur.execute('SELECT nome, livello FROM ruoli WHERE ragionesociale = %s', (RG,))
-    r = cur.fetchall()
+
+    cur.execute("SELECT utenti.email, ruoli.livello FROM utenti CROSS JOIN ruoli")
+    
+    for i in cur.fetchall():
+        if email == i[0]: UTENTE = i
+
+    query = """SELECT 
+                    utenti.nome, 
+                    utenti.cognome, 
+                    utenti.ragionesociale, 
+                    utenti.email,
+                    ruoli.livello 
+                FROM utenti 
+                JOIN ruoli 
+                ON utenti.nome = ruoli.nome"""
+
+    if UTENTE[1] == "superadmin":  cur.execute(f"{query}")
+
+    elif UTENTE[1] == "admin": cur.execute(f"{query} WHERE utenti.ragionesociale = '{RG}'")
+
+    elif UTENTE[1] == "utente": cur.execute(f"{query} WHERE utenti.ragionesociale = '{RG}' and ruoli.livello = 'utente'")
 
     USER = [] 
-    for i in u: 
-        for j in r:
-            if j[0] == i[0]:
-                User(i[0], i[1], i[2], i[3], j[1]).utente(USER); break
+    for i in cur.fetchall(): User(i[0], i[1], i[2], i[3], i[4]).utente(USER)
             
     cur.close() 
     return USER
-'''
-def ruoloUtente(nome) -> dict:
-    class Admin:
-        def __init__(self, nome):
-            self.nome = nome
 
-        def creatore(self): ogg={"superadmin": self.nome}; return ogg
-        def amministratore(self): ogg={"admin": self.nome}; return ogg
-        def utente(self): ogg={"utente": self.nome}; return ogg
-
-    cur = connPOSTGRES.cursor()
-
-    cur.execute('SELECT livello FROM ruoli WHERE nome = %s',(nome,))
-    u = cur.fetchall()
-    
-    if u[0][0] == "superadmin": return Admin(nome).creatore()
-    elif u[0][0] == "admin": return Admin(nome).amministratore()
-    elif u[0][0] == "utente": return Admin(nome).utente()
-'''
 
 
 

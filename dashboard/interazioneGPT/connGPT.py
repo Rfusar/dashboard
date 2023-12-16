@@ -14,6 +14,4 @@ def interact_with_chatgpt_prova(user, system, API_KEY, maxContent, creativita):
         temperature=creativita,  # Puoi regolare questo valore per controllare la "creatività" delle risposte
     )
 
-     
-
     return [response['choices'][0]['message']['content'], response['usage']['total_tokens']]
