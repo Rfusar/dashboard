@@ -22,8 +22,6 @@
     <h3>TRASFORMAZIONE DOCUMENTI(API)</h3>
     <ol>
         <li style="margin-bottom: 1.5%;"><strong>/registrazione_azienda</strong></li>
-        <li style="margin-bottom: 1.5%;"><strong>/registrazione_utente</strong></li>
-        <li style="margin-bottom: 1.5%;"><strong>/registrazione_&lt;azienda>_&lt;tipologia></strong></li>
     </ol>
 
 
@@ -70,92 +68,6 @@
             }'
 
             url="http://???/registrazione_azienda"
-            curl -X POST -d "$azienda" -H "Content-Type: application/json" "$url"
-        </code>
-    </pre>
-
-
-
-
-    <h2>/registrazione_utente</h2>
-    <pre>
-        <em class="W">WINDOWS ESEMPIO</em>::
-        <code>
-            $utente = @{
-                Nome = ""
-                Cognome = ""
-                Tel = ""
-                Ragionesociale = ""
-                Email = ""
-                Password = ""
-                Ruolo=""
-            }
-            
-            $jsonUtente = $utente | ConvertTo-Json
-            
-            $url = "???/registrazione_utente"
-            Invoke-RestMethod -Uri $url -Method Post -Body $jsonUtente -ContentType "application/json"
-        </code>
-
-
-
-        <em class="L">LINUX ESEMPIO (con cURL)</em>:
-        <code>
-            #!/bin/bash
-
-            utente='{
-                "Nome": "",
-                "Cognome": "",
-                "Tel": "",
-                "Ragionesociale": "",
-                "Email": "",
-                "Password": "",
-                "Ruolo": ""
-            }'
-
-            url="http://???/registrazione_utente"
-            curl -X POST -d "$utente" -H "Content-Type: application/json" "$url"
-        </code>
-    </pre>
-
-
-
-
-
-
-    <h2>/registrazione_&lt;azienda>_&lt;tipologia></h2>
-    <pre>
-        <em class="W">WINDOWS ESEMPIO</em>::
-        <code>
-            $documento = @{
-                Id = ""
-                User = ""
-                Nome_file = ""
-                System = ""
-                Ragionesociale = ""
-            }
-            
-            $jsondoc = $documento | ConvertTo-Json
-            
-            $url = "???/registrazione_GySytem_contratti"
-            Invoke-RestMethod -Uri $url -Method Post -Body $jsondoc -ContentType "application/json" 
-        </code>
-
-
-
-        <em class="L">LINUX ESEMPIO (con cURL)</em>:
-        <code>
-            #!/bin/bash
-
-            documento='{
-            "Id": "",
-            "Nome_file": "",
-            "User": "",
-            "System": "",
-            "Ragionesociale": ""
-            }'
-
-            url="http://???/registrazione_Publish_F24"
             curl -X POST -d "$azienda" -H "Content-Type: application/json" "$url"
         </code>
     </pre>

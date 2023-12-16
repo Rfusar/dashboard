@@ -334,10 +334,13 @@ def aziende___superadmin():
         u = session.get('utente')
         users = session.get('users')
 
-        cur = connPOSTGRES.cursor()
-        cur.execute("SELECT * FROM azienda")
-        aziende = cur.fetchall()
-        cur.close()
+        try:
+            cur = connPOSTGRES.cursor()
+            cur.execute("SELECT * FROM azienda")
+            aziende = cur.fetchall()
+            cur.close()
+        except Exception as e: 
+            print(str(e))  
 
         try:
             l=len(session.get('notifica')[0]['altri'])
@@ -382,6 +385,8 @@ def prova():
     dati = request.json
     risposte = []
 
+    print(dati)
+
     cur = connPOSTGRES.cursor()
     for utente in dati:
         azienda = utente.get('azienda')
@@ -393,7 +398,7 @@ def prova():
 
         check = ""
         if session.get("demo") == "superadmin" or session.get("demo") == "admin": 
-            modify_DB(elimina, modifica, nome, cognome, email, azienda, cur, connPOSTGRES, risposte, check)
+            risposte.append(modify_DB(elimina, modifica, nome, cognome, email, azienda, cur, connPOSTGRES, check))
 
     cur.close()
     

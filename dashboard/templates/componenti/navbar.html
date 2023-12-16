@@ -48,16 +48,19 @@
 
         <!-- Nav Item - Alerts -->
         <li class="nav-item dropdown no-arrow mx-1">
+            {%if check == "utente" or check == "admin"%}
             <a class="nav-link dropdown-toggle" id="alertsDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                {%if check == "utente" or check == "admin" or check == "superadmin"%}
                 <i class="fas fa-bell fa-fw" id="btnNotifiche"></i>
-                {%elif check == true%}
-                <i class="fas fa-bell fa-fw"></i>
-                {%endif%}
-                <!-- Counter - Alerts -->
                 <span class="badge badge-danger badge-counter">{{ Nmes }}</span>
             </a>
+            {%elif check == true%}
+            <a class="nav-link dropdown-toggle" id="alertsDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-bell fa-fw"></i>
+                <span class="badge badge-danger badge-counter">3</span>
+            </a>
+            {%endif%}
             <!-- Dropdown - Alerts -->
 
             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -116,12 +119,19 @@
 
         <!-- Nav Item - Messages -->
         <li class="nav-item dropdown no-arrow mx-1">
+            {%if check == "utente" or check == "admin"%}
             <a class="nav-link dropdown-toggle" id="messagesDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-envelope fa-fw" id="btnMessaggi"></i>
-                <!-- Counter - Messages -->
                 <span class="badge badge-danger badge-counter">{{ N_amici }}</span>
             </a>
+            {%elif check == true%}
+            <a class="nav-link dropdown-toggle" id="messagesDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-envelope fa-fw" id="btnMessaggi"></i>
+                <span class="badge badge-danger badge-counter">5</span>
+            </a>
+            {%endif%}
             <!-- Dropdown - Messages -->
             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                 aria-labelledby="messagesDropdown">
@@ -151,29 +161,6 @@
                 {%if check == "admin" or check == "utente"%}
                 {%for a in amici%}
                 {% if a['utente'][0] != nome and a['ruolo'] != "superadmin" %}
-                <a class="dropdown-item d-flex align-items-center AMICI" href="#">
-                    <div class="dropdown-list-image mr-3">
-                        <img class="rounded-circle" src="static/img/undraw_profile_1.svg" alt="...">
-
-                        <!--<div class="status-indicator bg-success"></div>***NEL CASO DEL SEGNO ONLINE-->
-
-                    </div>
-                    <div class="font-weight-bold">
-
-                        <div class="text-truncate AMICO">{{ a['utente'][0] }}</div>
-
-                        <div class="small text-gray-500"></div>
-                    </div>
-                </a>
-                {% endif %}
-                {% endfor%}
-                {%endif%}
-
-
-
-                {%if check == "superadmin"%}
-                {%for a in amici%}
-                {% if a['utente'][0] != nome %}
                 <a class="dropdown-item d-flex align-items-center AMICI" href="#">
                     <div class="dropdown-list-image mr-3">
                         <img class="rounded-circle" src="static/img/undraw_profile_1.svg" alt="...">

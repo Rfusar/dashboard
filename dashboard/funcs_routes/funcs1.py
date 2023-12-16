@@ -62,21 +62,21 @@ def Query():
     return ogg
 
 
-def modify_DB(elimina, modifica, nome, cognome, email, azienda, cur, connPOSTGRES, risposte, check):
+def modify_DB(elimina, modifica, nome, cognome, email, azienda, cur, connPOSTGRES, check):
     if elimina:
-            cur.execute("DELETE FROM ruoli WHERE email = %s and ragionesociale = %s", (email, azienda))
+            cur.execute(f"DELETE FROM ruoli WHERE email = '{email}' and ragionesociale = '{azienda}'")
             connPOSTGRES.commit()
-            cur.execute("DELETE FROM utenti WHERE nome = %s and cognome = %s and email = %s and ragionesociale = %s", (nome, cognome, email, azienda))
+            cur.execute(f"DELETE FROM utenti WHERE nome = '{nome}' and cognome = '{cognome}' and email = '{email}' and ragionesociale = '{azienda}'")
             connPOSTGRES.commit()
             check += "eliminato"
 
     elif  modifica:
-        cur.execute("UPDATE ruoli SET livello = 'admin' WHERE email = %s", (email,))
+        cur.execute(f"UPDATE ruoli SET livello = 'admin' WHERE email = '{email}'")
         connPOSTGRES.commit()
         check += "reso admin"
 
-    risposta = f"L'utente {nome} {cognome}, lavora presso: {azienda}; {check} con successo"
-    risposte.append(risposta)
+    return f"L'utente {nome} {cognome}, lavora presso: {azienda}; {check} con successo"
+    
     
 
 

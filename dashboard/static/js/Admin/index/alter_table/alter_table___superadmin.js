@@ -1,4 +1,6 @@
 document.querySelector("#btn").addEventListener("click", () => {
+    const fieldDEL = document.querySelectorAll(".DELETE")
+    const fieldMOD = document.querySelectorAll(".MODIFY")
     const aziende = document.querySelectorAll(".azienda_utente")
     const nomi = document.querySelectorAll(".nome_utente")
     const cognomi = document.querySelectorAll(".cognome_utente")
