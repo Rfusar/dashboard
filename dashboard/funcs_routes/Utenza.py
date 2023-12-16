@@ -37,9 +37,9 @@ def LOGIN(connPOSTGRES, email, listaColleghi, session, check_password_hash, pass
             
         if check_password_hash(u[0][0], password):
             #INDIRIZZAMENTO A PAGINA PRINCIPALE
-            ruoli = ["utente", "admin", "superadmin" ]; paginePrincipali=["HOME", "admin", "superadmin"]
+            ruoli = ["utente", "admin", "superadmin" ]
             for i in range(len(ruoli)): 
-                if session.get('utente')['ruolo'] == ruoli[i]: return redirect(url_for(paginePrincipali[i]))   
+                if session.get('utente')['ruolo'] == ruoli[i]: return redirect(url_for('HOME'))   
   
         else:
             return redirect(url_for('login'))

@@ -26,6 +26,7 @@ fetch("/messaggi")
 
         User['nome'] = d[0]['utente'][0]
         User['email'] = d[0]['email']
+        User['azienda'] = d[0]['azienda']
 
         for (let i in d[1]) {
             for (let j in d[1][i]) {

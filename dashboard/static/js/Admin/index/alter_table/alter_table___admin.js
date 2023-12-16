@@ -1,4 +1,6 @@
-btnESEGUI.addEventListener("click", () => {
+document.querySelector("#btn").addEventListener("click", () => {
+    const fieldDEL = document.querySelectorAll(".DELETE")
+    const fieldMOD = document.querySelectorAll(".MODIFY")
     const nomi = document.querySelectorAll(".nome_utente")
     const cognomi = document.querySelectorAll(".cognome_utente")
     const emails = document.querySelectorAll(".email_utente")
@@ -6,7 +8,7 @@ btnESEGUI.addEventListener("click", () => {
     const utenti = []
     for (let i = 0; i < nomi.length; i++) {
         const utente = {}
-        utente['azienda'] = "null"
+        utente['azienda'] = User['azienda']
         utente['nome'] = nomi[i].textContent
         utente['cognome'] = cognomi[i].textContent
         utente['email'] = emails[i].textContent

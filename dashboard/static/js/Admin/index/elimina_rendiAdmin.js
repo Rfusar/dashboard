@@ -2,7 +2,7 @@ const fieldDEL = document.querySelectorAll(".DELETE")
 const fieldMOD = document.querySelectorAll(".MODIFY")
 const campi = [fieldDEL, fieldMOD]
 
-const btnESEGUI = document.querySelector("#btn")
+
 
 identificativo(campi)
 let ID_per_disattivazione = ""

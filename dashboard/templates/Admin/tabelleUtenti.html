@@ -22,16 +22,6 @@
 
     <!-- Custom styles for this page -->
     <link href="../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <style>
-        input[type="radio"] {
-            /* Imposta il colore di sfondo del radio button */
-            background-color: #3498db;
-            /* Imposta il colore del bordo del radio button */
-            border-color: #3498db;
-            /* Imposta il colore del pallino centrale del radio button */
-            border-radius: 50%;
-        }
-    </style>
 </head>
 
 <body id="page-top">
@@ -102,7 +92,6 @@
                                         {%elif check == "superadmin"%}
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
                                                 <th>Azienda</th>
                                                 <th>Nome</th>
                                                 <th>Cognome</th>
@@ -114,7 +103,6 @@
                                         </thead>
                                     <tfoot>
                                         <tr>
-                                            <th>ID</th>
                                             <th>Azienda</th>
                                             <th>Nome</th>
                                             <th>Cognome</th>
@@ -127,12 +115,11 @@
                                     <tbody>
                                         {% for link in links %}
                                         <tr>
-                                            <td >{{ link[0]}}</td>
-                                            <td class="azienda_utente">{{ link[4]}}</td>
+                                            <td class="azienda_utente">{{ link[0]}}</td>
                                             <td class="nome_utente">{{ link[1]}}</td>
                                             <td class="cognome_utente">{{ link[2]}}</td>
                                             <td class="email_utente">{{ link[3]}}</td>
-                                            <td class="ruolo">{{ link[5]}}</td>
+                                            <td class="ruolo">{{ link[4]}}</td>
                                             <td><input type="radio" class="DELETE" value="elimina"
                                                     secondoCheck="true" /></td>
                                             <td><input type="radio" class="MODIFY" value="modifica"
@@ -203,8 +190,8 @@
     <script src="../../static/js/Admin/index/elimina_rendiAdmin.js"></script>
     <script src="../../static/js/Admin/index/invio_a_server.js"></script>
 
-    {%if check == "superadmin"%}
     <script src="../../static/js/base/element.js"></script>
+    {%if check == "superadmin"%}
     <script src="../../static/js/base/.script2.js"></script>
     <script src="../../static/js/Admin/index/alter_table/alter_table___superadmin.js"></script>
     {%elif check == "admin"%}

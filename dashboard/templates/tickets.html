@@ -69,46 +69,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    {%if check == "superuser" %}
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Azienda</th>
-                                            <th>Nome</th>
-                                            <th>Cognome</th>
-                                            <th>Email</th>
-
-                                            <th>ruolo</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Azienda</th>
-                                            <th>Nome</th>
-                                            <th>Cognome</th>
-                                            <th>Email</th>
-
-                                            <th>ruolo</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        {% for link in links %}
-                                        <tr>
-                                            <td>{{ link[0]}}</td>
-                                            <td>{{ link[4]}}</td>
-                                            <td>{{ link[1]}}</td>
-                                            <td>{{ link[2]}}</td>
-                                            <td>{{ link[3]}}</td>
-                                            <td class="ruolo">{{ link[5]}}</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-
-
-
-
-                                    {%elif check == "utente" or check == "admin" %}
+                                    {%if check == "utente" or check == "admin" or check == "superadmin" %}
                                     <thead>
                                         <tr>
                                             <th>ID</th>

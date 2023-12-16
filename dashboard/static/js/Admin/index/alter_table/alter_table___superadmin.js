@@ -1,4 +1,6 @@
-btnESEGUI.addEventListener("click", () => {
+document.querySelector("#btn").addEventListener("click", () => {
+    const fieldDEL = document.querySelectorAll(".DELETE")
+    const fieldMOD = document.querySelectorAll(".MODIFY")
     const aziende = document.querySelectorAll(".azienda_utente")
     const nomi = document.querySelectorAll(".nome_utente")
     const cognomi = document.querySelectorAll(".cognome_utente")
@@ -17,7 +19,7 @@ btnESEGUI.addEventListener("click", () => {
 
         if (utente['elimina'] || utente['modifica']) { utenti.push(utente) }
     }
-    
+
     //js/Admin/index/invio_a_server.js
     manda_a_SERVER("/modificaDB", utenti)
 })
