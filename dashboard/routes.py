@@ -38,7 +38,7 @@ def logicaRegistrazione():
         email = request.form['email']
         telefono = request.form['telefono']
 
-        return REGISTER(generate_password_hash, password, connPOSTGRES, redirect, url_for, nome, cognome, telefono, RG, email, False)
+        return REGISTER(generate_password_hash, password, connPOSTGRES, redirect, url_for, nome, cognome, telefono, RG, email)
 
 #-----> login 
 @app.route("/login")
@@ -455,5 +455,6 @@ def registrazione_documento_api():
 COSE DA FARE:
     - Gestione tickets
     - Query Documenti (voce: file)
+        --rilascio link?
 
 '''

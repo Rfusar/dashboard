@@ -30,7 +30,7 @@ def Documenti__da_DB(cur, session, check):
               """]
     
     if check == "MUTUI":
-        cur.execute(f"{Prompt[0]} WHERE ragionesociale = %s ", (session.get('utente')['azienda'],))
+        cur.execute(f"{Prompt[0]} WHERE ragionesociale = '{session.get('utente')['azienda']}'")
         return cur.fetchall()
     
 def Query():

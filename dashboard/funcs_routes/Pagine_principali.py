@@ -31,7 +31,7 @@ def principale___utente(session, readChat, allNotifica, readNotifica, dt, render
     
     
     return render_template('base.html',
-                       title="IRON_BOX-dashboard",
+                       title="Repository_GDPR",
                        check = demo, 
                        nome = u['utente'][0], 
                        cognome = u['utente'][1], 
@@ -68,7 +68,7 @@ def principale___admin(session, connPOSTGRES, render_template, dt, checkMese):
     usersL = len(users)
 
     return render_template("base.html",
-                       title="IRON_BOX-dashboard",
+                       title="Repository_GDPR",
                        Nmes = l, 
                        amici = users, 
                        N_amici =usersL -1, 
@@ -93,7 +93,7 @@ def principale__superadmin(session, render_template):
         usersL = len(users)
 
     return render_template("charts.html",
-                           title="IRON_BOX-dashboard",
+                           title="Repository_GDPR",
                            Nmes = l, 
                            amici = users, 
                            N_amici =usersL -1, 

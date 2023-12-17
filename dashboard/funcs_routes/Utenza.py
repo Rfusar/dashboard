@@ -43,18 +43,12 @@ def REGISTER(generate_password_hash, password, connPOSTGRES, redirect, url_for, 
         cur.execute("insert into ruoli (email, ragionesociale, livello) values (%s, %s, 'utente')", (email, RG))
         connPOSTGRES.commit()
         cur.close()
-        if api:
-            return "registrazione completata", 200
-        else:
-            return redirect(url_for('login'))
+        return redirect(url_for('login'))
 
     
     except Exception as e:
         print(str(e))
-        if api:
-            return str(e), 00
-        else:
-            return redirect(url_for('registrazione'))  
+        return redirect(url_for('registrazione'))  
 
 
 def reset_password(generate_password_hash, password, connPOSTGRES, email, redirect, url_for):
