@@ -11,7 +11,7 @@ from datetime import datetime as dt
 from dashboard.funcs_routes.funcs1 import checkMese, Documenti__da_DB, Query, modify_DB
 from dashboard.funcs_routes.Utenza import LOGIN, REGISTER, reset_password
 from dashboard.funcs_routes.Pagine_principali import principale___utente, principale___admin, principale__superadmin
-from dashboard.funcs_routes.API import API___azienda
+from dashboard.funcs_routes.API import API___azienda, API___utente, API___documento
 
 
 #*START
@@ -38,7 +38,7 @@ def logicaRegistrazione():
         email = request.form['email']
         telefono = request.form['telefono']
 
-        return REGISTER(generate_password_hash, password, connPOSTGRES, redirect, url_for, nome, cognome, telefono, RG, email)
+        return REGISTER(generate_password_hash, password, connPOSTGRES, redirect, url_for, nome, cognome, telefono, RG, email, False)
 
 #-----> login 
 @app.route("/login")
@@ -429,7 +429,26 @@ def pagina_protetta():
 
 #*************************************************************************************************** API
 @app.route("/registrazione_azienda", methods=['POST'])
-def registrazione_azienda_api(): return API___azienda(request, connPOSTGRES)
+def registrazione_azienda_api():
+    try:
+        return API___azienda(request, connPOSTGRES)
+    except Exception as e:
+        return str(e), 400
+
+@app.route("/registrazione_utente", methods=['POST'])
+def registrazione_utente_api():
+    try:
+        return API___utente(request, generate_password_hash, connPOSTGRES)
+    except Exception as e:
+        return str(e), 400
+
+@app.route("/registrazione_documento", methods=['POST'])
+def registrazione_documento_api():
+    try:
+        return API___documento(request)
+    except Exception as e:
+        return str(e), 400
+
 
 
 '''

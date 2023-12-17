@@ -33,7 +33,7 @@ def LOGIN(connPOSTGRES, email, listaColleghi, session, check_password_hash, pass
         return redirect(url_for('login'))
     
 
-def REGISTER(generate_password_hash, password, connPOSTGRES, redirect, url_for, nome, cognome, telefono, RG, email):
+def REGISTER(generate_password_hash, password, connPOSTGRES, redirect, url_for, nome, cognome, telefono, RG, email, api):
     p = generate_password_hash(password)
 
     try:    
@@ -43,11 +43,19 @@ def REGISTER(generate_password_hash, password, connPOSTGRES, redirect, url_for, 
         cur.execute("insert into ruoli (email, ragionesociale, livello) values (%s, %s, 'utente')", (email, RG))
         connPOSTGRES.commit()
         cur.close()
-        return redirect(url_for('login'))
+        if api:
+            return "registrazione completata", 200
+        else:
+            return redirect(url_for('login'))
+
     
     except Exception as e:
         print(str(e))
-        return redirect(url_for('registrazione'))  
+        if api:
+            return str(e), 00
+        else:
+            return redirect(url_for('registrazione'))  
+
 
 def reset_password(generate_password_hash, password, connPOSTGRES, email, redirect, url_for):
     #aggiungere funzionalita con SMS oppure email

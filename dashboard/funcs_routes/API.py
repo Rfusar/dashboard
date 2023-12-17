@@ -10,13 +10,50 @@ def API___azienda(request, connPOSTGRES):
     Email = data.get('Email')
     Pec = data.get('Pec')
     Telefono = data.get('Tel')
+
     try:
         cur = connPOSTGRES.cursor()
         cur.execute("INSERT INTO azienda (ragionesociale, partitaiva, indirizzo, comune, provincia, cap, nazione, email, pec, tel) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", 
-                        (Ragionesociale, Partitaiva, Indirizzo, Comune, Provincia, Cap, Nazione, Email, Pec, Telefono))
+                    (Ragionesociale, Partitaiva, Indirizzo, Comune, Provincia, Cap, Nazione, Email, Pec, Telefono))
         connPOSTGRES.commit()
         cur.close()
         return "registrazione completata", 200
     
-    except Exception as e: return str(e), 400
+    except Exception as e:
+            return str(e), 400
 
+def API___utente(request, generate_password_hash, connPOSTGRES):
+    data = request.get_json()
+    nome = data.get('Nome')
+    cognome = data.get('Cognome')
+    telefono = data.get('Telefono')
+    RG = data.get('Ragionesociale')
+    email = data.get('Email')
+    password = data.get('Password')
+    ruolo = data.get('Ruolo')
+
+    p = generate_password_hash(password)
+
+    try:    
+        cur = connPOSTGRES.cursor()
+        cur.execute("insert into utenti (nome, cognome, tel, ragionesociale, email, password) values (%s,%s,%s,%s,%s,%s)",(nome, cognome, telefono, RG, email, p))
+        connPOSTGRES.commit()
+        cur.execute("insert into ruoli (email, ragionesociale, livello) values (%s,%s,%s)", (email, RG, ruolo))
+        connPOSTGRES.commit()
+        cur.close()
+        return "registrazione completata", 200
+    
+    except Exception as e:
+            return str(e), 400
+
+def API___documento(request):
+    data = request.get_json()
+    id = data.get("Id")
+    TITOLO = data.get("Nome_file")
+    Ragionesociale = data.get("Ragionesociale")
+
+    #Aggiungere doc
+
+
+
+    return "registrazione completata", 200
