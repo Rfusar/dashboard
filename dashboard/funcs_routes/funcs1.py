@@ -31,7 +31,7 @@ def Documenti__da_DB(cur, session, check):
               """]
     
     if check == "MUTUI":
-        cur.execute(f"{Prompt[0]} WHERE ragionesociale = %s ", (session.get('utente')['azienda'],))
+        cur.execute(f"{Prompt[0]} WHERE ragionesociale = '{session.get('utente')['azienda']}' ")
         return cur.fetchall()
     
 
@@ -45,7 +45,7 @@ def Query():
             ruoli.livello 
         FROM utenti 
         JOIN ruoli 
-        ON utenti.nome = ruoli.nome"""
+        ON utenti.email = ruoli.email"""
     
     b= """SELECT 
             utenti.nome, 
@@ -54,7 +54,7 @@ def Query():
             ruoli.livello 
         FROM utenti 
         JOIN ruoli 
-        ON utenti.nome = ruoli.nome"""
+        ON utenti.email = ruoli.email"""
     
     #OGGETTO
     ogg={
@@ -80,5 +80,15 @@ def modify_DB(elimina, modifica, nome, cognome, email, azienda, cur, connPOSTGRE
 
     return f"L'utente {nome} {cognome}, lavora presso: {azienda}; {check} con successo"
 
+# /dati
+def cerca_in_DB(query, cur, checkToken, jsonify, MESI, demo):
+        if demo:
+            return jsonify(query, MESI)
+        else:
+            cur.execute(query)
+            dati = cur.fetchall()
+            cur.close()
+            ultimo_check = checkToken(dati, MESI)    
+            return jsonify(ultimo_check, MESI)
 
     

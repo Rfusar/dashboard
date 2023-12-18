@@ -23,7 +23,7 @@ def API___utente(request, generate_password_hash, connPOSTGRES):
     data = request.get_json()
     nome = data.get('Nome')
     cognome = data.get('Cognome')
-    telefono = data.get('Tel')
+    telefono = data.get('Telefono')
     RG = data.get('Ragionesociale')
     email = data.get('Email')
     password = data.get('Password')
@@ -35,7 +35,7 @@ def API___utente(request, generate_password_hash, connPOSTGRES):
         cur = connPOSTGRES.cursor()
         cur.execute("insert into utenti (nome, cognome, tel, ragionesociale, email, password) values (%s,%s,%s,%s,%s,%s)",(nome, cognome, telefono, RG, email, p))
         connPOSTGRES.commit()
-        cur.execute("insert into ruoli (nome, ragionesociale, livello) values (%s,%s,%s)", (nome, RG, ruolo))
+        cur.execute("insert into ruoli (email, ragionesociale, livello) values (%s,%s,%s)", (email, RG, ruolo))
         connPOSTGRES.commit()
         cur.close()
         return "registrazione completata", 200
@@ -67,3 +67,12 @@ def API___documento(request):
     '''
 
     return "registrazione completata", 200
+
+#GESTIONE -> funcs API
+def FUNCS_API(func, request, connPOSTGRES, generate_password_hash, API):
+    try:
+        if API == 0: return func(request, connPOSTGRES)
+        elif API == 1: return func(request, generate_password_hash, connPOSTGRES)
+        elif API == 2: return func(request)
+    except Exception as e:
+        return str(e)

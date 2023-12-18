@@ -158,7 +158,6 @@ def notifica(utente1, mes1 ,data, attributo, RG):
 
     nomedb = f'.notifiche\\{utente1}_{RG}.db'
    
-   
     if nomedb in files:
         conn = sqlite3.connect(nomedb)
 

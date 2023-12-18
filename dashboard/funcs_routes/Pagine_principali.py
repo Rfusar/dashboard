@@ -46,7 +46,7 @@ def principale___utente(session, readChat, allNotifica, readNotifica, connPOSTGR
     
     
     return render_template('base.html',
-                       title="IRON_BOX-dashboard",
+                       title="DashboardVersatile",
                        check = demo, 
                        nome = u['utente'][0], 
                        cognome = u['utente'][1], 
@@ -64,13 +64,13 @@ def principale___utente(session, readChat, allNotifica, readNotifica, connPOSTGR
                         anno = dt.now().year
                        )
 
-def principale___admin(session, connPOSTGRES, render_template):
+def principale___admin(session, connPOSTGRES, render_template, dt, checkMese):
     u = session.get('utente')
     users = session.get('users')
     demo = session.get('demo')
 
     cur = connPOSTGRES.cursor()
-    cur.execute('SELECT nome, livello FROM ruoli WHERE ragionesociale = %s', (u['azienda'],))
+    cur.execute('SELECT email, livello FROM ruoli WHERE ragionesociale = %s', (u['azienda'],))
     access = cur.fetchall()
     cur.close()
 
@@ -85,15 +85,18 @@ def principale___admin(session, connPOSTGRES, render_template):
     except: l = 0
     usersL = len(users)
 
-    return render_template("Admin/tabelleUtenti.html",
+    return render_template("base.html",
+                       title="DashboardVersatile",
                        Nmes = l, 
                        amici = users, 
                        N_amici =usersL -1, 
                        nome=u['utente'][0], 
                        check = demo,
                        links = link,
-                       ragionesociale = u['azienda']
-                       ) 
+                       ragionesociale = u['azienda'],
+                       mese = checkMese(dt),
+                       anno = dt.now().year
+                       )
 
 def principale__superadmin(session, render_template):
     u = session.get('utente')

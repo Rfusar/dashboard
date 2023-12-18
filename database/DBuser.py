@@ -18,7 +18,7 @@ def listaColleghi(RG, email) -> list[dict]:
 
     cur = connPOSTGRES.cursor()
 
-    cur.execute("SELECT utenti.email, ruoli.livello FROM utenti CROSS JOIN ruoli")
+    cur.execute("SELECT email, livello FROM ruoli")
     
     for i in cur.fetchall():
         if email == i[0]: UTENTE = i
@@ -31,7 +31,7 @@ def listaColleghi(RG, email) -> list[dict]:
                     ruoli.livello 
                 FROM utenti 
                 JOIN ruoli 
-                ON utenti.nome = ruoli.nome"""
+                ON utenti.email = ruoli.email"""
 
     if UTENTE[1] == "superadmin":  cur.execute(f"{query}")
 
