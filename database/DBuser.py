@@ -32,7 +32,7 @@ def listaColleghi(RG, email) -> list[dict]:
                 JOIN ruoli 
                 ON utenti.email = ruoli.email"""
 
-    if UTENTE[1] == "superadmin": cur.execute(query)
+    if UTENTE[1] == "superadmin": cur.execute(f"{query}")
 
     elif UTENTE[1] == "admin": cur.execute(f"{query} WHERE utenti.ragionesociale = '{RG}' and (ruoli.livello = 'utente' or ruoli.livello = 'admin')")
 

@@ -62,7 +62,16 @@ def Query():
     return ogg
 
 
-def modify_DB(elimina, modifica, nome, cognome, email, azienda, cur, connPOSTGRES, check):
+def modify_DB(utente, cur, connPOSTGRES):
+
+    azienda = utente.get('azienda')
+    nome = utente.get('nome')
+    cognome = utente.get('cognome')
+    email = utente.get('email')
+    modifica = utente.get('modifica')
+    elimina = utente.get('elimina')
+
+    check = ""
     if elimina:
             cur.execute(f"DELETE FROM ruoli WHERE email = '{email}' and ragionesociale = '{azienda}'")
             connPOSTGRES.commit()

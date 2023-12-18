@@ -57,3 +57,13 @@ def API___documento(request):
 
 
     return "registrazione completata", 200
+
+
+#GESTIONE -> funcs API
+def FUNCS_API(func, request, connPOSTGRES, generate_password_hash, API):
+    try:
+        if API == 0: return func(request, connPOSTGRES)
+        elif API == 1: return func(request, generate_password_hash, connPOSTGRES)
+        elif API == 2: return func(request)
+    except Exception as e:
+        return str(e)
