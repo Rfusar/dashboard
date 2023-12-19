@@ -86,19 +86,15 @@ def Query():
 
 
 def modify_DB(utente, cur, connPOSTGRES):
-
-    azienda = utente.get('azienda')
-    nome = utente.get('nome')
-    cognome = utente.get('cognome')
     email = utente.get('email')
     modifica = utente.get('modifica')
     elimina = utente.get('elimina')
 
     check = ""
     if elimina:
-            cur.execute(f"DELETE FROM ruoli WHERE email = '{email}' and ragionesociale = '{azienda}'")
+            cur.execute(f"DELETE FROM ruoli WHERE email = '{email}'")
             connPOSTGRES.commit()
-            cur.execute(f"DELETE FROM utenti WHERE nome = '{nome}' and cognome = '{cognome}' and email = '{email}' and ragionesociale = '{azienda}'")
+            cur.execute(f"DELETE FROM utenti WHERE email = '{email}'")
             connPOSTGRES.commit()
             check += "eliminato"
 
@@ -107,7 +103,7 @@ def modify_DB(utente, cur, connPOSTGRES):
         connPOSTGRES.commit()
         check += "reso admin"
 
-    return f"L'utente {nome} {cognome}, lavora presso: {azienda}; {check} con successo"
+    return f"L'utente {email}; {check} con successo"
     
     
 

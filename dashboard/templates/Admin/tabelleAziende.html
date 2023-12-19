@@ -69,27 +69,31 @@
                                             <th>Indirizzo</th>
                                             <th>Comune</th>
 
-                                            <th>Più dettagli</th>
+                                            <th>Azioni</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for link in links %}
                                         <tr class="riga_">
-                                            <td class="IDDocumento">{{ link[0]}}</td>
-                                            <td>{{ link[1]}}</td>
+                                            <td>{{ link[0]}}</td>
+                                            <td class="Ragionesociale">{{ link[1]}}</td>
                                             <td>{{ link[2]}}</td>
                                             <td>{{ link[3]}}</td>
                                             <td>{{ link[4]}}</td>
                                             <td>
-                                                <a class=" piuDettagli"
-                                                    style="cursor: pointer;">
-                                                    <img src="../../static/img/piu_dettagli.png" alt="piu dettagli" style="width: 20px;" ></a>
+                                                <a style="cursor: pointer;margin-left: 10px;">
+                                                    <img src="../../static/img/elimina.png" alt="piu dettagli" style="width: 20px;" >
+                                                </a>
+                                                <a style="cursor: pointer;margin-left: 15px;">
+                                                    <img src="../../static/img/modifica.png" alt="piu dettagli" style="width: 20px;" >
+                                                </a>
+                                                <a style="cursor: pointer;margin-left: 15px;" class="piu_dettagli" href="#">
+                                                    <img src="../../static/img/piu_dettagli.png" alt="piu dettagli" style="width: 20px;" >
+                                                </a>
+
                                             </td>
                                         </tr>
                                         {% endfor %}
-                                        <div id="_piuDettagli" style="overflow: hidden;
-                                                                        ">
-                                        </div>
                                     </tbody>
 
                                 </table>
@@ -149,8 +153,14 @@
     <script src="../../static/js/base/.script2.js"></script>
 
 
-    <script src="../../static/js/base/classe_tabelle.js"></script>
     <script src="../../static/js/pag_table/pagina_aziende.js"></script>
+
+    <script>
+        document.querySelectorAll('.piu_dettagli').forEach((e,i)=>{
+            e.setAttribute('href', `/azienda/${document.querySelectorAll('.Ragionesociale')[i].textContent}`)
+        })
+
+    </script>
 
     <script>
         document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });

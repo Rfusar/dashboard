@@ -10,4 +10,5 @@ function setImg(path, e){
 document.querySelectorAll('.ruolo').forEach(e=>{
     if(e.textContent == "admin"){ setImg("../../static/img/admin.png", e)}
     else if(e.textContent == "utente"){ setImg("../../static/img/user.png", e)}
+    else if(e.textContent == "superadmin"){ setImg("../../static/img/superadmin.png", e)}
 })

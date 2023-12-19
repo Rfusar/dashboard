@@ -103,7 +103,7 @@
                                             style="color:green;display: flex; justify-content: space-between;">
                                             <span>Azienda</span>
                                             <div>
-                                                <a href="">
+                                                <a id="azienda" href="">
                                                     <img src="../static/img/piu_dettagli.png" alt="visualizza"
                                                         style="width: 25px;margin-left: 5px;cursor: pointer;">
                                                 </a>
@@ -126,7 +126,7 @@
 
                                                     {% for link in azienda %}
                                                     <tr>
-                                                        <td class="IDDocumento">{{ link[0]}}</td>
+                                                        <td id="Ragionesociale">{{ link[0]}}</td>
                                                         <td>{{ link[1]}}</td>
                                                         <td>{{ link[2]}}</td>
                                                         <td>{{link[3]}}</td>
@@ -150,9 +150,9 @@
                                     <div class="card-header py-3">
                                         <h6 class="m-0 font-weight-bold"
                                             style="color:green;display: flex; justify-content: space-between;">
-                                            <span>Tikects</span>
+                                            <span>Ultimi 5 tikects</span>
                                             <div>
-                                                <a href="">
+                                                <a href="/Tickets">
                                                     <img src="../static/img/piu_dettagli.png" alt="visualizza"
                                                         style="width: 25px;margin-left: 5px;cursor: pointer;">
                                                 </a>
@@ -166,7 +166,6 @@
                                                     <tr>
                                                         <th>ID</th>
                                                         <th>Oggetto</th>
-                                                        <th>Azienda</th>
                                                         <th>Status</th>
                                                         <th>Assegnato</th>
                                                         <th>Data</th>
@@ -174,14 +173,13 @@
                                                 </thead>
                                                 <tbody>
 
-                                                    {% for link in user %}
+                                                    {% for link in tiks %}
                                                     <tr class="riga_">
-                                                        <td class="IDDocumento"></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
+                                                        <td>{{link[0]}}</td>
+                                                        <td>{{link[1]}}</td>
+                                                        <td>{{link[2]}}</td>
+                                                        <td>{{link[3]}}</td>
+                                                        <td>{{link[4]}}</td>
                                                     </tr>
                                                     {% endfor %}
                                                 </tbody>
@@ -255,7 +253,15 @@
 
     <script src="../static/js/Admin/index/script_utenza_img.js"></script>
     <script>
-        document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });
+        document.querySelector("#azienda").addEventListener('click',()=>{
+           document.querySelector('#azienda').setAttribute('href', `/azienda/${document.querySelector('#Ragionesociale').textContent}`)
+        })
+    </script>
+
+    <script>
+        window.addEventListener('change',()=>{
+            document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });
+        })
     </script>
 
 

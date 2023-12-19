@@ -97,9 +97,8 @@
                                             <th>Nome</th>
                                             <th>Cognome</th>
                                             <th>Email</th>
-                                            <th>ruolo</th>
-                                            <th>Elimina</th>
-                                            <th>Rendi Amministratore</th>
+                                            <th>Ruolo</th>
+                                            <th>Azioni</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -108,13 +107,25 @@
                                             <td class="azienda_utente">{{ link[0]}}</td>
                                             <td class="nome_utente">{{ link[1]}}</td>
                                             <td class="cognome_utente">{{ link[2]}}</td>
-                                            <td class="email_utente"><a href="#" class="email">{{ link[3]}}</a></td>
+                                            <td class="email_utente">{{ link[3]}}</td>
                                             <td class="ruolo">{{ link[4]}}</td>
 
-                                            <td><input type="radio" class="DELETE check" value="elimina"
-                                                    secondoCheck="true" /></td>
-                                            <td><input type="radio" class="MODIFY check" value="modifica"
-                                                    secondoCheck="true" /></td>
+                                            <td>
+                                                <a style="cursor: pointer;margin-left: 10px;" class="elimina">
+                                                    <img src="../../static/img/elimina.png" alt="elimina"
+                                                        style="width: 20px;">
+                                                </a>
+                                                <a style="cursor: pointer;margin-left: 15px;">
+                                                    <img src="../../static/img/modifica.png" alt="modifica"
+                                                        style="width: 20px;">
+                                                </a>
+                                                <a style="cursor: pointer;margin-left: 15px;" class="piu_dettagli"
+                                                    href="#">
+                                                    <img src="../../static/img/piu_dettagli.png" alt="piu dettagli"
+                                                        style="width: 20px;">
+                                                </a>
+
+                                            </td>
 
                                         </tr>
                                         {% endfor %}
@@ -122,14 +133,10 @@
                                     </tbody>
 
                                 </table>
-                                <button id="btn" class="btn"
-                                    style="color:white;background-color: green;">ESEGUI</button>
                             </div>
                         </div>
                     </div>
-
-                    <div id="risposte"></div>
-
+                    <h3 id="risposta"></h3>
                 </div>
                 <!-- /.container-fluid -->
 
@@ -203,26 +210,22 @@
     <script src="../../static/js/base/element.js"></script>
     <script src="../../static/js/base/.script2.js"></script>
 
-    <script src="../../static/js/Admin/index/elimina_rendiAdmin.js"></script>
+    <script src="../../static/js/Admin/index/elimina_dettagli.js"></script>
     <script src="../../static/js/Admin/index/invio_a_server.js"></script>
 
     <!--<script src="../../static/js/Admin/index/script.js"></script>-->
     <script src="../../static/js/Admin/index/script_utenza_img.js"></script>
 
-    {%if check == "superadmin"%}
-    <script src="../../static/js/Admin/index/alter_table/alter_table___superadmin.js"></script>
-    {%elif check == "admin"%}
-    <script src="../../static/js/Admin/index/alter_table/alter_table___admin.js"></script>
-    {%endif%}
 
-    <script>
-        document.querySelectorAll('.email').forEach(e => {
-            e.addEventListener('click', () => { e.setAttribute("href", `/utente/${e.textContent}`) })
-        })
-    </script>
 
     <script>
         document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });
+        window.addEventListener('click',()=>{
+            document.querySelectorAll(".riga_").forEach((e, i) => { 
+                if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } 
+                else {e.style.backgroundColor= null}
+            });
+        })
     </script>
 
 

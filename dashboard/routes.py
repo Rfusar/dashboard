@@ -303,6 +303,7 @@ def report___superadmin(): return render_template("Admin/report.html")
 
 
 #*************************************************************************************************** ALTRO
+#Dettagli
 @app.route("/utente/<email>", methods=["GET"])
 def area_utente(email):
     if session.get("demo") in ["admin", "superadmin"]:
@@ -315,40 +316,44 @@ def area_utente(email):
         azienda = cur.fetchall()
         cur.close()
 
-
-        print(user)
-        print(azienda)
+        tiks = [["sadas","blalbab","attivo","gigino","22/03/2023"],
+                ["sadas","blalbab","non attivo","---","23/12/2023"],
+                ["sadas","blalbab","attivo","gigino","22/03/2022"],
+                ["sadas","blalbab","attivo","gigino","22/03/2022"],
+                ["sadas","blalbab","non attivo","---","22/03/2022"]]
         
         return render_template("area_utente.html", 
                                    check=session.get('demo'),
                                    nome=u['utente'][0],
                                    ragionesociale=u['azienda'],
                                    user = user,
-                                   azienda = azienda
+                                   azienda = azienda,
+                                   tiks = tiks
                                   )
     
-@app.route("/azienda/<email>", methods=["GET"])
-def area_azienda(email):
+@app.route("/azienda/<nome>", methods=["GET"])
+def area_azienda(nome):
     if session.get("demo") in ["admin", "superadmin"]:
         u = session.get('utente')
 
         cur = connPOSTGRES.cursor()
-        cur.execute(f"{Query()['area_utenti1']} WHERE utenti.email = '{email}'")
-        user = cur.fetchall()
-        cur.execute(f"{Query()['area_utenti2']} WHERE utenti.email = '{email}'")
+        cur.execute(f"SELECT * FROM azienda WHERE ragionesociale = '{nome}'")
         azienda = cur.fetchall()
+        cur.execute(f"SELECT utenti.cognome, utenti.email, ruoli.livello FROM utenti JOIN ruoli ON utenti.email = ruoli.email WHERE utenti.ragionesociale = '{azienda[0][1]}'")
+        user = cur.fetchall()
         cur.close()
 
-
-        print(user)
-        print(azienda)
+        docs = [["sadas","titoli1","22/03/2022"], ["sadas","titoli1","22/03/2022"], ["sadas","titoli1","22/03/2022"]]
+        tiks = [["sadas","attivo","22/03/2022"],["sadas","non attivo","22/03/2022"],["sadas","attivo","22/03/2022"]]
         
-        return render_template("area_utente.html", 
+        return render_template("area_azienda.html", 
                                    check=session.get('demo'),
                                    nome=u['utente'][0],
                                    ragionesociale=u['azienda'],
+                                   azienda = azienda,
                                    user = user,
-                                   azienda = azienda
+                                   docs = docs,
+                                   tiks = tiks
                                   )
 
 #Help
@@ -357,16 +362,14 @@ def HELP(): return render_template('componenti/Help.html')
 
 @app.route("/modificaDB", methods=['POST'])
 def modificaDB():
-    dati = request.json
-    risposte = []
+    if session.get("demo") in ["admin", "superadmin"]:
+        utente = request.json
 
-    cur = connPOSTGRES.cursor()
-    for utente in dati:
-        if session.get("demo") == "superadmin" or session.get("demo") == "admin": 
-            risposte.append(modify_DB(utente, cur, connPOSTGRES))
-    cur.close()
+        cur = connPOSTGRES.cursor()
+        risposta = modify_DB(utente, cur, connPOSTGRES)
+        cur.close()
     
-    return jsonify(risposte)
+        return jsonify(risposta)
 
 #Check
 @app.route("/messaggi", methods=['GET'])
