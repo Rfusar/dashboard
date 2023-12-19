@@ -60,12 +60,12 @@ def HOME():
         return principale___admin(session, connPOSTGRES, render_template, dt, checkMese)
     
     elif session.get('demo') == "superadmin":
-        return principale__superadmin(session, render_template)
+        return principale__superadmin(session, render_template, dt, checkMese)
 
 #PAGINE
 @app.route("/charts")
 def charts():
-    if session.get('demo') == "utente" or session.get('demo') == "admin":
+    if session.get('demo') == "utente" or session.get('demo') == "admin" or session.get('demo') == "superadmin":
         u = session.get('utente')
 
         try: 
@@ -80,6 +80,8 @@ def charts():
                                nome=u['utente'][0], 
                                check = session.get('demo'), 
                                ragionesociale=u['azienda'])
+    
+
     
     elif session.get('demo') == True:
         return render_template("charts.html", check = True)

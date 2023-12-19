@@ -28,6 +28,7 @@ function prova_perSemplificare(func1, func2) {
 function check(elementi) {
     elementi.forEach(e => {
         e.addEventListener('click', () => {
+           
             if (ID_per_disattivazione == e.getAttribute("id")) {
                 e.checked == true ? e.checked = false : e.checked = true
                 if (e.getAttribute("secondoCheck") == "false") {

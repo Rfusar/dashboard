@@ -64,7 +64,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Documenti</h6>
+                            <h6 class="m-0 font-weight-bold" style="color: green">Documenti</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -81,21 +81,10 @@
                                             <th>Data</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Titolo</th>
-                                            <th>Categoria</th>
-                                            <th>Anno di validita</th>
-                                            <th>TAG</th>
-                                            <th>File</th>
-                                            <th>Data</th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
 
                                         {% for link in links %}
-                                        <tr>
+                                        <tr class="riga_">
                                             <td class="ID_documento"></td>
                                             <td class="Titolo_documento"></td>
                                             <td class="Categoria_documento"></td>
@@ -121,19 +110,8 @@
                                             <th>più dettagli</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Nome documento</th>
-                                            <th>Dato 1</th>
-                                            <th>Dato 2</th>
-                                            <th>Dato 3</th>
-
-                                            <th>più dettagli</th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
-                                        <tr>
+                                        <tr class="riga_">
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -145,7 +123,7 @@
                                     {% endif %}
 
                                 </table>
-                                <button class="btn btn-success">AGGIUNGI</button>
+                                <button class="btn" style="color:white;background-color: green;">AGGIUNGI</button>
 
 
                             </div>
@@ -203,6 +181,10 @@
 
     <script src="../static/js/base/element.js"></script>
     <script src="../static/js/Admin/index/script.js"></script>
+
+    <script>
+        document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });
+    </script>
 
 </body>
 

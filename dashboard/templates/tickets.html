@@ -64,7 +64,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Tickets</h6>
+                            <h6 class="m-0 font-weight-bold " style="color:green">Tickets</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -80,16 +80,6 @@
                                             <th>Data</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Oggetto</th>
-                                            <th>Azienda</th>
-                                            <th>Status</th>
-                                            <th>Assegnato</th>
-                                            <th>Data</th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
 
                                         {% for link in links %}
@@ -103,46 +93,11 @@
                                         </tr>
                                         {%endfor%}
                                     </tbody>
+                                    {%endif%}
 
-
-
-                                    {% elif check == true %}
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Nome documento</th>
-                                            <th>Dato 1</th>
-                                            <th>Dato 2</th>
-                                            <th>Dato 3</th>
-
-                                            <th>più dettagli</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Nome documento</th>
-                                            <th>Dato 1</th>
-                                            <th>Dato 2</th>
-                                            <th>Dato 3</th>
-
-                                            <th>più dettagli</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td><a href="#">più dettagli</a></td>
-                                        </tr>
-                                    </tbody>
-                                    {% endif %}
 
                                 </table>
-                                <button class="btn btn-success">AGGIUNGI</button>
+                                <button class="btn" style="color:white;background-color: green;">AGGIUNGI</button>
 
 
                             </div>

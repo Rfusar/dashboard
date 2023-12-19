@@ -80,24 +80,31 @@ def principale___admin(session, connPOSTGRES, render_template, dt, checkMese):
                        anno = dt.now().year
                        )    
 
-def principale__superadmin(session, render_template):
+def principale__superadmin(session, render_template, dt, checkMese):
     if session.get('demo') == "superadmin":
         u = session.get('utente')
-        users = session.get('users')
-        demo = session.get('demo')
+
+
+        link = [[dt.now().year-2], [dt.now().year-1], [dt.now().year]]
 
         try:
             l=len(session.get('notifica')[0]['altri'])
         except: l = 0
         
-        usersL = len(users)
+        usersL = len(session.get('users'))
 
-    return render_template("charts.html",
+        docs = [["id1", "title1", "category1", "2023", "tag1", "img", "22/10/2023"]]
+
+    return render_template("base.html",
                            title="Repository_GDPR",
                            Nmes = l, 
-                           amici = users, 
+                           links = link,
+                           docs = docs,
+                           amici = session.get('users'), 
                            N_amici =usersL -1, 
                            nome= u['utente'][0], 
-                           check = demo,
-                           ragionesociale=u['azienda']
+                           check = session.get('demo'),
+                           ragionesociale=u['azienda'],
+                           mese = checkMese(dt),
+                           anno = dt.now().year
                            )

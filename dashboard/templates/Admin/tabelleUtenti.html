@@ -23,6 +23,17 @@
     <!-- Custom styles for this page -->
     <link href="../../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
+    <style>
+        input[type="radio"] {
+            margin-right: 5px;
+            /* Margine a destra per separare i radio button */
+            background-color: transparent;
+            /* Imposta il colore di sfondo come trasparente */
+            border: 1px solid #145d0012 !important;
+            /* Imposta un bordo per annullare eventuali stili predefiniti del browser */
+        }
+    </style>
+
 </head>
 
 <body id="page-top">
@@ -50,7 +61,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Utenti</h6>
+                            <h6 class="m-0 font-weight-bold" style="color: green">Utenti</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -66,43 +77,21 @@
                                             <th>Rendi Amministratore</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Nome</th>
-                                            <th>Cognome</th>
-                                            <th>Email</th>
-                                            <th>Ruolo</th>
-                                            <th>Elimina</th>
-                                            <th>Rendi Amministratore</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        {% for link in links %}
-                                        <tr>
-                                            <td class="nome_utente">{{ link[0]}}</td>
-                                            <td class="cognome_utente">{{ link[1]}}</td>
-                                            <td class="email_utente">{{ link[2]}}</td>
-                                            <td class="ruolo">{{ link[3]}}</td>
-                                            <td><input type="radio" class="DELETE" value="elimina"
-                                                    secondoCheck="true" /></td>
-                                            <td><input type="radio" class="MODIFY" value="modifica"
-                                                    secondoCheck="true" /></td>
-                                        </tr>
-                                        {% endfor %}
+                                    {% for link in links %}
+                                    <tr class="riga_">
+                                        <td class="nome_utente">{{ link[0]}}</td>
+                                        <td class="cognome_utente">{{ link[1]}}</td>
+                                        <td class="email_utente">{{ link[2]}}</td>
+                                        <td class="ruolo">{{ link[3]}}</td>
+                                        <td><input type="radio" class="DELETE" value="elimina" secondoCheck="true" />
+                                        </td>
+                                        <td><input type="radio" class="MODIFY" value="modifica" secondoCheck="true" />
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
 
-                                        {%elif check == "superadmin"%}
-                                        <thead>
-                                            <tr>
-                                                <th>Azienda</th>
-                                                <th>Nome</th>
-                                                <th>Cognome</th>
-                                                <th>Email</th>
-                                                <th>ruolo</th>
-                                                <th>Elimina</th>
-                                                <th>Rendi Amministratore</th>
-                                            </tr>
-                                        </thead>
-                                    <tfoot>
+                                    {%elif check == "superadmin"%}
+                                    <thead>
                                         <tr>
                                             <th>Azienda</th>
                                             <th>Nome</th>
@@ -112,26 +101,28 @@
                                             <th>Elimina</th>
                                             <th>Rendi Amministratore</th>
                                         </tr>
-                                    </tfoot>
+                                    </thead>
                                     <tbody>
                                         {% for link in links %}
-                                        <tr>
+                                        <tr class="riga_">
                                             <td class="azienda_utente">{{ link[0]}}</td>
                                             <td class="nome_utente">{{ link[1]}}</td>
                                             <td class="cognome_utente">{{ link[2]}}</td>
                                             <td class="email_utente">{{ link[3]}}</td>
                                             <td class="ruolo">{{ link[4]}}</td>
-                                            <td><input type="radio" class="DELETE" value="elimina"
+
+                                            <td><input type="radio" class="DELETE check" value="elimina"
                                                     secondoCheck="true" /></td>
-                                            <td><input type="radio" class="MODIFY" value="modifica"
+                                            <td><input type="radio" class="MODIFY check" value="modifica"
                                                     secondoCheck="true" /></td>
+
                                         </tr>
                                         {% endfor %}
                                         {%endif%}
                                     </tbody>
 
                                 </table>
-                                <button id="btn" class="btn btn-primary">ESEGUI</button>
+                                <button id="btn" class="btn" style="color:white;background-color: green;">ESEGUI</button>
                             </div>
                         </div>
                     </div>
@@ -185,43 +176,48 @@
         </div>
     </div>
 
-       <!-- Bootstrap core JavaScript-->
-   <script src="../../static/vendor/jquery/jquery.min.js"></script>
-   <script src="../../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="../../static/vendor/jquery/jquery.min.js"></script>
+    <script src="../../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-   <!-- Core plugin JavaScript-->
-   <script src="../../static/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="../../static/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-   <!-- Custom scripts for all pages-->
-   <script src="../../static/js/sb-admin-2.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="../../static/js/sb-admin-2.min.js"></script>
 
-   <!-- Page level plugins -->
-   <script src="../../static/vendor/datatables/jquery.dataTables.min.js"></script>
-   <script src="../../static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <!-- Page level plugins -->
+    <script src="../../static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-   <!-- Page level custom scripts -->
-   <script src="../../static/js/demo/datatables-demo.js"></script>
-
-
+    <!-- Page level custom scripts -->
+    <script src="../../static/js/demo/datatables-demo.js"></script>
 
 
 
 
-   
-   <script src="../../static/js/base/element.js"></script>
-   <script src="../../static/js/base/.script2.js"></script>
-   
-   <script src="../../static/js/Admin/index/elimina_rendiAdmin.js"></script>
-   <script src="../../static/js/Admin/index/invio_a_server.js"></script>
-   
-   <script src="../../static/js/Admin/index/script.js"></script>
-   
+
+
+
+    <script src="../../static/js/base/element.js"></script>
+    <script src="../../static/js/base/.script2.js"></script>
+
+    <script src="../../static/js/Admin/index/elimina_rendiAdmin.js"></script>
+    <script src="../../static/js/Admin/index/invio_a_server.js"></script>
+
+    <!--<script src="../../static/js/Admin/index/script.js"></script>-->
+    <script src="../../static/js/Admin/index/script_utenza_img.js"></script>
+
     {%if check == "superadmin"%}
     <script src="../../static/js/Admin/index/alter_table/alter_table___superadmin.js"></script>
     {%elif check == "admin"%}
     <script src="../../static/js/Admin/index/alter_table/alter_table___admin.js"></script>
     {%endif%}
-    
+
+    <script>
+        document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });
+    </script>
+
 
 </body>
 
