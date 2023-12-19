@@ -1,17 +1,4 @@
 <div class="container-fluid">
-
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        {%if check != true%}
-        <h1 class="h3 mb-0 text-gray-800">{{ check }}</h1>
-        {%else%}
-        <h1 class="h3 mb-0 text-gray-800">RUOLO</h1>
-        {%endif%}
-
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-    </div>
-
     <!-- Content Row -->
     <div class="row">
 
@@ -191,7 +178,7 @@
 
     <div style="display: flex; flex-direction: row;">
 
-        <div class="card shadow mb-4" style="width:20%">
+        <div class="card shadow mb-4" style="width:10%;height: max-content;" >
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold" style="color: green">Archivio</h6>
             </div>
@@ -209,11 +196,12 @@
                 </div>
             </div>
         </div>
-        <div style="width: 10%;"></div>
 
-        <div class="card shadow mb-4"  style="width:70%">
+        <div style="width: 2%;"></div>
+
+        <div class="card shadow mb-4"  style="width:88%">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold" style="color: green">Documenti</h6>
+                <h6 class="m-0 font-weight-bold" style="color: green">Ultimi 5 documenti</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -244,9 +232,6 @@
                             {%endfor%}
                         </tbody>
                     </table>
-                    <button class="btn" style="color:white;background-color: green;">AGGIUNGI</button>
-
-
                 </div>
             </div>
         </div>

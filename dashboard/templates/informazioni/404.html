@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - 404</title>
+    <title>NON PUOI PASSARE!!!</title>
 
     <!-- Custom fonts for this template-->
     <link href="../../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -28,7 +28,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        {% include "componenti/sidebar.html"%}
+
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -37,22 +37,17 @@
             <div id="content">
 
                 <!-- Topbar -->
-                {% include "componenti/navbar.html" %}
+
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
                     <!-- 404 Error Text -->
-                    <div class="text-center">
+                    <div class="text-center" style="height: 90vh; display: flex;flex-direction: column; justify-content: center;">
                         <div class="error mx-auto" data-text="404">404</div>
                         <p class="lead text-gray-800 mb-5">Page Not Found</p>
                         <p class="text-gray-500 mb-0">It looks like you found a glitch in the matrix...</p>
-                        {% if check == true %}
-                        <a href="/">&larr; Back to Dashboard</a>
-                        {% elif check == false %}
-                        <a href="/HOME">&larr; Back to Dashboard</a>
-                        {% endif %}
                     </div>
 
                 </div>
@@ -102,7 +97,22 @@
         </div>
     </div>
 
-    {% include "scripts.html" %}
+       <!-- Bootstrap core JavaScript-->
+   <script src="../../static/vendor/jquery/jquery.min.js"></script>
+   <script src="../../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+   <!-- Core plugin JavaScript-->
+   <script src="../../static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+   <!-- Custom scripts for all pages-->
+   <script src="../../static/js/sb-admin-2.min.js"></script>
+
+   <!-- Page level plugins -->
+   <script src="../../static/vendor/datatables/jquery.dataTables.min.js"></script>
+   <script src="../../static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+   <!-- Page level custom scripts -->
+   <script src="../../static/js/demo/datatables-demo.js"></script>
 
 </body>
 

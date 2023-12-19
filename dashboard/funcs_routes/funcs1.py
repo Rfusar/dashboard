@@ -53,10 +53,33 @@ def Query():
         JOIN ruoli 
         ON utenti.email = ruoli.email"""
     
+    c = """SELECT 
+            utenti.nome,
+            utenti.cognome, 
+            utenti.email, 
+            utenti.tel, 
+            ruoli.livello 
+        FROM utenti 
+        JOIN ruoli 
+        ON utenti.email = ruoli.email"""
+    
+    d = """SELECT
+            azienda.ragionesociale,
+            azienda.partitaiva,
+            azienda.cap,
+            azienda.nazione,
+            azienda.pec
+        FROM azienda
+        JOIN utenti
+        ON azienda.ragionesociale = utenti.ragionesociale
+"""
+    
     #OGGETTO
     ogg={
         "listaColleghi_superadmin": a,
-        "listaColleghi_admin": b
+        "listaColleghi_admin": b,
+        "area_utenti1": c,
+        "area_utenti2": d,
         }
     
     return ogg

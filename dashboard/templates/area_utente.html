@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Area utente</title>
+
+    <!-- Custom fonts for this template -->
+    <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this page -->
+    <link href="../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        {% include "componenti/sidebar.html"%}
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                {% include "componenti/navbar.html"%}
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div>
+                    <div style="display: flex; flex-direction: row;;">
+
+                        <div class="container-fluid" style="width: 50%;">
+                            <div id="container">
+                                <!-- DataTales Example -->
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold"
+                                            style="color:green;display: flex; justify-content: space-between;">
+                                            <span>Utente</span>
+                                            <div>
+                                                <img src="../static/img/modifica.png" alt="modifica"
+                                                    style="width: 25px;margin-left: 5px;cursor: pointer;">
+                                            </div>
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nome</th>
+                                                        <th>Cognome</th>
+                                                        <th>Email</th>
+                                                        <th>Telefono</th>
+                                                        <th>Ruolo</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    {% for link in user %}
+                                                    <tr>
+                                                        <td>{{ link[0]}}</td>
+                                                        <td>{{ link[1]}}</td>
+                                                        <td>{{ link[2]}}</td>
+                                                        <td>{{link[3]}}</td>
+                                                        <td class="ruolo">{{link[4]}}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container-fluid" style="width: 50%;">
+
+                            <div id="container">
+                                <!-- DataTales Example -->
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold"
+                                            style="color:green;display: flex; justify-content: space-between;">
+                                            <span>Azienda</span>
+                                            <div>
+                                                <a href="">
+                                                    <img src="../static/img/piu_dettagli.png" alt="visualizza"
+                                                        style="width: 25px;margin-left: 5px;cursor: pointer;">
+                                                </a>
+                                            </div>
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Ragionesociale</th>
+                                                        <th>Partita IVA</th>
+                                                        <th>CAP</th>
+                                                        <th>Nazione</th>
+                                                        <th>PEC</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    {% for link in azienda %}
+                                                    <tr>
+                                                        <td class="IDDocumento">{{ link[0]}}</td>
+                                                        <td>{{ link[1]}}</td>
+                                                        <td>{{ link[2]}}</td>
+                                                        <td>{{link[3]}}</td>
+                                                        <td>{{link[4]}}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: row;">
+                        <div class="container-fluid">
+
+                            <div id="container">
+                                <!-- DataTales Example -->
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold"
+                                            style="color:green;display: flex; justify-content: space-between;">
+                                            <span>Tikects</span>
+                                            <div>
+                                                <a href="">
+                                                    <img src="../static/img/piu_dettagli.png" alt="visualizza"
+                                                        style="width: 25px;margin-left: 5px;cursor: pointer;">
+                                                </a>
+                                            </div>
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Oggetto</th>
+                                                        <th>Azienda</th>
+                                                        <th>Status</th>
+                                                        <th>Assegnato</th>
+                                                        <th>Data</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    {% for link in user %}
+                                                    <tr class="riga_">
+                                                        <td class="IDDocumento"></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- End of Main Content -->
+
+
+
+
+
+
+
+
+
+
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2020</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "Scripts/principali.html" %}
+    <script src="../static/js/base/element.js"></script>
+
+    <script src="../static/js/base/classe_tabelle.js"></script>
+
+    <script src="../static/js/Admin/index/script_utenza_img.js"></script>
+    <script>
+        document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });
+    </script>
+
+
+</body>
+
+</html>

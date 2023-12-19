@@ -61,6 +61,9 @@ def HOME():
     
     elif session.get('demo') == "superadmin":
         return principale__superadmin(session, render_template, dt, checkMese)
+    
+    else:
+        return render_template("informazioni/404.html")
 
 #PAGINE
 @app.route("/charts")
@@ -213,7 +216,7 @@ def utenti___superadmin():
             if i[nome] == u['utente'][0] or i[ruolo] == "superadmin": continue
             else: utenti.append(i)
 
-    if session.get('demo') == "admin" or session.get('demo') == "superadmin":
+    if session.get('demo') in ["admin", "superadmin"]:
         u = session.get('utente')
 
         cur = connPOSTGRES.cursor()
@@ -300,6 +303,54 @@ def report___superadmin(): return render_template("Admin/report.html")
 
 
 #*************************************************************************************************** ALTRO
+@app.route("/utente/<email>", methods=["GET"])
+def area_utente(email):
+    if session.get("demo") in ["admin", "superadmin"]:
+        u = session.get('utente')
+
+        cur = connPOSTGRES.cursor()
+        cur.execute(f"{Query()['area_utenti1']} WHERE utenti.email = '{email}'")
+        user = cur.fetchall()
+        cur.execute(f"{Query()['area_utenti2']} WHERE utenti.email = '{email}'")
+        azienda = cur.fetchall()
+        cur.close()
+
+
+        print(user)
+        print(azienda)
+        
+        return render_template("area_utente.html", 
+                                   check=session.get('demo'),
+                                   nome=u['utente'][0],
+                                   ragionesociale=u['azienda'],
+                                   user = user,
+                                   azienda = azienda
+                                  )
+    
+@app.route("/azienda/<email>", methods=["GET"])
+def area_azienda(email):
+    if session.get("demo") in ["admin", "superadmin"]:
+        u = session.get('utente')
+
+        cur = connPOSTGRES.cursor()
+        cur.execute(f"{Query()['area_utenti1']} WHERE utenti.email = '{email}'")
+        user = cur.fetchall()
+        cur.execute(f"{Query()['area_utenti2']} WHERE utenti.email = '{email}'")
+        azienda = cur.fetchall()
+        cur.close()
+
+
+        print(user)
+        print(azienda)
+        
+        return render_template("area_utente.html", 
+                                   check=session.get('demo'),
+                                   nome=u['utente'][0],
+                                   ragionesociale=u['azienda'],
+                                   user = user,
+                                   azienda = azienda
+                                  )
+
 #Help
 @app.route("/Help")
 def HELP(): return render_template('componenti/Help.html')  

@@ -81,7 +81,7 @@
                                     <tr class="riga_">
                                         <td class="nome_utente">{{ link[0]}}</td>
                                         <td class="cognome_utente">{{ link[1]}}</td>
-                                        <td class="email_utente">{{ link[2]}}</td>
+                                        <td class="email_utente"><a href="#">{{ link[2]}}</a></td>
                                         <td class="ruolo">{{ link[3]}}</td>
                                         <td><input type="radio" class="DELETE" value="elimina" secondoCheck="true" />
                                         </td>
@@ -108,7 +108,7 @@
                                             <td class="azienda_utente">{{ link[0]}}</td>
                                             <td class="nome_utente">{{ link[1]}}</td>
                                             <td class="cognome_utente">{{ link[2]}}</td>
-                                            <td class="email_utente">{{ link[3]}}</td>
+                                            <td class="email_utente"><a href="#" class="email">{{ link[3]}}</a></td>
                                             <td class="ruolo">{{ link[4]}}</td>
 
                                             <td><input type="radio" class="DELETE check" value="elimina"
@@ -122,7 +122,8 @@
                                     </tbody>
 
                                 </table>
-                                <button id="btn" class="btn" style="color:white;background-color: green;">ESEGUI</button>
+                                <button id="btn" class="btn"
+                                    style="color:white;background-color: green;">ESEGUI</button>
                             </div>
                         </div>
                     </div>
@@ -213,6 +214,12 @@
     {%elif check == "admin"%}
     <script src="../../static/js/Admin/index/alter_table/alter_table___admin.js"></script>
     {%endif%}
+
+    <script>
+        document.querySelectorAll('.email').forEach(e => {
+            e.addEventListener('click', () => { e.setAttribute("href", `/utente/${e.textContent}`) })
+        })
+    </script>
 
     <script>
         document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });
