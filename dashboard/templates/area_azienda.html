@@ -121,10 +121,10 @@
                                                         <th>Ruolo</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="tb">
+                                                <tbody>
 
                                                     {% for link in user %}
-                                                    <tr>
+                                                    <tr class="riga_">
                                                         <td>{{link[0]}}</td>
                                                         <td>{{link[1]}}</td>
                                                         <td class="ruolo">{{link[2]}}</td>
@@ -284,10 +284,15 @@
 
     <script src="../static/js/Admin/index/script_utenza_img.js"></script>
 
-    <script src="../static/js/Admin/index/script_utenza_img.js"></script>
 
     <script>
         document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });
+        window.addEventListener('click',()=>{
+            document.querySelectorAll(".riga_").forEach((e, i) => { 
+                if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } 
+                else{ e.style.backgroundColor = null } 
+            });
+        })
     </script>
 
 

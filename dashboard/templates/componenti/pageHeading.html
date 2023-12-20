@@ -8,7 +8,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            {%if check == "utente" or check == "admin" or check == "superadmin"%}
+                            {%if check in ["utente", "admin", "superadmin"]%}
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 Costo di {{ mese }}</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ spesaMensile }}</div>
@@ -33,7 +33,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            {%if check == "utente" or check == "admin" or check == "superadmin"%}
+                            {%if check in ["utente", "admin", "superadmin"]%}
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 Costo anno: {{ anno }}</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ spesaAnnua }}</div>
@@ -174,7 +174,7 @@
         </div>
     </div>
 
-    {%if check == "admin" or check == "superadmin"%}
+    {%if check in ["utente", "admin", "superadmin"]%}
 
     <div style="display: flex; flex-direction: row;">
 
@@ -185,7 +185,7 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        {% for link in links %}
+                        {% for link in years %}
                         <tr>
                             <td><a href="#">{{ link[0]}}</a></td>
                         </tr>

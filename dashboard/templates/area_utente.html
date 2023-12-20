@@ -167,7 +167,6 @@
                                                         <th>ID</th>
                                                         <th>Oggetto</th>
                                                         <th>Status</th>
-                                                        <th>Assegnato</th>
                                                         <th>Data</th>
                                                     </tr>
                                                 </thead>
@@ -178,7 +177,6 @@
                                                         <td>{{link[0]}}</td>
                                                         <td>{{link[1]}}</td>
                                                         <td>{{link[2]}}</td>
-                                                        <td>{{link[3]}}</td>
                                                         <td>{{link[4]}}</td>
                                                     </tr>
                                                     {% endfor %}
@@ -259,9 +257,7 @@
     </script>
 
     <script>
-        window.addEventListener('change',()=>{
             document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });
-        })
     </script>
 
 

@@ -73,20 +73,32 @@
                                             <th>Cognome</th>
                                             <th>Email</th>
                                             <th>Ruolo</th>
-                                            <th>Elimina</th>
-                                            <th>Rendi Amministratore</th>
+                                            <th>Azioni</th>
                                         </tr>
                                     </thead>
                                     {% for link in links %}
                                     <tr class="riga_">
                                         <td class="nome_utente">{{ link[0]}}</td>
                                         <td class="cognome_utente">{{ link[1]}}</td>
-                                        <td class="email_utente"><a href="#">{{ link[2]}}</a></td>
+                                        <td class="email_utente">{{ link[2]}}</td>
                                         <td class="ruolo">{{ link[3]}}</td>
-                                        <td><input type="radio" class="DELETE" value="elimina" secondoCheck="true" />
+
+                                        <td>
+                                            <a style="cursor: pointer;margin-left: 10px;" class="elimina">
+                                                <img src="../../static/img/elimina.png" alt="elimina"
+                                                    style="width: 20px;">
+                                            </a>
+                                            <a style="cursor: pointer;margin-left: 15px;">
+                                                <img src="../../static/img/modifica.png" alt="modifica"
+                                                    style="width: 20px;">
+                                            </a>
+                                            <a style="cursor: pointer;margin-left: 15px;" class="piu_dettagli" href="#">
+                                                <img src="../../static/img/piu_dettagli.png" alt="piu dettagli"
+                                                    style="width: 20px;">
+                                            </a>
+
                                         </td>
-                                        <td><input type="radio" class="MODIFY" value="modifica" secondoCheck="true" />
-                                        </td>
+
                                     </tr>
                                     {% endfor %}
 
@@ -220,10 +232,10 @@
 
     <script>
         document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });
-        window.addEventListener('click',()=>{
-            document.querySelectorAll(".riga_").forEach((e, i) => { 
-                if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } 
-                else {e.style.backgroundColor= null}
+        window.addEventListener('click', () => {
+            document.querySelectorAll(".riga_").forEach((e, i) => {
+                if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" }
+                else { e.style.backgroundColor = null }
             });
         })
     </script>

@@ -1,12 +1,12 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" style="cursor: default;">
         {%if check == true%}
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        {%elif check == "utente" or check == "admin" or check == "superadmin"%}
+        {%elif check in ["utente", "admin", "superadmin"]%}
         <div class="sidebar-brand-text mx-3">{{ ragionesociale }}</div>
         {% endif %}
     </a>
@@ -15,7 +15,7 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    {%if check == "utente" or check == "admin" or check == "superadmin"%}
+    {%if check in ["utente", "admin", "superadmin"]%}
     <li class="nav-item active">
         <a class="nav-link" href="{{url_for('HOME')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -91,6 +91,8 @@
     </li>
 
 
+
+
     {%elif check == "utente"%}
     <li class="nav-item">
         <a class="nav-link" href="{{url_for('charts')}}">
@@ -102,7 +104,15 @@
             <i class="fas fa-laugh-wink"></i>
             <span>Documenti</span></a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/Tickets">
+            <i class="fas fa-laugh-wink"></i>
+            <span>Tickets</span></a>
+    </li>
     
+
+
+
     {%elif check == "admin" %}
     <li class="nav-item">
         <a class="nav-link" href="{{url_for('charts')}}">
@@ -126,7 +136,15 @@
     </li>
 
     
+
+
+
     {%elif check == "superadmin"%}
+    <li class="nav-item">
+        <a class="nav-link" href="/table">
+            <i class="fas fa-laugh-wink"></i>
+            <span>Documenti</span></a>
+    </li>
     <li class="nav-item">
         <a class="nav-link" href="/charts">
             <i class="fas fa-laugh-wink"></i>
@@ -144,8 +162,12 @@
     </li>
     {%endif%}
 
+
+
+
+
     <!--cose comuni in tutte l'utenze-->
-    {%if check == "utente" or check == "admin" or check == "superadmin"%}
+    {%if check in ["utente", "admin", "superadmin"]%}
     <li class="nav-item">
         <a class="nav-link" href="/logout">
             <i class="fas fa-laugh-wink"></i>

@@ -82,6 +82,7 @@ def charts():
                                N_amici =usersL -1, 
                                nome=u['utente'][0], 
                                check = session.get('demo'), 
+                               ruolo = session.get("demo"), 
                                ragionesociale=u['azienda'])
     
 
@@ -112,7 +113,7 @@ def tableInfo():
 
 @app.route("/table")
 def table():
-    if session.get('demo') == "utente" or session.get('demo') == "admin":
+    if session.get('demo') in ["utente", "admin","superadmin"]:
         u = session.get('utente')
 
         try:
@@ -131,6 +132,7 @@ def table():
                                links = [], 
                                nome = u['utente'][0], 
                                check= session.get('demo'), 
+                               ruolo = session.get("demo"), 
                                ragionesociale=u['azienda'])
 
     elif session.get('demo') == True:
@@ -244,6 +246,7 @@ def utenti___superadmin():
                            nome=u['utente'][0], 
                            check = session.get('demo'),
                            links = utenti,
+                           ruolo = session.get("demo"), 
                            ragionesociale=u['azienda']
                            )
 
@@ -263,6 +266,7 @@ def Tickets():
                            links = [], 
                            nome = u['utente'][0], 
                            check= session.get('demo'), 
+                           ruolo = session.get("demo"), 
                            ragionesociale=u['azienda'])
 
 @app.route("/superadmin/aziende")
@@ -287,6 +291,7 @@ def aziende___superadmin():
                                 nome=u['utente'][0],
                                 check = session.get('demo'),
                                 links = aziende,
+                                ruolo = session.get("demo"), 
                                 ragionesociale=u['azienda']
                                 )
 
@@ -328,6 +333,7 @@ def area_utente(email):
                                    ragionesociale=u['azienda'],
                                    user = user,
                                    azienda = azienda,
+                                   ruolo = session.get("demo"), 
                                    tiks = tiks
                                   )
     
@@ -353,8 +359,11 @@ def area_azienda(nome):
                                    azienda = azienda,
                                    user = user,
                                    docs = docs,
+                                   ruolo = session.get("demo"), 
                                    tiks = tiks
                                   )
+
+
 
 #Help
 @app.route("/Help")
@@ -370,6 +379,9 @@ def modificaDB():
         cur.close()
     
         return jsonify(risposta)
+
+
+
 
 #Check
 @app.route("/messaggi", methods=['GET'])
