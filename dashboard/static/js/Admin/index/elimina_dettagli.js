@@ -1,11 +1,5 @@
-//DETTAGLI
-window.addEventListener('click',()=>{
-    document.querySelectorAll('.piu_dettagli').forEach((e, i) => {
-        e.addEventListener('click', () => { e.setAttribute("href", `/utente/${document.querySelectorAll('.email_utente')[i].textContent}`) })
-    })
-    
-})
-
+gestione___modificaANDdettagli(".modifica", "modifica")
+gestione___modificaANDdettagli(".piu_dettagli", "utente")
 
 //ELIMINA
 document.querySelectorAll('.elimina').forEach((e, i) => {
@@ -23,3 +17,12 @@ document.querySelectorAll('.elimina').forEach((e, i) => {
         }
     })
 })
+
+
+function gestione___modificaANDdettagli(classe, pathFisso){
+    window.addEventListener('click', ()=>{
+        document.querySelectorAll(classe).forEach((e, i)=>{
+            e.addEventListener('click', () => { e.setAttribute("href", `/${pathFisso}/${document.querySelectorAll('.email_utente')[i].textContent}`) })
+        })
+    }) 
+}

@@ -103,7 +103,7 @@
                                             style="color:green;display: flex; justify-content: space-between;">
                                             <span>Azienda</span>
                                             <div>
-                                                <a id="azienda" href="">
+                                                <a id="azienda" href="/azienda">
                                                     <img src="../static/img/piu_dettagli.png" alt="visualizza"
                                                         style="width: 25px;margin-left: 5px;cursor: pointer;">
                                                 </a>
@@ -250,14 +250,26 @@
     <script src="../static/js/base/classe_tabelle.js"></script>
 
     <script src="../static/js/Admin/index/script_utenza_img.js"></script>
+
     <script>
-        document.querySelector("#azienda").addEventListener('click',()=>{
-           document.querySelector('#azienda').setAttribute('href', `/azienda/${document.querySelector('#Ragionesociale').textContent}`)
-        })
+
+
     </script>
 
     <script>
-            document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });
+        document.querySelector("#azienda").addEventListener('click', () => {
+            fetch("/ricezione_dati___pulsanti", {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify()
+
+            })
+        })
+
+    </script>
+
+    <script>
+        document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });
     </script>
 
 

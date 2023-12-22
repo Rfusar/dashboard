@@ -1,6 +1,6 @@
 import glob
 import sqlite3
-from .DB import connPOSTGRES
+
 
 
 
@@ -236,7 +236,8 @@ def readNotifica(utente1, RG):
         pass
 
 
-def allNotifica(RG):
+
+def allNotifica(RG, DB):
 
     n = []
 
@@ -260,11 +261,10 @@ def allNotifica(RG):
             }
             return mess_dict
     
-    curUNO = connPOSTGRES.cursor()
-    curUNO.execute('SELECT nome FROM utenti WHERE ragionesociale = %s',(RG,))
-    u = curUNO.fetchall()
+
+    u = DB['users'].find({'company': RG}, {"name.firstName"})
     uL = len(u)
-    curUNO.close()
+
 
     count = 0
 

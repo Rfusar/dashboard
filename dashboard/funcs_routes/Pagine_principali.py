@@ -7,7 +7,7 @@ docs = [["id1", "title1", "category1", "2023", "tag1", "img", "22/10/2023"],
         ["id1", "title1", "category1", "2023", "tag1", "img", "22/10/2023"]]
 
 
-def principale___utente(session, readChat, allNotifica, readNotifica, dt, render_template, checkMese):
+def principale___utente(session, readChat, allNotifica, readNotifica, dt, render_template, checkMese, DB):
     if session.get('demo') == "utente":
         amici = session.get('users')
         u = session.get('utente')
@@ -21,7 +21,7 @@ def principale___utente(session, readChat, allNotifica, readNotifica, dt, render
 
             ogg1['chat'] = readChat(u['utente'][0], i['utente'][0])
 
-            ogg2['altri'] = allNotifica(u['azienda'])
+            ogg2['altri'] = allNotifica(u['azienda'], DB)
             ogg2['mia'] = readNotifica(i['utente'][0], u['azienda'])
         
             CHAT.append(ogg1)
@@ -59,21 +59,19 @@ def principale___utente(session, readChat, allNotifica, readNotifica, dt, render
                         anno = dt.now().year
                        )
 
-def principale___admin(session, connPOSTGRES, render_template, dt, checkMese):
+def principale___admin(session, render_template, dt, checkMese):
     u = session.get('utente')
     users = session.get('users')
     demo = session.get('demo')
 
-    cur = connPOSTGRES.cursor()
-    cur.execute('SELECT email, livello FROM ruoli WHERE ragionesociale = %s', (u['azienda'],))
-    access = cur.fetchall()
-    cur.close()
-
     link = []
     for utente in users:
-        for ruoli in access:
-            if utente['email'] != u['email'] and utente['utente'][0] == ruoli[0] and ruoli[1] != "superadmin":
-                link.append([utente['utente'][0], utente['utente'][1], utente['email'], ruoli[1]])
+        link.append([
+            utente['utente']['idetificazione']['nome'], 
+            utente['utente']['idetificazione']['cognome'], 
+            utente['utente']['contatti']['email'], 
+            utente['ruoli']['base']
+        ])
 
     try:
         l=len(session.get('notifica')[0]['altri'])
@@ -101,17 +99,11 @@ def principale___admin(session, connPOSTGRES, render_template, dt, checkMese):
 def principale__superadmin(session, render_template, dt, checkMese):
     if session.get('demo') == "superadmin":
         u = session.get('utente')
-
-
-        
-
         try:
             l=len(session.get('notifica')[0]['altri'])
         except: l = 0
         
         usersL = len(session.get('users'))
-
-
 
     return render_template("base.html",
                            title="Repository_GDPR",

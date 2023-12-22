@@ -1,4 +1,3 @@
-
 def checkMese(dt):
     ANNO = ["Gennaio", "Febbraio" "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"]
     for n in range(len(ANNO)+1): 
@@ -84,7 +83,6 @@ def Query():
     
     return ogg
 
-
 def modify_DB(utente, cur, connPOSTGRES):
     email = utente.get('email')
     modifica = utente.get('modifica')
@@ -105,6 +103,13 @@ def modify_DB(utente, cur, connPOSTGRES):
 
     return f"L'utente {email}; {check} con successo"
     
+def Token(lunghezza):
+    import string; import random
+
+    scelte = string.ascii_letters + string.digits 
+    t = ""
+    while len(t) < lunghezza: 
+        t += random.choice(scelte)
     
 
 

@@ -127,7 +127,7 @@
                                                     <img src="../../static/img/elimina.png" alt="elimina"
                                                         style="width: 20px;">
                                                 </a>
-                                                <a style="cursor: pointer;margin-left: 15px;">
+                                                <a style="cursor: pointer;margin-left: 15px;" class="modifica" href="/utente">
                                                     <img src="../../static/img/modifica.png" alt="modifica"
                                                         style="width: 20px;">
                                                 </a>
@@ -231,6 +231,7 @@
 
 
     <script>
+        //COLORE RIGHE TABELLE
         document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });
         window.addEventListener('click', () => {
             document.querySelectorAll(".riga_").forEach((e, i) => {
@@ -238,6 +239,8 @@
                 else { e.style.backgroundColor = null }
             });
         })
+
+
     </script>
 
 

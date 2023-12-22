@@ -48,7 +48,7 @@
 
         <!-- Nav Item - Alerts -->
         <li class="nav-item dropdown no-arrow mx-1">
-            {%if check == "utente" or check == "admin"%}
+            {%if check in ["spike-user", "spike-admin", "admin"]%}
             <a class="nav-link dropdown-toggle" id="alertsDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw" id="btnNotifiche"></i>
@@ -68,7 +68,7 @@
                 <h6 class="dropdown-header">
                     NOTIFICHE
                 </h6>
-                {%if check == "utente" or check == "admin"%}
+                {%if check in ["spike-user", "spike-admin", "admin"]%}
                 {%for i in messaggio%}
                 {%if i.attributo == 0%}
                 <a class="dropdown-item d-flex align-items-center NOTIFICA0">
@@ -119,7 +119,7 @@
 
         <!-- Nav Item - Messages -->
         <li class="nav-item dropdown no-arrow mx-1">
-            {%if check == "utente" or check == "admin"%}
+            {%if check in ["spike-user", "spike-admin", "admin"]%}
             <a class="nav-link dropdown-toggle" id="messagesDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-envelope fa-fw" id="btnMessaggi"></i>
@@ -158,9 +158,9 @@
                 {%endif%}
 
 
-                {%if check == "admin" or check == "utente"%}
+                {%if check in ["spike-user", "spike-admin"]%}
                 {%for a in amici%}
-                {% if a['utente'][0] != nome and a['ruolo'] != "superadmin" %}
+                {% if a['utente']['nome'] != nome and a['ruoli']['base'] != "admin" %}
                 <a class="dropdown-item d-flex align-items-center AMICI" href="#">
                     <div class="dropdown-list-image mr-3">
                         <img class="rounded-circle" src="static/img/undraw_profile_1.svg" alt="...">
@@ -197,8 +197,8 @@
             <a class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false" style="cursor: default;">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="sonoIO">
+                    <span style="color: green;font-size: 16px;margin-right: 10px;" class="ruolo">{{ruolo}}</span>
                     <span style="color: black;font-size: 18px;">{{ nome }}</span>
-                    <span style="color: green;font-size: 16px;">{{ruolo}}</span>
                 </span>
                 <!--<img class="img-profile rounded-circle" src="static/img/undraw_profile.svg">-->
             </a>

@@ -1,14 +1,14 @@
 from dashboard import app
 from flask import render_template,jsonify,request,session, redirect, url_for
-from database.DB import connPOSTGRES
+import bcrypt
+from database.DB import DB
 from database.DBchat import chat, readChat,notifica, readNotifica, allNotifica
 from database.DBuser import listaColleghi
 from functools import wraps
 #from .classDefinition import RegistrazioneForm,LoginForm
-from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime as dt
 #funzioni_per_semplificare
-from dashboard.funcs_routes.funcs1 import checkMese, Documenti__da_DB, Query, modify_DB
+from dashboard.funcs_routes.funcs1 import checkMese, Documenti__da_DB, Query, modify_DB, Token
 from dashboard.funcs_routes.Utenza import LOGIN, REGISTER, reset_password
 from dashboard.funcs_routes.Pagine_principali import principale___utente, principale___admin, principale__superadmin
 from dashboard.funcs_routes.API import API___azienda, API___utente, API___documento, FUNCS_API
@@ -26,19 +26,17 @@ def home():
 @app.route("/registrazione")#PAGINA
 def registrazione(): return render_template("user/register.html")
 @app.route("/fetchRegister", methods=["POST"])#FUNZIONE
-def logicaRegistrazione(): return REGISTER(request, generate_password_hash, connPOSTGRES, redirect, url_for)
-
+def logicaRegistrazione(): return REGISTER(request, bcrypt, DB, redirect, url_for, dt, Token)
 #-----> login 
 @app.route("/login")#PAGINA
 def login(): return render_template("user/login.html")
 @app.route("/fetchUtente", methods=["POST"])#FUNZIONE
-def logicaLogin(): return LOGIN(request, connPOSTGRES, listaColleghi, session, check_password_hash, redirect, url_for)
-           
+def logicaLogin(): return LOGIN(request, DB, listaColleghi, session, bcrypt, redirect, url_for)        
 #-----> resetPassword
 @app.route("/resetPassword")#PAGINA
 def resetPassword(): return render_template("user/forgot-password.html")
 @app.route("/fetchResetPassword", methods=["POST"])#FUNZIONE
-def logicaResetPassword(): return reset_password(request, generate_password_hash, connPOSTGRES, redirect, url_for)
+def logicaResetPassword(): return reset_password(request, bcrypt, DB, redirect, url_for)
   
 #LOGOUT
 @app.route('/logout')
@@ -53,13 +51,13 @@ def logout():
 #*************************************************************************************************** Principale
 @app.route("/HOME")
 def HOME():
-    if session.get('demo') == "utente":
-        return principale___utente(session, readChat, allNotifica, readNotifica, dt, render_template, checkMese)
+    if session.get('demo') == "spike-user":
+        return principale___utente(session, readChat, allNotifica, readNotifica, dt, render_template, checkMese, DB)
+    
+    elif session.get('demo') == "spike-admin":
+        return principale___admin(session, render_template, dt, checkMese)
     
     elif session.get('demo') == "admin":
-        return principale___admin(session, connPOSTGRES, render_template, dt, checkMese)
-    
-    elif session.get('demo') == "superadmin":
         return principale__superadmin(session, render_template, dt, checkMese)
     
     else:
@@ -121,9 +119,6 @@ def table():
         except: l = 0
         usersL = len(session.get('users'))
 
-        cur = connPOSTGRES.cursor()
-        #links = Documenti__da_DB(cur, session, "MUTUI")
-        cur.close()
 
         return render_template("tables.html",
                                Nmes = l, 
@@ -151,10 +146,30 @@ def b(a,b,c,d):
         notifica(a,b,c,d,azienda)
         
     elif session.get("demo") == "superadmin":
-        cur = connPOSTGRES.cursor()
-        cur.execute('SELECT ragionesociale FROM azienda')
-        for A in cur.fetchall():
+        for A in DB['companies'].find({}, {"name":1}):
             notifica(a,b,c,d,A)
+
+@app.route("/modifica/<nome>")
+def modifica_utente(nome):
+    u = session.get('utente')
+
+    try:
+        l=len(session['notifica'][0]['altri'])
+    except: l = 0
+    usersL = len(session.get('users'))
+    
+
+    return render_template("/modifica_utente.html",
+                           Nmes = l, 
+                           amici = session.get('users'), 
+                           N_amici =usersL -1, 
+                           links = [], 
+                           nome = u['utente'][0], 
+                           check= session.get('demo'), 
+                           ruolo = session.get("demo"), 
+                           ragionesociale=u['azienda'])
+
+
 
 #*************************************************************************************************** Pagine AMMINISTRATORI
 @app.route("/adminCheck")
@@ -163,9 +178,7 @@ def adminCheck():
         nomeAzienda = session.get('utente')['azienda']
 
         #CHECK CHAT
-        cur = connPOSTGRES.cursor()
-        cur.execute(f"SELECT nome FROM utenti WHERE ragionesociale = '{nomeAzienda}'")
-        nomiUSERS = cur.fetchall()
+        nomiUSERS = DB['users'].find({'company': nomeAzienda},{'name.firstName': 1})
 
         try:
             CHAT = {}
@@ -187,7 +200,6 @@ def adminCheck():
 def superadminCheck():
     if session.get('demo') == "superadmin":
         #CHECK CHAT
-        cur = connPOSTGRES.cursor()
         users = session.get('users')
         nomiUSERS = []
         for U in users : nomiUSERS.append(U['utente'][0])
@@ -200,10 +212,7 @@ def superadminCheck():
                 CHAT['chat'] = readChat(nomiUSERS[i+1][0], nomiUSERS[i][0])
         except:...
 
-        cur.execute("SELECT * FROM azienda")
-        aziende = cur.fetchall()
-        cur.close()
-
+        aziende = list(DB['companies'].find())
         result = { 'utenti': users, 'chat':CHAT, 'aziende': aziende }
         
         return jsonify(result)
@@ -213,25 +222,16 @@ def superadminCheck():
 #--------> CHECK UTENTI
 @app.route("/listaColleghi")
 def utenti___superadmin(): 
-    def checkRitorno(nome, utenti, ruolo):
-        for i in cur.fetchall():
-            if i[nome] == u['utente'][0] or i[ruolo] == "superadmin": continue
-            else: utenti.append(i)
-
     if session.get('demo') in ["admin", "superadmin"]:
         u = session.get('utente')
 
-        cur = connPOSTGRES.cursor()
-        utenti = []
+
         if session.get("demo") == "admin":
-            cur.execute(f"{Query()['listaColleghi_admin']} WHERE utenti.ragionesociale = '{u['azienda']}' ")
-            checkRitorno(0,utenti,3)
+            utenti = DB['users'].find({'company': u['azienda']})
+            
             
         elif session.get("demo") == "superadmin":
-            cur.execute(f"{Query()['listaColleghi_superadmin']}")
-            checkRitorno(1, utenti,4)
-            
-        cur.close()
+            utenti = DB['users'].find()
 
         try:
             l=len(session.get('notifica')[0]['altri'])
@@ -274,10 +274,7 @@ def aziende___superadmin():
     if session.get('demo') == "superadmin":
         u = session.get('utente')
 
-        cur = connPOSTGRES.cursor()
-        cur.execute("SELECT * FROM azienda")
-        aziende = cur.fetchall()
-        cur.close()
+        aziende = DB['companies'].find()
 
         try:
             l = len(session.get('notifica')[0]['altri'])
@@ -298,9 +295,7 @@ def aziende___superadmin():
 @app.route("/superadmin/checkAziende", methods=["POST"])
 def check_aziende___superadmin():
     if session.get('demo') == "superadmin":
-        cur = connPOSTGRES.cursor()
-        cur.execute("SELECT * FROM azienda")
-        aziende = cur.fetchall()
+        aziende = DB['companies'].find()
         return jsonify(aziende)
 
 @app.route("/superadmin/report")
@@ -309,17 +304,13 @@ def report___superadmin(): return render_template("Admin/report.html")
 
 #*************************************************************************************************** ALTRO
 #Dettagli
-@app.route("/utente/<email>", methods=["GET"])
-def area_utente(email):
+@app.route("/utente/<ID>", methods=["GET"])
+def area_utente(ID):
     if session.get("demo") in ["admin", "superadmin"]:
-        u = session.get('utente')
 
-        cur = connPOSTGRES.cursor()
-        cur.execute(f"{Query()['area_utenti1']} WHERE utenti.email = '{email}'")
-        user = cur.fetchall()
-        cur.execute(f"{Query()['area_utenti2']} WHERE utenti.email = '{email}'")
-        azienda = cur.fetchall()
-        cur.close()
+        U = DB['users'].find_one({"_id":ID})
+        user = DB['users'].find({'email': U['email']})
+        azienda = DB['companies'].find_one({"name": U['company']})
 
         tiks = [["sadas","blalbab","attivo","gigino","22/03/2023"],
                 ["sadas","blalbab","non attivo","---","23/12/2023"],
@@ -328,36 +319,31 @@ def area_utente(email):
                 ["sadas","blalbab","non attivo","---","22/03/2022"]]
         
         return render_template("area_utente.html", 
-                                   check=session.get('demo'),
-                                   nome=u['utente'][0],
-                                   ragionesociale=u['azienda'],
+                                   check= session.get('demo'),
+                                   nome= session.get('utente')['utente'][0],
+                                   ragionesociale= session.get('utente')['azienda'],
                                    user = user,
                                    azienda = azienda,
                                    ruolo = session.get("demo"), 
                                    tiks = tiks
                                   )
     
-@app.route("/azienda/<nome>", methods=["GET"])
-def area_azienda(nome):
+@app.route("/azienda/<ID>", methods=["GET"])
+def area_azienda(ID):
     if session.get("demo") in ["admin", "superadmin"]:
-        u = session.get('utente')
 
-        cur = connPOSTGRES.cursor()
-        cur.execute(f"SELECT * FROM azienda WHERE ragionesociale = '{nome}'")
-        azienda = cur.fetchall()
-        cur.execute(f"SELECT utenti.cognome, utenti.email, ruoli.livello FROM utenti JOIN ruoli ON utenti.email = ruoli.email WHERE utenti.ragionesociale = '{azienda[0][1]}'")
-        user = cur.fetchall()
-        cur.close()
+        datiAzienda = DB['companies'].find({"_id":ID})
+        datiUser = DB['users'].find({'company': datiAzienda['name']}, {"name.lastName": 1,})
 
         docs = [["sadas","titoli1","22/03/2022"], ["sadas","titoli1","22/03/2022"], ["sadas","titoli1","22/03/2022"]]
         tiks = [["sadas","attivo","22/03/2022"],["sadas","non attivo","22/03/2022"],["sadas","attivo","22/03/2022"]]
         
         return render_template("area_azienda.html", 
                                    check=session.get('demo'),
-                                   nome=u['utente'][0],
-                                   ragionesociale=u['azienda'],
-                                   azienda = azienda,
-                                   user = user,
+                                   nome= session.get('utente')['utente'][0],
+                                   ragionesociale= session.get('utente')['azienda'],
+                                   azienda = datiAzienda,
+                                   user = datiUser,
                                    docs = docs,
                                    ruolo = session.get("demo"), 
                                    tiks = tiks
@@ -368,7 +354,7 @@ def area_azienda(nome):
 #Help
 @app.route("/Help")
 def HELP(): return render_template('componenti/Help.html')  
-
+'''
 @app.route("/modificaDB", methods=['POST'])
 def modificaDB():
     if session.get("demo") in ["admin", "superadmin"]:
@@ -379,7 +365,7 @@ def modificaDB():
         cur.close()
     
         return jsonify(risposta)
-
+'''
 
 
 
@@ -396,7 +382,7 @@ def mes():
         return jsonify(u, m, a, a1, c1)
     
     except: return {"Ti è andata male"}
-
+'''
 #capacita d'interagire con DB
 def requires_auth(f):
     def check_credentials(username, password): return username == "admintech" and password == "123456"
@@ -421,14 +407,14 @@ def checkDati():
 @app.route('/check/provaAuth')
 @requires_auth
 def pagina_protetta(): return render_template("Admin/sql.html")
-
+'''
 
 #*************************************************************************************************** API
 @app.route("/registrazione_azienda", methods=['POST'])
-def registrazione_azienda_api(): return FUNCS_API(API___azienda, request, connPOSTGRES, None, 0)
+def registrazione_azienda_api(): return FUNCS_API(API___azienda, request, DB, None, 0)
 
 @app.route("/registrazione_utente", methods=['POST'])
-def registrazione_utente_api(): return FUNCS_API(API___utente, request, connPOSTGRES, generate_password_hash, 1)
+def registrazione_utente_api(): return FUNCS_API(API___utente, request, DB, bcrypt, 1)
 
 @app.route("/registrazione_documento", methods=['POST'])
 def registrazione_documento_api(): return FUNCS_API(API___documento, request, None, None, 2)

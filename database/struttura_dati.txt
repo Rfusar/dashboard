@@ -1,0 +1,152 @@
+b'$2b$12$Tqt7S.SM69e5.7FXsPc7e.MsrKCZo.ShM967sqD7coaerR7xzBvMS'
+
+
+CAMPI = [
+    {
+        "comments": [
+            {
+                "ticket": "ID",
+                "author": "ID",
+                "comment": str,
+                "createAt": "Date"
+            }
+        ]
+    }
+    {
+        "companies": [
+            {
+                "staff": [str],
+                "papers": [str],
+                "hasDossier": bool,
+                "active": bool,
+                "name": str,
+                "vatNum": str,
+                "address": {
+                    "street": str,
+                    "postalCode": str,
+                    "city": str,
+                    "state": str,
+                    "country": str,
+                },
+                "contact": {
+                    "email": str,
+                    "phone": str,
+                },
+                "slug": str,
+                "seller": "ID"
+                "services":{
+                    "gdpr":bool
+                }
+            }
+        ]
+    }, 
+
+    {
+        "dossiers": [
+            {
+                "company": "ID",
+                "year": int,
+                "category": str,
+                "createAt": "date",
+                "updateAT": "date",
+            }
+        ]
+    }, 
+
+    {
+        "paper": [
+            {
+                "title": str,
+                "description": str,
+                "company": "ID",
+                "category": str,
+                "tags": str,
+                "file": str,
+                "paperCode": str,
+                "createAt": "date",
+                "updateAT": "date",
+                "slug": str,
+                "yearValidation": int
+            }
+        ]
+    }, 
+
+    {
+        "projectfiles": [
+            {
+                "title": str,
+                "description": str,
+                "company": "ID",
+                "project": "ID",
+                "file": str,
+                "code": str,
+                "createAt": "date",
+                "updateAT": "date",
+                "slug": str
+            }
+        ]
+    },
+
+    {
+        "projects": [
+            {
+                "author": "ID",
+                "authorizedRoles": [str],
+                "title": str,
+                "description": str,
+                "company": "ID",
+                "status": str,
+                "code": str,
+                "slug": str,
+                "createAt": "date",
+                "updateAT": "date"
+            }
+        ]
+    },
+
+    {
+        "tickets": [
+            {
+                "status": str,
+                "urgency": bool,
+                "assigned": bool,
+                "assignedTO": "ID",
+                "title": str,
+                "description": str,
+                "company": "ID",
+                "person": "ID",
+                "ticketCode": str,
+                "createAt": "date",
+                "updateAT": "date",
+                "slug": str,
+            }
+        ]
+    },
+
+    {
+        "users": [
+            {
+                "photo": str,
+                "businessRole": str,
+                "active": bool,
+                "validated": bool,
+                createAt: "Date",
+                "name": {
+                    "firstName": str,
+                    "lastName": str,
+                },
+                "contact": {
+                    "email": str,
+                    "phone": str
+                },
+                "role": str,
+                "company": "ID",
+                "password": str,
+                "userCode": str,
+                "slug": str,
+                "passwordChange": "date"
+                "updateAt": "Date"
+            }
+        ]
+    }
+]

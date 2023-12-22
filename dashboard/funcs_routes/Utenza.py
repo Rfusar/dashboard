@@ -1,45 +1,47 @@
-def LOGIN(request, connPOSTGRES, listaColleghi, session, check_password_hash, redirect, url_for):
+def LOGIN(request, DB, listaColleghi, session, bcrypt, redirect, url_for):
     try: 
         if request.method == 'POST':
             email = request.form['email']
             password = request.form['password']
 
+            check = DB['users'].find_one({"contact.email": email})
             try:
-                cur = connPOSTGRES.cursor()
-        
-                cur.execute("SELECT password, email FROM utenti WHERE email = %s", (email,))
-                u = cur.fetchall()
-                cur.execute("SELECT nome, ragionesociale FROM utenti WHERE password = %s", (u[0][0],))
-                a = cur.fetchall()
+                if check and bcrypt.checkpw(password.encode('utf-8'), check['password']):
+                    utenti = listaColleghi(email)
+                    #utente
+                    for i in utenti: 
+                        if i['utente']["contatti"]['email'] == email: 
+                            session['utente'] = i
+                        else:
+                            print("sei un coglione, perche chi cazzo sei???")
+                            return redirect(url_for('login'))
 
-                utenti = listaColleghi(a[0][1], email)
-                #utente
-                for i in utenti: 
-                    if i['email'] == email: session['utente'] = i
+                    utenteRuolo = session.get('utente')['ruolo']
+                    #colleghi
+                    session['users'] = utenti
+                    #livello utente
+                    session['demo'] = utenteRuolo
 
-                utenteRuolo = session.get('utente')['ruolo']
-                
-                #colleghi
-                session['users'] = utenti
-
-                #livello utente
-                session['demo'] = utenteRuolo
-            
-                if check_password_hash(u[0][0], password):
-                    #INDIRIZZAMENTO A PAGINA PRINCIPALE
-                    ruoli = ["utente", "admin", "superadmin" ]
-                    for i in range(len(ruoli)): 
-                        if session.get('utente')['ruolo'] == ruoli[i]: return redirect(url_for('HOME'))   
-  
+                    RUOLI = ["user", "referent", "spike-user", "spike-admin", "admin"]
+                    for i in range(len(RUOLI)): 
+                        if session.get('utente')['ruoli']['base'] == RUOLI[i]: 
+                            return redirect(url_for('HOME'))
+                        else:
+                            print("sei un coglione, il ruolo non torna")
+                            return redirect(url_for('login'))
                 else:
+                    print("sei un coglione, la password non funziona")
                     return redirect(url_for('login'))
-            
-            except:
+                
+            except Exception as e:
+                print(str(e)+"errore except")
                 return redirect(url_for('login'))
-    except:...
-    
+            
+    except Exception as e:
+        print(str(e))
+        return redirect(url_for('login'))
 
-def REGISTER(request, generate_password_hash, connPOSTGRES, redirect, url_for):
+def REGISTER(request, bcrypt, DB, redirect, url_for, dt, Token):
     try:
         if request.method == 'POST':
             nome = request.form['nome']
@@ -48,41 +50,50 @@ def REGISTER(request, generate_password_hash, connPOSTGRES, redirect, url_for):
             RG = request.form['ragionesociale']
             email = request.form['email']
             telefono = request.form['telefono']
-        
-            p = generate_password_hash(password)
 
-            try:    
-                cur = connPOSTGRES.cursor()
-                cur.execute("insert into utenti (nome, cognome, tel, ragionesociale, email, password) values (%s,%s,%s,%s,%s,%s)",(nome, cognome, telefono, RG, email, p))
-                connPOSTGRES.commit()
-                cur.execute("insert into ruoli (email, ragionesociale, livello) values (%s, %s, 'utente')", (email, RG))
-                connPOSTGRES.commit()
-                cur.close()
+            company = DB['companies'].find_one({"name": RG}, {"name": 1, "_id": 1})
+
+            if company['name'].upper() == RG.upper():
+                aziendaID = company['_id'] 
+                userCode = Token(9)
+                password_crypt = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(12))
+
+                DB['users'].insert_one({
+                    "photo": None,
+                    "businessRole": "staff",
+                    "active": True,
+                    "validated": True,
+                    "craeteAt": dt.now(),
+                    "name": {"firstName": nome, "lastName": cognome},
+                    "contact": {"email": email, "phone": telefono},
+                    "role": None,
+                    "company": aziendaID,
+                    "password": password_crypt,
+                    "userCode": userCode,
+                    "slug": f"{nome}-{cognome}-{userCode}",
+                    "passwordChangedAt": None,
+                    "passwordResetExpires": None,
+                    "passwordResetToken": None,
+                    "updateAt": None
+                })
+
                 return redirect(url_for('login'))
-
-    
-            except Exception as e:
-                print(str(e))
+            else:
                 return redirect(url_for('registrazione'))  
     except:...
 
-
-def reset_password(request, generate_password_hash, connPOSTGRES, redirect, url_for):
-    #aggiungere funzionalita con SMS oppure email
+def reset_password(request, bcrypt, DB, redirect, url_for):
     try:
         if request.method == "POST":
             email = request.form['email']
             password = request.form['new-password']
+            token = request.form['token']
 
-            p = generate_password_hash(password)
-            try:
-                cur = connPOSTGRES.cursor()
-                cur.execute("UPDATE utenti SET password = %s WHERE email = %s", (p, email))
-                connPOSTGRES.commit()
-                cur.close()
+            utente = DB['users'].find_one({"email":email})
+            if utente.get('passwordResetToken') == token:
+                password_crypt = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(12))
+                DB['users'].update_one({"email": email}, {"$set": {"password": password_crypt}})
                 return redirect(url_for('login'))
-
-            except:
+            else:
                 return redirect(url_for('resetPassword')) 
     except:...
-
