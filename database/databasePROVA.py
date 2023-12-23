@@ -13,7 +13,7 @@ def slugify_company(nome):
     if slug[-1] == "-": slug = slug[:-1]
     return slug
 
-ruoli = ['user', 'referent', 'spike-user', 'spike-admin', 'admin']
+ruoli = ['user', 'referent', 'spike-user', 'spike-admin']
 businessRuoli = ['ceo', 'coo', 'cfo', 'om', 'pm', 'staff']
 #businessRuoliDEFAULT = "staff"
 #spike-user = backoffice

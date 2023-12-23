@@ -22,7 +22,7 @@ document.querySelectorAll('.elimina').forEach((e, i) => {
 function gestione___modificaANDdettagli(classe, pathFisso){
     window.addEventListener('click', ()=>{
         document.querySelectorAll(classe).forEach((e, i)=>{
-            e.addEventListener('click', () => { e.setAttribute("href", `/${pathFisso}/${document.querySelectorAll('.email_utente')[i].textContent}`) })
+            e.addEventListener('click', () => { e.setAttribute("href", `/${pathFisso}/${document.querySelectorAll('.email_utente')[i].getAttribute("value")}`) })
         })
     }) 
 }

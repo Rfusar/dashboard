@@ -66,7 +66,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    {%if check == "admin"%}
+                                    {%if check == "spike-admin"%}
                                     <thead>
                                         <tr>
                                             <th>Nome</th>
@@ -78,10 +78,10 @@
                                     </thead>
                                     {% for link in links %}
                                     <tr class="riga_">
-                                        <td class="nome_utente">{{ link[0]}}</td>
-                                        <td class="cognome_utente">{{ link[1]}}</td>
-                                        <td class="email_utente">{{ link[2]}}</td>
-                                        <td class="ruolo">{{ link[3]}}</td>
+                                        <td class="nome_utente">{{ link['name']['firstName'] }}</td>
+                                        <td class="cognome_utente">{{ link['name']['lastName'] }}</td>
+                                        <td class="email_utente" value="{{link['_id']}}">{{ link['contact']['email']}}</td>
+                                        <td class="ruolo">{{ link['role']}}</td>
 
                                         <td>
                                             <a style="cursor: pointer;margin-left: 10px;" class="elimina">

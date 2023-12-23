@@ -66,7 +66,7 @@ def HOME():
 #PAGINE
 @app.route("/charts")
 def charts():
-    if session.get('demo') == "utente" or session.get('demo') == "admin" or session.get('demo') == "superadmin":
+    if session.get('demo') in ["user", "referente", "spike-user", "spike-admin", "admin"]:
         u = session.get('utente')
 
         try: 
@@ -78,10 +78,10 @@ def charts():
                                Nmes = l, 
                                amici = session.get('users'), 
                                N_amici =usersL -1, 
-                               nome=u['utente'][0], 
+                               nome=u['utente']['identificazione']['nome'], 
                                check = session.get('demo'), 
                                ruolo = session.get("demo"), 
-                               ragionesociale=u['azienda'])
+                               ragionesociale=u['azienda']['nome'])
     
 
     
@@ -111,8 +111,11 @@ def tableInfo():
 
 @app.route("/table")
 def table():
-    if session.get('demo') in ["utente", "admin","superadmin"]:
+    if session.get('demo') in ["user", "referente", "spike-user", "spike-admin", "admin"]:
         u = session.get('utente')
+
+        comID = DB['companies'].find_one({"name": u['azienda']['nome']}, {"_id": 1})
+        docs = DB['projectfiles'].find({"company": comID['_id']})
 
         try:
             l=len(session['notifica'][0]['altri'])
@@ -124,11 +127,11 @@ def table():
                                Nmes = l, 
                                amici = session.get('users'), 
                                N_amici =usersL -1, 
-                               links = [], 
-                               nome = u['utente'][0], 
+                               links = docs, 
+                               nome = u['utente']['identificazione']['nome'], 
                                check= session.get('demo'), 
                                ruolo = session.get("demo"), 
-                               ragionesociale=u['azienda'])
+                               ragionesociale=u['azienda']['nome'])
 
     elif session.get('demo') == True:
             return render_template("tables.html", check=True)
@@ -164,17 +167,17 @@ def modifica_utente(nome):
                            amici = session.get('users'), 
                            N_amici =usersL -1, 
                            links = [], 
-                           nome = u['utente'][0], 
+                           nome = u['utente']['identificazione']['nome'], 
                            check= session.get('demo'), 
                            ruolo = session.get("demo"), 
-                           ragionesociale=u['azienda'])
+                           ragionesociale=u['azienda']['nome'])
 
 
 
 #*************************************************************************************************** Pagine AMMINISTRATORI
 @app.route("/adminCheck")
 def adminCheck():
-    if session.get('demo') == "admin":
+    if session.get('demo') == ["spike-admin", "admin"]:
         nomeAzienda = session.get('utente')['azienda']
 
         #CHECK CHAT
@@ -198,7 +201,7 @@ def adminCheck():
 
 @app.route("/superadminCheck")
 def superadminCheck():
-    if session.get('demo') == "superadmin":
+    if session.get('demo') == "admin":
         #CHECK CHAT
         users = session.get('users')
         nomiUSERS = []
@@ -222,16 +225,17 @@ def superadminCheck():
 #--------> CHECK UTENTI
 @app.route("/listaColleghi")
 def utenti___superadmin(): 
-    if session.get('demo') in ["admin", "superadmin"]:
+    if session.get('demo') in ["spike-admin", "admin"]:
         u = session.get('utente')
 
 
-        if session.get("demo") == "admin":
-            utenti = DB['users'].find({'company': u['azienda']})
+        if session.get("demo") == "spike-admin":
+            company = DB['companies'].find_one({'name': u['azienda']['nome']}, {"_id": 1})
+            utenti = DB['users'].find({'company': company['_id']}, {"password": 0})
             
-            
-        elif session.get("demo") == "superadmin":
-            utenti = DB['users'].find()
+        elif session.get("demo") == "admin":
+            company = DB['companies'].find_one({}, {"_id": 1})
+            utenti = DB['users'].find({'company': company['_id']}, {"password": 0})
 
         try:
             l=len(session.get('notifica')[0]['altri'])
@@ -243,38 +247,89 @@ def utenti___superadmin():
                            Nmes = l, 
                            amici = session.get('users'), 
                            N_amici =usersL -1, 
-                           nome=u['utente'][0], 
+                           nome=u['utente']['identificazione']['nome'], 
                            check = session.get('demo'),
                            links = utenti,
                            ruolo = session.get("demo"), 
-                           ragionesociale=u['azienda']
+                           ragionesociale=u['azienda']['nome']
                            )
 
 @app.route("/Tickets")
 def Tickets():
     u = session.get('utente')
 
+    tiks = []
+    if session.get('demo') in ["user", "spike-user"]:
+        user = DB['users'].find({}, {'_id': 1, "name.firstName": 1, "name.lastName": 1})
+        company = DB['companies'].find({}, {'_id': 1, "name": 1})
+        tik = DB['tickets'].find()
+        for i in tik:
+            OGG={}
+            OGG['title'] = i['title']
+            OGG['status'] = i['status']
+            OGG['ticketCode'] = i['ticketCode']
+            OGG['createAt'] = i['createAt']
+            for c in company:
+                if i['company'] == c['_id']:
+                    OGG['company'] = c['name']
+
+            for U in user:
+                if i['assignedTO'] == U['_id']:
+                    OGG['person'] = f"{U['name']['firstName']} {U['name']['lastName']}"
+            tiks.append(OGG)
+        
+
+    elif session.get('demo') == "spike-admin":
+        user = DB['users'].find({}, {'_id': 1, "name.firstName": 1, "name.lastName": 1})
+        company = DB['companies'].find({}, {'_id': 1, "name": 1})
+        tik = DB['tickets'].find()
+        for i in tik:
+            OGG={}
+            OGG['title'] = i['title']
+            OGG['status'] = i['status']
+            OGG['ticketCode'] = i['ticketCode']
+            OGG['createAt'] = i['createAt']
+            for c in company:
+                if i['company'] == c['_id']:
+                    OGG['company'] = c['name']
+
+            for U in user:
+                if i['assignedTO'] == U['_id']:
+                    OGG['person'] = f"{U['name']['firstName']} {U['name']['lastName']}"
+            tiks.append(OGG)
+                
+            
+
+    
+        
+
     try:
         l=len(session['notifica'][0]['altri'])
     except: l = 0
     usersL = len(session.get('users'))
 
+
     return render_template("/tickets.html",
                            Nmes = l, 
                            amici = session.get('users'), 
                            N_amici =usersL -1, 
-                           links = [], 
-                           nome = u['utente'][0], 
+                           links = tiks, 
+                           nome = u['utente']['identificazione']['nome'], 
                            check= session.get('demo'), 
                            ruolo = session.get("demo"), 
-                           ragionesociale=u['azienda'])
+                           ragionesociale=u['azienda']['nome'])
 
 @app.route("/superadmin/aziende")
 def aziende___superadmin(): 
-    if session.get('demo') == "superadmin":
+    if session.get('demo') in [ "spike-admin", "admin"]:
         u = session.get('utente')
 
-        aziende = DB['companies'].find()
+        if session.get("demo") == "spike-admin":
+            company = DB['companies'].find()
+            
+        elif session.get("demo") == "admin":
+            company = DB['companies'].find({'name': u['azienda']['nome']})
+
 
         try:
             l = len(session.get('notifica')[0]['altri'])
@@ -285,11 +340,11 @@ def aziende___superadmin():
                                 Nmes = l, 
                                 amici = session.get('users'), 
                                 N_amici =usersL -1, 
-                                nome=u['utente'][0],
+                                nome=u['utente']['identificazione']['nome'],
                                 check = session.get('demo'),
-                                links = aziende,
+                                links = company,
                                 ruolo = session.get("demo"), 
-                                ragionesociale=u['azienda']
+                                ragionesociale=u['azienda']['nome']
                                 )
 
 @app.route("/superadmin/checkAziende", methods=["POST"])
@@ -306,11 +361,16 @@ def report___superadmin(): return render_template("Admin/report.html")
 #Dettagli
 @app.route("/utente/<ID>", methods=["GET"])
 def area_utente(ID):
-    if session.get("demo") in ["admin", "superadmin"]:
+    if session.get("demo") in ["spike-admin", "admin"]:
 
-        U = DB['users'].find_one({"_id":ID})
-        user = DB['users'].find({'email': U['email']})
-        azienda = DB['companies'].find_one({"name": U['company']})
+        datiUSER = DB['users'].find()
+
+        for i in datiUSER:
+            if str(i['_id']) == ID: 
+                id = i['_id']
+        
+        user = DB['users'].find({'_id': id})
+        azienda = DB['companies'].find({"name": session.get('utente')['azienda']['nome']})
 
         tiks = [["sadas","blalbab","attivo","gigino","22/03/2023"],
                 ["sadas","blalbab","non attivo","---","23/12/2023"],
@@ -320,8 +380,8 @@ def area_utente(ID):
         
         return render_template("area_utente.html", 
                                    check= session.get('demo'),
-                                   nome= session.get('utente')['utente'][0],
-                                   ragionesociale= session.get('utente')['azienda'],
+                                   nome= session.get('utente')['utente']["identificazione"]["nome"],
+                                   ragionesociale= session.get('utente')['azienda']['nome'],
                                    user = user,
                                    azienda = azienda,
                                    ruolo = session.get("demo"), 
@@ -330,19 +390,25 @@ def area_utente(ID):
     
 @app.route("/azienda/<ID>", methods=["GET"])
 def area_azienda(ID):
-    if session.get("demo") in ["admin", "superadmin"]:
+    if session.get("demo") in ["spike-admin", "admin"]:
 
-        datiAzienda = DB['companies'].find({"_id":ID})
-        datiUser = DB['users'].find({'company': datiAzienda['name']}, {"name.lastName": 1,})
+        datiAzienda = DB['companies'].find()
+
+        for i in datiAzienda:
+            if str(i['_id']) == ID: 
+                id = i['_id']
+
+        azienda = DB['companies'].find({"_id":id})
+        datiUser = DB['users'].find({'company': id}, {"password": 0})
 
         docs = [["sadas","titoli1","22/03/2022"], ["sadas","titoli1","22/03/2022"], ["sadas","titoli1","22/03/2022"]]
         tiks = [["sadas","attivo","22/03/2022"],["sadas","non attivo","22/03/2022"],["sadas","attivo","22/03/2022"]]
         
         return render_template("area_azienda.html", 
                                    check=session.get('demo'),
-                                   nome= session.get('utente')['utente'][0],
-                                   ragionesociale= session.get('utente')['azienda'],
-                                   azienda = datiAzienda,
+                                   nome= session.get('utente')['utente']['identificazione']['nome'],
+                                   ragionesociale= session.get('utente')['azienda']['nome'],
+                                   azienda = azienda,
                                    user = datiUser,
                                    docs = docs,
                                    ruolo = session.get("demo"), 

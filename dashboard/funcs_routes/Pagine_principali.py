@@ -67,8 +67,8 @@ def principale___admin(session, render_template, dt, checkMese):
     link = []
     for utente in users:
         link.append([
-            utente['utente']['idetificazione']['nome'], 
-            utente['utente']['idetificazione']['cognome'], 
+            utente['utente']['identificazione']['nome'], 
+            utente['utente']['identificazione']['cognome'], 
             utente['utente']['contatti']['email'], 
             utente['ruoli']['base']
         ])
@@ -84,20 +84,20 @@ def principale___admin(session, render_template, dt, checkMese):
                        amici = users, 
                        N_amici =usersL -1, 
                        ruolo = session.get("demo"), 
-                       nome=u['utente'][0], 
+                       nome=u['utente']['identificazione']['nome'], 
                        check = demo,
                        links = link,
 
                         years = years,
                         docs = docs,
 
-                       ragionesociale = u['azienda'],
+                       ragionesociale = u['azienda']['nome'],
                        mese = checkMese(dt),
                        anno = dt.now().year
                        )    
 
 def principale__superadmin(session, render_template, dt, checkMese):
-    if session.get('demo') == "superadmin":
+    if session.get('demo') == "admin":
         u = session.get('utente')
         try:
             l=len(session.get('notifica')[0]['altri'])

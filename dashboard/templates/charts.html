@@ -75,7 +75,7 @@
                                     <code>/js/demo/chart-area-demo.js</code> file.
                                 </div>
 
-                                {%elif check == "utente" or check == "admin"%}
+                                {%elif check in ["user", "spike-user"]%}
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold" style="color: green">Documenti</h6>
                                 </div>
@@ -87,7 +87,7 @@
                                     <p id="costo"></p>
                                 </div>
 
-                                {%elif check == "superadmin"%}
+                                {%elif check in ["spike-admin", "admin"]%}
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold" style="color: green">Documenti</h6>
                                 </div>

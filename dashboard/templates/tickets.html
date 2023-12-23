@@ -69,7 +69,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    {%if check in ["utente", "admin", "superadmin"]%}
+                                    {%if check in ["user", "spike-user", "spike-admin", "admin"]%}
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -84,12 +84,12 @@
 
                                         {% for link in links %}
                                         <tr>
-                                            <td class="IDDocumento"></td>
-                                            <td class="Ipoteca"></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td class="data"></td>
-                                            <td class="data"></td>
+                                            <td class="IDDocumento">{{link['ticketCode']}}</td>
+                                            <td class="Ipoteca">{{link['title']}}</td>
+                                            <td>{{link['company']}}</td>
+                                            <td>{{link['status']}}</td>
+                                            <td class="data">{{link['person']}}</td>
+                                            <td class="data">{{link['createAt']}}</td>
                                         </tr>
                                         {%endfor%}
                                     </tbody>

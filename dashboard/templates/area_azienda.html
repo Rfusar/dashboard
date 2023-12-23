@@ -61,7 +61,6 @@
                                         <table class="table table-bordered" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th>Numero</th>
                                                     <th>Ragionesociale</th>
                                                     <th>Partita IVA</th>
                                                     <th>Indirizzo</th>
@@ -70,7 +69,6 @@
                                                     <th>CAP</th>
                                                     <th>Nazione</th>
                                                     <th>Email</th>
-                                                    <th>PEC</th>
                                                     <th>Telefono</th>
                                                 </tr>
                                             </thead>
@@ -78,17 +76,15 @@
 
                                                 {% for link in azienda %}
                                                 <tr>
-                                                    <td>{{link[0]}}</td>
-                                                    <td>{{link[1]}}</td>
-                                                    <td>{{link[2]}}</td>
-                                                    <td>{{link[3]}}</td>
-                                                    <td>{{link[4]}}</td>
-                                                    <td>{{link[5]}}</td>
-                                                    <td>{{link[6]}}</td>
-                                                    <td>{{link[7]}}</td>
-                                                    <td>{{link[8]}}</td>
-                                                    <td>{{link[9]}}</td>
-                                                    <td>{{link[10]}}</td>
+                                                    <td>{{link['name']}}</td>
+                                                    <td>{{link['vatNum']}}</td>
+                                                    <td>{{link['address']['street']}}</td>
+                                                    <td>{{link['address']['city']}}</td>
+                                                    <td>{{link['address']['state']}}</td>
+                                                    <td>{{link['address']['postalCode']}}</td>
+                                                    <td>{{link['address']['country']}}</td>
+                                                    <td>{{link['contact']['email']}}</td>
+                                                    <td>{{link['contact']['phone']}}</td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>
@@ -125,9 +121,9 @@
 
                                                     {% for link in user %}
                                                     <tr class="riga_">
-                                                        <td>{{link[0]}}</td>
-                                                        <td>{{link[1]}}</td>
-                                                        <td class="ruolo">{{link[2]}}</td>
+                                                        <td>{{link['name']['firstName']}}</td>
+                                                        <td>{{link['name']['lastName']}}</td>
+                                                        <td class="ruolo">{{link['role']}}</td>
                                                     </tr>
                                                     {% endfor %}
                                                 </tbody>

@@ -78,11 +78,11 @@
 
                                                     {% for link in user %}
                                                     <tr>
-                                                        <td>{{ link[0]}}</td>
-                                                        <td>{{ link[1]}}</td>
-                                                        <td>{{ link[2]}}</td>
-                                                        <td>{{link[3]}}</td>
-                                                        <td class="ruolo">{{link[4]}}</td>
+                                                        <td>{{ link['name']['firstName']}}</td>
+                                                        <td>{{ link['name']['lastName']}}</td>
+                                                        <td>{{ link['contact']['email']}}</td>
+                                                        <td>{{ link['contact']['phone']}}</td>
+                                                        <td class="ruolo">{{link['role']}}</td>
                                                     </tr>
                                                     {% endfor %}
                                                 </tbody>
@@ -119,18 +119,18 @@
                                                         <th>Partita IVA</th>
                                                         <th>CAP</th>
                                                         <th>Nazione</th>
-                                                        <th>PEC</th>
+                                                        <th>Email</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 
                                                     {% for link in azienda %}
                                                     <tr>
-                                                        <td id="Ragionesociale">{{ link[0]}}</td>
-                                                        <td>{{ link[1]}}</td>
-                                                        <td>{{ link[2]}}</td>
-                                                        <td>{{link[3]}}</td>
-                                                        <td>{{link[4]}}</td>
+                                                        <td id="Ragionesociale">{{ link['name']}}</td>
+                                                        <td>{{ link['vatNum']}}</td>
+                                                        <td>{{ link['address']['postalCode']}}</td>
+                                                        <td>{{ link['address']['country']}}</td>
+                                                        <td>{{ link['contact']['email']}}</td>
                                                     </tr>
                                                     {% endfor %}
                                                 </tbody>

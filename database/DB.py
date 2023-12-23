@@ -5,11 +5,8 @@ import os
 from dotenv import load_dotenv
 import bcrypt
 from datetime import datetime as dt
-from databasePROVA import databaseDEFAULT
-
-    
-
-
+#from databasePROVA import databaseDEFAULT
+#from pprint import pprint as ppr
 load_dotenv("C:\\Users\\Utente\\Desktop\\info\\variabili\\.env")
 
 
@@ -27,6 +24,8 @@ client = MongoClient(f"mongodb+srv://{UTENTE}:{PASSWORD_DEV}@{CLUSTER_DEV}.mongo
 DB = client[DATABASE[1]]
 
 
+
+'''
 for collection in COLLECTIONS: 
     DB[collection].delete_many({})
 
@@ -34,7 +33,7 @@ password0 = "CHIOCCIOLA13$$$"
 password = bcrypt.hashpw(password0.encode('utf-8'), bcrypt.gensalt(12))
 
 databaseDEFAULT(DB, COLLECTIONS, dt, password)
-
+'''
 
 
 

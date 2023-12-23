@@ -6,7 +6,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        {%elif check in ["utente", "admin", "superadmin"]%}
+        {%elif check in ["user", "referente", "spike-user", "spike-admin", "admin"]%}
         <div class="sidebar-brand-text mx-3">{{ ragionesociale }}</div>
         {% endif %}
     </a>
@@ -15,7 +15,7 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    {%if check in ["utente", "admin", "superadmin"]%}
+    {%if check in ["user", "referente", "spike-user", "spike-admin", "admin"]%}
     <li class="nav-item active">
         <a class="nav-link" href="{{url_for('HOME')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -57,7 +57,7 @@
     </li>
 
 
-    {%elif check == "superadmin"%}
+    {%elif check  in ["spike-admin", "admin"]%}
     <li class="nav-item" style="cursor: pointer;">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsePages0" aria-expanded="true"
             aria-controls="collapsePages">
@@ -93,7 +93,7 @@
 
 
 
-    {%elif check == "utente"%}
+    {%elif check in ["user", "referente", "spike-user"]%}
     <li class="nav-item">
         <a class="nav-link" href="{{url_for('charts')}}">
             <i class="fas fa-laugh-wink"></i>
@@ -113,7 +113,7 @@
 
 
 
-    {%elif check == "admin" %}
+    {%elif check == "spike-admin"%}
     <li class="nav-item">
         <a class="nav-link" href="{{url_for('charts')}}">
             <i class="fas fa-laugh-wink"></i>
@@ -139,7 +139,7 @@
 
 
 
-    {%elif check == "superadmin"%}
+    {%elif check ==  "admin"%}
     <li class="nav-item">
         <a class="nav-link" href="/table">
             <i class="fas fa-laugh-wink"></i>
@@ -167,7 +167,7 @@
 
 
     <!--cose comuni in tutte l'utenze-->
-    {%if check in ["utente", "admin", "superadmin"]%}
+    {%if check in ["user", "referente", "spike-user", "spike-admin", "admin"]%}
     <li class="nav-item">
         <a class="nav-link" href="/logout">
             <i class="fas fa-laugh-wink"></i>

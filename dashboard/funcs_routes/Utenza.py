@@ -1,3 +1,4 @@
+import pprint
 def LOGIN(request, DB, listaColleghi, session, bcrypt, redirect, url_for):
     try: 
         if request.method == 'POST':
@@ -6,17 +7,17 @@ def LOGIN(request, DB, listaColleghi, session, bcrypt, redirect, url_for):
 
             check = DB['users'].find_one({"contact.email": email})
             try:
-                if check and bcrypt.checkpw(password.encode('utf-8'), check['password']):
+                if bcrypt.checkpw(password.encode('utf-8'), check['password']):
                     utenti = listaColleghi(email)
+
+                    pprint.pprint(utenti)
+                    print()
                     #utente
                     for i in utenti: 
-                        if i['utente']["contatti"]['email'] == email: 
+                        if i['utente']['contatti']['email'] == email: 
                             session['utente'] = i
-                        else:
-                            print("sei un coglione, perche chi cazzo sei???")
-                            return redirect(url_for('login'))
 
-                    utenteRuolo = session.get('utente')['ruolo']
+                    utenteRuolo = session.get('utente')['ruoli']['base']
                     #colleghi
                     session['users'] = utenti
                     #livello utente
@@ -26,15 +27,12 @@ def LOGIN(request, DB, listaColleghi, session, bcrypt, redirect, url_for):
                     for i in range(len(RUOLI)): 
                         if session.get('utente')['ruoli']['base'] == RUOLI[i]: 
                             return redirect(url_for('HOME'))
-                        else:
-                            print("sei un coglione, il ruolo non torna")
-                            return redirect(url_for('login'))
                 else:
                     print("sei un coglione, la password non funziona")
                     return redirect(url_for('login'))
                 
             except Exception as e:
-                print(str(e)+"errore except")
+                print(str(e))
                 return redirect(url_for('login'))
             
     except Exception as e:

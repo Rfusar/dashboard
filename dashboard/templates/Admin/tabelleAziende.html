@@ -63,7 +63,6 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
                                             <th>Azienda</th>
                                             <th>partita IVA</th>
                                             <th>Indirizzo</th>
@@ -75,11 +74,10 @@
                                     <tbody>
                                         {% for link in links %}
                                         <tr class="riga_">
-                                            <td>{{ link[0]}}</td>
-                                            <td class="Ragionesociale">{{ link[1]}}</td>
-                                            <td>{{ link[2]}}</td>
-                                            <td>{{ link[3]}}</td>
-                                            <td>{{ link[4]}}</td>
+                                            <td class="Ragionesociale" value="{{link['_id']}}">{{ link['name'] }}</td>
+                                            <td>{{ link['vatNum'] }}</td>
+                                            <td>{{ link['address']['street'] }}</td>
+                                            <td>{{ link['address']['city'] }}</td>
                                             <td>
                                                 <a style="cursor: pointer;margin-left: 10px;">
                                                     <img src="../../static/img/elimina.png" alt="piu dettagli" style="width: 20px;" >
@@ -159,7 +157,7 @@
 
     <script>
         document.querySelectorAll('.piu_dettagli').forEach((e,i)=>{
-            e.setAttribute('href', `/azienda/${document.querySelectorAll('.Ragionesociale')[i].textContent}`)
+            e.setAttribute('href', `/azienda/${document.querySelectorAll('.Ragionesociale')[i].getAttribute('value')}`)
         })
 
     </script>

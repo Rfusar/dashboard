@@ -69,7 +69,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    {%if check == "utente" or check == "admin" or check == "superadmin"%}
+                                    {%if check in ["user", "spike-user", "spike-admin", "admin"]%}
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -85,13 +85,13 @@
 
                                         {% for link in links %}
                                         <tr class="riga_">
-                                            <td class="ID_documento"></td>
-                                            <td class="Titolo_documento"></td>
-                                            <td class="Categoria_documento"></td>
-                                            <td class="Anno_di_validita_documento"></td>
-                                            <td class="TAG_documento"></td>
-                                            <td class="File_documento"></td>
-                                            <td class="Data_documento"></td>
+                                            <td class="ID_documento">{{link['paperCode']}}</td>
+                                            <td class="Titolo_documento">{{link['title']}}</td>
+                                            <td class="Categoria_documento">{{link['category']}}</td>
+                                            <td class="Anno_di_validita_documento">{{link['yearValidation']}}</td>
+                                            <td class="TAG_documento">{{link['tags']}}</td>
+                                            <td class="File_documento"><a href="#">{{link['paperCode']}}</a></td>
+                                            <td class="Data_documento">{{link['createAt']}}</td>
                                         </tr>
                                         {%endfor%}
                                     </tbody>

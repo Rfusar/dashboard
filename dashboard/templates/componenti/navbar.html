@@ -160,7 +160,7 @@
 
                 {%if check in ["spike-user", "spike-admin"]%}
                 {%for a in amici%}
-                {% if a['utente']['nome'] != nome and a['ruoli']['base'] != "admin" %}
+                {% if a['utente']['identificazione']['nome'] != nome and a['ruoli']['base'] != "admin" %}
                 <a class="dropdown-item d-flex align-items-center AMICI" href="#">
                     <div class="dropdown-list-image mr-3">
                         <img class="rounded-circle" src="static/img/undraw_profile_1.svg" alt="...">
@@ -170,7 +170,7 @@
                     </div>
                     <div class="font-weight-bold">
 
-                        <div class="text-truncate AMICO">{{ a['utente'][0] }}</div>
+                        <div class="text-truncate AMICO">{{ a['utente']['identificazione']['nome'] }}</div>
 
                         <div class="small text-gray-500"></div>
                     </div>
