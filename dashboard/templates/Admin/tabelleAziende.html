@@ -22,13 +22,6 @@
 
     <!-- Custom styles for this page -->
     <link href="../../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <style>
-        #_piuDettagli {
-            width: 0px;
-            height: 0px;
-            transition: all 1s ease;
-        }
-    </style>
 </head>
 
 <body id="page-top">
@@ -79,14 +72,17 @@
                                             <td>{{ link['address']['street'] }}</td>
                                             <td>{{ link['address']['city'] }}</td>
                                             <td>
-                                                <a style="cursor: pointer;margin-left: 10px;">
-                                                    <img src="../../static/img/elimina.png" alt="piu dettagli" style="width: 20px;" >
+                                                <a style="cursor: pointer;margin-left: 10px;" class="elimina">
+                                                    <img src="../../static/img/elimina.png" alt="elimina"
+                                                        style="width: 20px;">
                                                 </a>
-                                                <a style="cursor: pointer;margin-left: 15px;">
-                                                    <img src="../../static/img/modifica.png" alt="piu dettagli" style="width: 20px;" >
+                                                <a style="cursor: pointer;margin-left: 15px;" class="modifica">
+                                                    <img src="../../static/img/modifica.png" alt="modifica"
+                                                        style="width: 20px;">
                                                 </a>
-                                                <a style="cursor: pointer;margin-left: 15px;" class="piu_dettagli" href="#">
-                                                    <img src="../../static/img/piu_dettagli.png" alt="piu dettagli" style="width: 20px;" >
+                                                <a style="cursor: pointer;margin-left: 15px;" class="piu_dettagli">
+                                                    <img src="../../static/img/piu_dettagli.png" alt="piu dettagli"
+                                                        style="width: 20px;">
                                                 </a>
 
                                             </td>
@@ -96,9 +92,12 @@
 
                                 </table>
                             </div>
+                            {%if check == "spike-admin"%}
+                            <button class="btn" style="background-color: green;color: aliceblue;">Aggiungi</button>
+                            {%endif%}
                         </div>
-                    </div>
 
+                    </div>
                 </div>
                 <!-- /.container-fluid -->
 
@@ -156,9 +155,17 @@
     <script src="../static/js/Admin/index/script_utenza_img.js"></script>
 
     <script>
-        document.querySelectorAll('.piu_dettagli').forEach((e,i)=>{
-            e.setAttribute('href', `/azienda/${document.querySelectorAll('.Ragionesociale')[i].getAttribute('value')}`)
-        })
+        function ELI_MOD_DET(classe, finale) {
+            document.querySelectorAll(classe).forEach((e, i) => {
+                e.addEventListener('click', () => {
+                    e.setAttribute('href', `/${document.querySelectorAll('.Ragionesociale')[i].getAttribute('value')}/${finale}`)
+                })
+            })
+        }
+
+        ELI_MOD_DET(".elimina", "elimina")
+        ELI_MOD_DET(".modifica", "modifica")
+        ELI_MOD_DET(".piu_dettagli", "dettaglio")
 
     </script>
 

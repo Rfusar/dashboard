@@ -8,6 +8,7 @@ from functools import wraps
 #from .classDefinition import RegistrazioneForm,LoginForm
 from datetime import datetime as dt
 #funzioni_per_semplificare
+from dashboard.funcs_routes.tickets import gestione_Tickets___admin, gestione_Ticktes___user
 from dashboard.funcs_routes.funcs1 import checkMese, Documenti__da_DB, Query, modify_DB, Token
 from dashboard.funcs_routes.Utenza import LOGIN, REGISTER, reset_password
 from dashboard.funcs_routes.Pagine_principali import principale___utente, principale___admin, principale__superadmin
@@ -170,7 +171,7 @@ def modifica_utente(ID):
     usersL = len(session.get('users'))
     
 
-    return render_template("modifica_utente.html",
+    return render_template("Admin/modifica_utente.html",
                            Nmes = l, 
                            amici = session.get('users'), 
                            N_amici =usersL -1, 
@@ -269,50 +270,10 @@ def Tickets():
     u = session.get('utente')
 
     tiks = []
-    if session.get('demo') in ["user", "spike-user"]:
-        user = DB['users'].find({}, {'_id': 1, "name.firstName": 1, "name.lastName": 1})
-        company = DB['companies'].find({}, {'_id': 1, "name": 1})
-        tik = DB['tickets'].find()
-        for i in tik:
-            OGG={}
-            OGG['title'] = i['title']
-            OGG['status'] = i['status']
-            OGG['ticketCode'] = i['ticketCode']
-            OGG['createAt'] = i['createAt']
-            for c in company:
-                if i['company'] == c['_id']:
-                    OGG['company'] = c['name']
+    if session.get('demo') in ["user", "spike-user"]: gestione_Ticktes___user(DB, tiks, u['utente']['contatti']['email'])
 
-            for U in user:
-                if i['assignedTO'] == U['_id']:
-                    OGG['person'] = f"{U['name']['firstName']} {U['name']['lastName']}"
-            tiks.append(OGG)
-        
-
-    elif session.get('demo') == "spike-admin":
-        user = DB['users'].find({}, {'_id': 1, "name.firstName": 1, "name.lastName": 1})
-        company = DB['companies'].find({}, {'_id': 1, "name": 1})
-        tik = DB['tickets'].find()
-        for i in tik:
-            OGG={}
-            OGG['title'] = i['title']
-            OGG['status'] = i['status']
-            OGG['ticketCode'] = i['ticketCode']
-            OGG['createAt'] = i['createAt']
-            for c in company:
-                if i['company'] == c['_id']:
-                    OGG['company'] = c['name']
-
-            for U in user:
-                if i['assignedTO'] == U['_id']:
-                    OGG['person'] = f"{U['name']['firstName']} {U['name']['lastName']}"
-            tiks.append(OGG)
-                
-            
-
-    
-        
-
+    elif session.get('demo') == "spike-admin": gestione_Tickets___admin(DB, tiks)
+                  
     try:
         l=len(session['notifica'][0]['altri'])
     except: l = 0
@@ -369,7 +330,7 @@ def report___superadmin(): return render_template("Admin/report.html")
 
 #*************************************************************************************************** ALTRO
 #Dettagli
-@app.route("/utente/<ID>", methods=["GET"])
+@app.route("/utente/<ID>")
 def area_utente(ID):
     if session.get("demo") in ["spike-admin", "admin"]:
 
@@ -379,8 +340,8 @@ def area_utente(ID):
             if str(i['_id']) == ID:  
                 id = i['_id']
         
-        user = DB['users'].find({'_id': id})
-        azienda = DB['companies'].find({"name": session.get('utente')['azienda']['nome']})
+        user = DB['users'].find_one({'_id': id})
+        azienda = DB['companies'].find_one({"_id": user['company']})
 
         tiks = [["sadas","blalbab","attivo","gigino","22/03/2023"],
                 ["sadas","blalbab","non attivo","---","23/12/2023"],
@@ -398,32 +359,46 @@ def area_utente(ID):
                                    tiks = tiks
                                   )
     
-@app.route("/azienda/<ID>", methods=["GET"])
-def area_azienda(ID):
-    if session.get("demo") in ["spike-admin", "admin"]:
+#area azienda
+@app.route("/<ID>/<azione>")
+def area_azienda(ID, azione):
+    if session.get("demo") == "spike-admin":
 
         datiAzienda = DB['companies'].find()
-
         for i in datiAzienda:
             if str(i['_id']) == ID: 
                 id = i['_id']
 
-        azienda = DB['companies'].find({"_id":id})
+        azienda = DB['companies'].find_one({"_id":id})
         datiUser = DB['users'].find({'company': id}, {"password": 0})
-
         docs = [["sadas","titoli1","22/03/2022"], ["sadas","titoli1","22/03/2022"], ["sadas","titoli1","22/03/2022"]]
         tiks = [["sadas","attivo","22/03/2022"],["sadas","non attivo","22/03/2022"],["sadas","attivo","22/03/2022"]]
+
+        if azione == "modifica":
+            return render_template("Admin/modifica_azienda.html", 
+                                       check=session.get('demo'),
+                                       nome= session.get('utente')['utente']['identificazione']['nome'],
+                                       ragionesociale= session.get('utente')['azienda']['nome'],
+                                       azienda = azienda,
+                                       user = datiUser,
+                                       docs = docs,
+                                       ruolo = session.get("demo"), 
+                                       tiks = tiks
+                                      )
+
+        elif azione == "dettaglio":
+            return render_template("area_azienda.html", 
+                                       check=session.get('demo'),
+                                       nome= session.get('utente')['utente']['identificazione']['nome'],
+                                       ragionesociale= session.get('utente')['azienda']['nome'],
+                                       azienda = azienda,
+                                       user = datiUser,
+                                       docs = docs,
+                                       ruolo = session.get("demo"), 
+                                       tiks = tiks
+                                      )
+
         
-        return render_template("area_azienda.html", 
-                                   check=session.get('demo'),
-                                   nome= session.get('utente')['utente']['identificazione']['nome'],
-                                   ragionesociale= session.get('utente')['azienda']['nome'],
-                                   azienda = azienda,
-                                   user = datiUser,
-                                   docs = docs,
-                                   ruolo = session.get("demo"), 
-                                   tiks = tiks
-                                  )
 
 
 

@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Area utente</title>
+    <title>Area Azienda</title>
 
     <!-- Custom fonts for this template -->
     <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -73,20 +73,18 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-
-                                                {% for link in azienda %}
                                                 <tr>
-                                                    <td>{{link['name']}}</td>
-                                                    <td>{{link['vatNum']}}</td>
-                                                    <td>{{link['address']['street']}}</td>
-                                                    <td>{{link['address']['city']}}</td>
-                                                    <td>{{link['address']['state']}}</td>
-                                                    <td>{{link['address']['postalCode']}}</td>
-                                                    <td>{{link['address']['country']}}</td>
-                                                    <td>{{link['contact']['email']}}</td>
-                                                    <td>{{link['contact']['phone']}}</td>
+                                                    <td>{{azienda['name']}}</td>
+                                                    <td>{{azienda['vatNum']}}</td>
+                                                    <td>{{azienda['address']['street']}}</td>
+                                                    <td>{{azienda['address']['city']}}</td>
+                                                    <td>{{azienda['address']['state']}}</td>
+                                                    <td>{{azienda['address']['postalCode']}}</td>
+                                                    <td>{{azienda['address']['country']}}</td>
+                                                    <td>{{azienda['contact']['email']}}</td>
+                                                    <td>{{azienda['contact']['phone']}}</td>
                                                 </tr>
-                                                {% endfor %}
+
                                             </tbody>
                                         </table>
                                     </div>

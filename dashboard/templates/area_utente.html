@@ -78,15 +78,13 @@
                                                 </thead>
                                                 <tbody>
 
-                                                    {% for link in user %}
                                                     <tr>
-                                                        <td>{{ link['name']['firstName']}}</td>
-                                                        <td>{{ link['name']['lastName']}}</td>
-                                                        <td>{{ link['contact']['email']}}</td>
-                                                        <td>{{ link['contact']['phone']}}</td>
-                                                        <td id="ruolo" value="{{link['_id']}}">{{link['role']}}</td>
+                                                        <td>{{ user['name']['firstName']}}</td>
+                                                        <td>{{ user['name']['lastName']}}</td>
+                                                        <td>{{ user['contact']['email']}}</td>
+                                                        <td>{{ user['contact']['phone']}}</td>
+                                                        <td id="ruolo" value="{{user['_id']}}">{{user['role']}}</td>
                                                     </tr>
-                                                    {% endfor %}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -125,16 +123,14 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-
-                                                    {% for link in azienda %}
                                                     <tr>
-                                                        <td id="Ragionesociale" value="{{link['_id']}}">{{ link['name']}}</td>
-                                                        <td>{{ link['vatNum']}}</td>
-                                                        <td>{{ link['address']['postalCode']}}</td>
-                                                        <td>{{ link['address']['country']}}</td>
-                                                        <td>{{ link['contact']['email']}}</td>
+                                                        <td id="Ragionesociale" value="{{azienda['_id']}}">{{ azienda['name']}}</td>
+                                                        <td>{{ azienda['vatNum']}}</td>
+                                                        <td>{{ azienda['address']['postalCode']}}</td>
+                                                        <td>{{ azienda['address']['country']}}</td>
+                                                        <td>{{ azienda['contact']['email']}}</td>
                                                     </tr>
-                                                    {% endfor %}
+
                                                 </tbody>
                                             </table>
                                         </div>
@@ -259,7 +255,7 @@
 
     <script>
         document.querySelector('#azienda').addEventListener('click', ()=>{
-            document.querySelector('#azienda').setAttribute('href', `/azienda/${document.querySelector('#Ragionesociale').getAttribute('value')}`)
+            document.querySelector('#azienda').setAttribute('href', `/${document.querySelector('#Ragionesociale').getAttribute('value')}/dettaglio`)
         })
 
         document.querySelector('#modificaUtente').addEventListener('click', ()=>{

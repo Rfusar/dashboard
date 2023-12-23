@@ -97,7 +97,7 @@ def principale___admin(session, render_template, dt, checkMese):
                        )    
 
 def principale__superadmin(session, render_template, dt, checkMese):
-    if session.get('demo') == "admin":
+    if session.get('demo') == "spike-admin":
         u = session.get('utente')
         try:
             l=len(session.get('notifica')[0]['altri'])
@@ -114,10 +114,10 @@ def principale__superadmin(session, render_template, dt, checkMese):
 
                            amici = session.get('users'), 
                            N_amici =usersL -1, 
-                           nome= u['utente'][0], 
+                           nome= u['utente']['identificazione']['nome'], 
                            ruolo = session.get("demo"), 
                            check = session.get('demo'),
-                           ragionesociale=u['azienda'],
+                           ragionesociale=u['azienda']['nome'],
                            mese = checkMese(dt),
                            anno = dt.now().year
                            )

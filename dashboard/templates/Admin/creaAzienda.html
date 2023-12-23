@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>tabelle</title>
+
+    <!-- Custom fonts for this template -->
+    <link href="../../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../../static/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this page -->
+    <link href="../../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        {% include "componenti/sidebar.html"%}
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div>
+                <!-- Topbar -->
+                {% include "componenti/navbar.html"%}
+                <!-- Begin Page Content -->
+                <div style="height: max-content; margin-top: 5%;font-size: 30px;">
+                    <div class="container-fluid" style="display: flex; justify-content: center;">
+                        <!--FORM-->
+                        <form action="/Aggiungi" method="post" class="user" style="width: 60%;">
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <input type="text" class="form-control form-control-user" id="RAGIONESOCIALE"
+                                        name="nome" placeholder="Nome">
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control form-control-user" id="PARTITA_IVA"
+                                        name="partitaIVA" placeholder="Partita IVA">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <input type="email" class="form-control form-control-user" id="EMAIL" name="email"
+                                        placeholder="Email">
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control form-control-user" id="TELEFONO"
+                                        name="telefono" placeholder="Telelefono">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <input type="email" class="form-control form-control-user" id="INDIRIZZO"
+                                        name="indirizzo" placeholder="indirizzo">
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control form-control-user" id="CITTA" name="citta"
+                                        placeholder="città">
+                                </div>
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <input type="email" class="form-control form-control-user" id="PROVINCIA"
+                                        name="provincia" placeholder="Provincia">
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control form-control-user" id="STATO" name="stato"
+                                        placeholder="Stato">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-user btn-block" id="btn">
+                                CREA
+                            </button>
+                            <hr>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+
+
+    {% include "Scripts/principali.html" %}
+
+    <script src="../static/js/base/element.js"></script>
+    <script src="../static/js/Admin/index/script.js"></script>
+
+
+
+
+
+</body>
+
+</html>
