@@ -366,7 +366,7 @@ def area_utente(ID):
         datiUSER = DB['users'].find()
 
         for i in datiUSER:
-            if str(i['_id']) == ID: 
+            if str(i['_id']) == ID:  
                 id = i['_id']
         
         user = DB['users'].find({'_id': id})
