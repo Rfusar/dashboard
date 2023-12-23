@@ -27,9 +27,7 @@ def LOGIN(request, DB, listaColleghi, session, bcrypt, redirect, url_for):
                     for i in range(len(RUOLI)): 
                         if session.get('utente')['ruoli']['base'] == RUOLI[i]: 
                             return redirect(url_for('HOME'))
-                else:
-                    print("sei un coglione, la password non funziona")
-                    return redirect(url_for('login'))
+                        
                 
             except Exception as e:
                 print(str(e))

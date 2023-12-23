@@ -22,6 +22,7 @@
 
     <!-- Custom styles for this page -->
     <link href="../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
 </head>
 
 <body id="page-top">
@@ -40,43 +41,69 @@
             <div>
                 <!-- Topbar -->
                 {% include "componenti/navbar.html"%}
-                <h3> modifica {{ nomeUtente }}</h3>
-
                 <!-- Begin Page Content -->
-                <div style="height: max-content; margin-top: 10%;">
+                <div style="height: max-content; margin-top: 5%;font-size: 30px;">
                     <div class="container-fluid" style="display: flex; justify-content: center;">
-                        <!-- DataTales Example -->
+                        <!--FORM-->
                         <form action="/fetchRegister" method="post" class="user" style="width: 60%;">
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="text" class="form-control form-control-user" id="exampleFirstName"
-                                        name="nome" placeholder="First Name">
+                                    <input type="text" class="form-control form-control-user FORM" id="exampleFirstName"
+                                        name="nome" placeholder="Nome" value="{{UTENTE['name']['firstName']}}">
                                 </div>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control form-control-user" id="exampleLastName"
-                                        name="cognome" placeholder="Last Name">
+                                    <input type="text" class="form-control form-control-user FORM" id="exampleLastName"
+                                        name="cognome" placeholder="Cognome" value="{{UTENTE['name']['lastName']}}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail"
-                                        name="email" placeholder="Email Address">
+                                    <input type="email" class="form-control form-control-user FORM"
+                                        id="exampleInputEmail" name="email" placeholder="Email"
+                                        value="{{UTENTE['contact']['email']}}">
                                 </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control form-control-user" id="telefono"
-                                        name="telefono" placeholder="Tel">
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control form-control-user FORM" id="telefono"
+                                        name="telefono" placeholder="Telelefono" value="{{UTENTE['contact']['phone']}}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="password" class="form-control form-control-user" name="password"
-                                        id="exampleInputPassword" placeholder="Password">
+                                    <input type="email" class="form-control form-control-user FORM" id="exampleRole"
+                                        name="ruolo" placeholder="Ruolo" value="{{UTENTE['role']}}">
                                 </div>
                                 <div class="col-sm-6">
-                                    <input type="password" class="form-control form-control-user" name="repeatpassword"
-                                        id="exampleRepeatPassword" placeholder="Repeat Password">
+                                    <input type="text" class="form-control form-control-user FORM" id="exampleBusinessRole"
+                                        name="businessRuolo" placeholder="RuoloBusiness"
+                                        value="{{UTENTE['businessRole']}}">
                                 </div>
                             </div>
+
+
+                            <div class="form-group row" style="margin-top: 100px;">
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control form-control-user FORM"
+                                        id="exampleOldPassword" name="vecchiaPassword" placeholder="Vecchia password"
+                                        disabled="true">
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="checkbox" name="" id="modificaPassword">
+                                    <span>Modifica password?</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <input type="password" class="form-control form-control-user FORM" name="password"
+                                        id="exampleInputPassword" placeholder="Nuova password" disabled="true">
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="password" class="form-control form-control-user FORM"
+                                        name="repeatpassword" id="exampleRepeatPassword"
+                                        placeholder="Ripeti nuova password" disabled="true">
+                                </div>
+                            </div>
+
                             <button type="submit" class="btn btn-primary btn-user btn-block" id="btn">
                                 MODIFICA
                             </button>
@@ -100,8 +127,23 @@
     <script src="../static/js/Admin/index/script_utenza_img.js"></script>
 
     <script>
-        document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });
+        let OLD_pass = document.querySelector('#exampleOldPassword')
+        let NEW_pass = document.querySelector('#exampleInputPassword')
+        let repaet_NEW_pass = document.querySelector('#exampleRepeatPassword')
+
+        document.querySelectorAll(".FORM").forEach(e => { e.style.fontSize = "25px" })
+
+
+        document.querySelector('#modificaPassword').addEventListener('click', () => {
+            if (OLD_pass.getAttribute('disabled') && NEW_pass.getAttribute('disabled') && repaet_NEW_pass.getAttribute('disabled')) {
+                OLD_pass.removeAttribute('disabled'); NEW_pass.removeAttribute('disabled'); repaet_NEW_pass.removeAttribute('disabled');
+            }
+            else {
+                OLD_pass.setAttribute('disabled', true); NEW_pass.setAttribute('disabled', true); repaet_NEW_pass.setAttribute('disabled', true);
+            }
+        })
     </script>
+
 
 </body>
 

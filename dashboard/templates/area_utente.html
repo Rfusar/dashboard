@@ -57,8 +57,10 @@
                                             style="color:green;display: flex; justify-content: space-between;">
                                             <span>Utente</span>
                                             <div>
-                                                <img src="../static/img/modifica.png" alt="modifica"
+                                                <a id="modificaUtente">
+                                                    <img src="../static/img/modifica.png" alt="modifica"
                                                     style="width: 25px;margin-left: 5px;cursor: pointer;">
+                                                </a>
                                             </div>
                                         </h6>
                                     </div>
@@ -82,7 +84,7 @@
                                                         <td>{{ link['name']['lastName']}}</td>
                                                         <td>{{ link['contact']['email']}}</td>
                                                         <td>{{ link['contact']['phone']}}</td>
-                                                        <td class="ruolo">{{link['role']}}</td>
+                                                        <td id="ruolo" value="{{link['_id']}}">{{link['role']}}</td>
                                                     </tr>
                                                     {% endfor %}
                                                 </tbody>
@@ -103,7 +105,7 @@
                                             style="color:green;display: flex; justify-content: space-between;">
                                             <span>Azienda</span>
                                             <div>
-                                                <a id="azienda" href="/azienda">
+                                                <a id="azienda" >
                                                     <img src="../static/img/piu_dettagli.png" alt="visualizza"
                                                         style="width: 25px;margin-left: 5px;cursor: pointer;">
                                                 </a>
@@ -126,7 +128,7 @@
 
                                                     {% for link in azienda %}
                                                     <tr>
-                                                        <td id="Ragionesociale">{{ link['name']}}</td>
+                                                        <td id="Ragionesociale" value="{{link['_id']}}">{{ link['name']}}</td>
                                                         <td>{{ link['vatNum']}}</td>
                                                         <td>{{ link['address']['postalCode']}}</td>
                                                         <td>{{ link['address']['country']}}</td>
@@ -247,7 +249,6 @@
     {% include "Scripts/principali.html" %}
     <script src="../static/js/base/element.js"></script>
 
-    <script src="../static/js/base/classe_tabelle.js"></script>
 
     <script src="../static/js/Admin/index/script_utenza_img.js"></script>
 
@@ -257,15 +258,13 @@
     </script>
 
     <script>
-        document.querySelector("#azienda").addEventListener('click', () => {
-            fetch("/ricezione_dati___pulsanti", {
-                method: 'POST',
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify()
-
-            })
+        document.querySelector('#azienda').addEventListener('click', ()=>{
+            document.querySelector('#azienda').setAttribute('href', `/azienda/${document.querySelector('#Ragionesociale').getAttribute('value')}`)
         })
 
+        document.querySelector('#modificaUtente').addEventListener('click', ()=>{
+            document.querySelector('#modificaUtente').setAttribute('href', `/modifica/${document.querySelector('#ruolo').getAttribute('value')}`)
+        })
     </script>
 
     <script>

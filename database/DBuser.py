@@ -56,7 +56,7 @@ def listaColleghi(email) -> list[dict]:
         users = DB['users'].find({}, common_projection)
 
     elif UTENTE['role'] == "spike-user":
-        users = DB['users'].find({"company": UTENTE['company'], "role": {"$in": ['user', 'referent', 'spike-user']}}, common_projection)
+        users = DB['users'].find({"company": UTENTE['company'], "role": {"$in": ['spike-user']}}, common_projection)
 
     elif UTENTE['role'] == "referente":
         users = DB['users'].find({"company": UTENTE['company'], "role": {"$in": ['user', 'referent']}}, common_projection)
@@ -70,7 +70,7 @@ def listaColleghi(email) -> list[dict]:
         nome_azienda = DB['companies'].find_one({"_id": i['company']}, {"name": 1})
         User(str(i['_id']), str(i['company']), nome_azienda['name'], i["name"]['firstName'], i["name"]['lastName'], i['contact']["email"], 
                          i["contact"]["phone"], i["role"], i["businessRole"], i["active"], i["validated"]).utente(USER) 
-    client.close() 
+
 
     return USER
 

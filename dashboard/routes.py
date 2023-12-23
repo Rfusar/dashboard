@@ -54,10 +54,10 @@ def HOME():
     if session.get('demo') == "spike-user":
         return principale___utente(session, readChat, allNotifica, readNotifica, dt, render_template, checkMese, DB)
     
-    elif session.get('demo') == "spike-admin":
+    elif session.get('demo') in ["user", "referent"]:
         return principale___admin(session, render_template, dt, checkMese)
     
-    elif session.get('demo') == "admin":
+    elif session.get('demo') == "spike-admin":
         return principale__superadmin(session, render_template, dt, checkMese)
     
     else:
@@ -66,7 +66,7 @@ def HOME():
 #PAGINE
 @app.route("/charts")
 def charts():
-    if session.get('demo') in ["user", "referente", "spike-user", "spike-admin", "admin"]:
+    if session.get('demo') in ["user", "referente", "spike-user", "spike-admin"]:
         u = session.get('utente')
 
         try: 
@@ -152,9 +152,17 @@ def b(a,b,c,d):
         for A in DB['companies'].find({}, {"name":1}):
             notifica(a,b,c,d,A)
 
-@app.route("/modifica/<nome>")
-def modifica_utente(nome):
+@app.route("/modifica/<ID>")
+def modifica_utente(ID):
     u = session.get('utente')
+
+    IDs = DB['users'].find({}, {"_id":1})
+    for i in IDs:
+        if str(i["_id"]) == ID:
+            id = i["_id"]
+
+    user = DB['users'].find_one({"_id": id}, {'password': 0})
+
 
     try:
         l=len(session['notifica'][0]['altri'])
@@ -162,11 +170,13 @@ def modifica_utente(nome):
     usersL = len(session.get('users'))
     
 
-    return render_template("/modifica_utente.html",
+    return render_template("modifica_utente.html",
                            Nmes = l, 
                            amici = session.get('users'), 
                            N_amici =usersL -1, 
                            links = [], 
+                           UTENTE = user,
+
                            nome = u['utente']['identificazione']['nome'], 
                            check= session.get('demo'), 
                            ruolo = session.get("demo"), 
