@@ -149,23 +149,24 @@
     <script src="../../static/js/base/element.js"></script>
     <script src="../../static/js/base/.script2.js"></script>
 
-
-    <script src="../../static/js/pag_table/pagina_aziende.js"></script>
-
     <script src="../static/js/Admin/index/script_utenza_img.js"></script>
 
     <script>
         function ELI_MOD_DET(classe, finale) {
-            document.querySelectorAll(classe).forEach((e, i) => {
-                e.addEventListener('click', () => {
-                    e.setAttribute('href', `/${document.querySelectorAll('.Ragionesociale')[i].getAttribute('value')}/${finale}`)
+            let valore = document.querySelectorAll('.Ragionesociale')
+            let img = document.querySelectorAll(classe)
+            img.forEach((e, i) => {
+                img[i].addEventListener('click', () => {
+                    img[i].setAttribute('href', `/${valore[i].getAttribute('value')}/${finale}`)
                 })
             })
         }
 
+
         ELI_MOD_DET(".elimina", "elimina")
         ELI_MOD_DET(".modifica", "modifica")
         ELI_MOD_DET(".piu_dettagli", "dettaglio")
+
 
     </script>
 

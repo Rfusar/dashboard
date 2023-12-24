@@ -13,7 +13,7 @@ def slugify_company(nome):
     if slug[-1] == "-": slug = slug[:-1]
     return slug
 
-ruoli = ['user', 'referent', 'spike-user', 'spike-admin']
+ruoli = ['user', 'referent']
 businessRuoli = ['ceo', 'coo', 'cfo', 'om', 'pm', 'staff']
 #businessRuoliDEFAULT = "staff"
 #spike-user = backoffice
@@ -53,6 +53,32 @@ def databaseDEFAULT(DB, COLLECTIONS, dt, password):
         "papers": [],
         "hasDossier": False,
         "active": True,
+        "name": "Spike Inova",
+        "vatNum": generazione("partita IVA"),
+        "address": {
+            "street": "via asdas 3",
+            "postalCode": generazione('cap'),
+            "city": "breasci",
+            "state": "BG",
+            "country": "italia",
+        },
+        "contact": {
+            "email": "spike@gmail.com",
+            "phone": generazione("telefono"),
+        },
+        "slug": slugify_company("Spike Inova"),
+        "seller": None,
+        "services":{
+            "gdpr":True,
+            "rs": False,
+            "project": True
+        }
+    },
+    {
+        "staff": [],
+        "papers": [],
+        "hasDossier": False,
+        "active": True,
         "name": "azienda A",
         "vatNum": generazione("partita IVA"),
         "address": {
@@ -66,7 +92,7 @@ def databaseDEFAULT(DB, COLLECTIONS, dt, password):
             "email": "aziA@gmail.com",
             "phone": generazione("telefono"),
         },
-        "slug": "azienda-A",
+        "slug": slugify_company("azienda A"),
         "seller": None,
         "services":{
             "gdpr":True,
@@ -92,7 +118,7 @@ def databaseDEFAULT(DB, COLLECTIONS, dt, password):
             "email": "aziB@gmail.com",
             "phone": generazione("telefono"),
         },
-        "slug": "azienda-B",
+        "slug": slugify_company("azienda B"),
         "seller": None,
         "services":{
             "gdpr":True,
@@ -118,7 +144,7 @@ def databaseDEFAULT(DB, COLLECTIONS, dt, password):
             "email": "aziC@gmail.com",
             "phone": generazione("telefono"),
         },
-        "slug": "azienda-C",
+        "slug": slugify_company("azienda C"),
         "seller": None,
         "services":{
             "gdpr":True,
@@ -131,6 +157,7 @@ def databaseDEFAULT(DB, COLLECTIONS, dt, password):
 
 
 
+    id_spike = DB['companies'].find_one({"name": "Spike Inova"}, {"_id": 1})
     id_A = DB['companies'].find_one({"name": "azienda A"}, {"_id": 1})
     id_B = DB['companies'].find_one({"name": "azienda B"}, {"_id": 1})
     id_C = DB['companies'].find_one({"name": "azienda C"}, {"_id": 1})
@@ -145,15 +172,37 @@ def databaseDEFAULT(DB, COLLECTIONS, dt, password):
         "validated": True,
         "createAt": dt.now(),
         "name": {
+            "firstName": "riky",
+            "lastName": "FuSaro",
+        },
+        "contact": {
+            "email": f"riky{mail}",
+            "phone": "3452368726"
+        },
+        "role": "spike-admin",
+        "company": id_spike["_id"],
+        "password": password,
+        "userCode": generazione("userCode"),
+        "slug": "riky-FuSaro",
+        "passwordChange": dt.now(),
+        "updateAt": dt.now()
+    },
+    {
+        "photo": "photo.png",
+        "businessRole": random.choice(businessRuoli),
+        "active": True,
+        "validated": True,
+        "createAt": dt.now(),
+        "name": {
             "firstName": "riccardo",
             "lastName": "fusaro",
         },
         "contact": {
             "email": f"rfusaro12{mail}",
-            "phone": "3452368726"
+            "phone": generazione('telefono')
         },
-        "role": "admin",
-        "company": id_A["_id"],
+        "role": "spike-user",
+        "company": id_spike["_id"],
         "password": password,
         "userCode": generazione("userCode"),
         "slug": "riccardo-fusaro",
@@ -361,47 +410,107 @@ def databaseDEFAULT(DB, COLLECTIONS, dt, password):
 
     ])
 
+
+
     #fase caricamento staff a company
-    id_users___A = DB['users'].find({"company": id_A}, {"_id": 1})
-    id_users___B = DB['users'].find({"company": id_B}, {"_id": 1})
-    id_users___C = DB['users'].find({"company": id_C}, {"_id": 1})
-    for id in id_users___A: DB['companies'].update_one({"company": id_A}, {"$push":{"staff":id["_id"]}})   
-    for id in id_users___B: DB['companies'].update_one({"company": id_B}, {"$push":{"staff":id["_id"]}})
-    for id in id_users___C: DB['companies'].update_one({"company": id_C}, {"$push":{"staff":id["_id"]}})
+    id_users___spike = DB['users'].find({"company": id_spike['_id']}, {"_id": 1})
+    id_users___A = DB['users'].find({"company": id_A['_id']}, {"_id": 1})
+    id_users___B = DB['users'].find({"company": id_B['_id']}, {"_id": 1})
+    id_users___C = DB['users'].find({"company": id_C['_id']}, {"_id": 1})
+
+    for id in id_users___spike: DB['companies'].update_one({"company": id_spike['_id']}, {"$push":{"staff":id["_id"]}})   
+    for id in id_users___A: DB['companies'].update_one({"company": id_A['_id']}, {"$push":{"staff":id["_id"]}})   
+    for id in id_users___B: DB['companies'].update_one({"company": id_B['_id']}, {"$push":{"staff":id["_id"]}})
+    for id in id_users___C: DB['companies'].update_one({"company": id_C['_id']}, {"$push":{"staff":id["_id"]}})
 
 
-    ID_per = DB['users'].find_one({"name.firstName": "Aziz"}, {"_id": 1})
+    ID_perSPIKE = DB['users'].find_one({"name.firstName": "riky"}, {"_id": 1})
+    ID_perA = DB['users'].find_one({"name.firstName": "Jessy"}, {"_id": 1})
+    ID_perB = DB['users'].find_one({"name.firstName": "Aziz"}, {"_id": 1})
+    ID_perC = DB['users'].find_one({"name.firstName": "Francesco"}, {"_id": 1})
     #*ticktes
     collection6 = DB[COLLECTIONS[6]]
-    collection6.insert_one({
+    collection6.insert_many([
+    {
         "status": "active",
         "urgency": False,
         "assigned": True,
-        "assignedTO": ID_per["_id"],
+        "assignedTO": ID_perSPIKE["_id"],
         "title": "toket1",
-        "description": "servizio attivo??",
-        "company": id_C["_id"],
-        "person": ID_per["_id"],
+        "description": "servizio attivo1??",
+        "company": id_A["_id"],
+        "person": ID_perA["_id"],
         "ticketCode": generazione("userCode"),
         "createAt": dt.now(),
         "updateAT": dt.now(),
-        "slug": "sdfs-dfsdfsd-fsdf"
-    })
+        "slug": f"{generazione('tag')}-{generazione('tag')}-{generazione('tag')}"
+    },
+    {
+        "status": "inactive",
+        "urgency": True,
+        "assigned": True,
+        "assignedTO": ID_perSPIKE["_id"],
+        "title": "toket2",
+        "description": "servizio attivo2??",
+        "company": id_B["_id"],
+        "person": ID_perB["_id"],
+        "ticketCode": generazione("userCode"),
+        "createAt": dt.now(),
+        "updateAT": dt.now(),
+        "slug": f"{generazione('tag')}-{generazione('tag')}-{generazione('tag')}"
+    },
+    {
+        "status": "active",
+        "urgency": False,
+        "assigned": False,
+        "assignedTO": None,
+        "title": "toket3",
+        "description": "servizio attivo3??",
+        "company": id_A["_id"],
+        "person": ID_perA["_id"],
+        "ticketCode": generazione("userCode"),
+        "createAt": dt.now(),
+        "updateAT": dt.now(),
+        "slug": f"{generazione('tag')}-{generazione('tag')}-{generazione('tag')}"
+    },
+    {
+        "status": "inactive",
+        "urgency": False,
+        "assigned": True,
+        "assignedTO": ID_perSPIKE["_id"],
+        "title": "toket4",
+        "description": "servizio attivo4??",
+        "company": id_C["_id"],
+        "person": ID_perC["_id"],
+        "ticketCode": generazione("userCode"),
+        "createAt": dt.now(),
+        "updateAT": dt.now(),
+        "slug": f"{generazione('tag')}-{generazione('tag')}-{generazione('tag')}"
+    }
+    ])
 
 
-    ID_tic = DB['tickets'].find_one({"status": "active"}, {'_id': 1})
+    ID_ticA = DB['tickets'].find_one({"person": ID_perA['_id']}, {'_id': 1})
+    ID_ticB = DB['tickets'].find_one({"person": ID_perB['_id']}, {'_id': 1})
+    ID_ticC = DB['tickets'].find_one({"person": ID_perC['_id']}, {'_id': 1})
     #*comments
     collection0 = DB[COLLECTIONS[0]]
     collection0.insert_many([
     {
-        "ticket": ID_tic['_id'],
-        "author": ID_per["_id"],
+        "ticket": ID_ticA['_id'],
+        "author": ID_perSPIKE["_id"],
         "comment": "buongiorno, mi servirebbe il resoconto dell'anno 2022",
         "createAt": dt.now()
     },
     {
-        "ticket": ID_tic['_id'],
-        "author": ID_per["_id"],
+        "ticket": ID_ticB['_id'],
+        "author": ID_perSPIKE["_id"],
+        "comment": "buongiorno, mi servirebbe il resoconto dell'anno 2022",
+        "createAt": dt.now()
+    },
+    {
+        "ticket": ID_ticC['_id'],
+        "author": ID_perSPIKE["_id"],
         "comment": "buongiorno, mi servirebbe il resoconto dell'anno 2022",
         "createAt": dt.now()
     },
@@ -451,8 +560,8 @@ def databaseDEFAULT(DB, COLLECTIONS, dt, password):
 
 
     #*paper
-    collection3 = DB[COLLECTIONS[3]]
-    collection3.insert_many([
+    collection4 = DB[COLLECTIONS[4]]
+    collection4.insert_many([
     {
         "title": "foglio1",
         "description": "descrizione",
@@ -524,7 +633,7 @@ def databaseDEFAULT(DB, COLLECTIONS, dt, password):
     #*project
     collection5 = DB[COLLECTIONS[5]]
     collection5.insert_one({
-        "author": ID_per["_id"],
+        "author": ID_perB["_id"],
         "authorizedRoles": ["user", "admin"],
         "title": "project",
         "description": "progetto di prova",
@@ -536,9 +645,10 @@ def databaseDEFAULT(DB, COLLECTIONS, dt, password):
         "updateAT": dt.now()
     })
     ID_pro = DB['projects'].find_one({"title": "project"},{"_id": 1})
+
     #*projectFiles
-    collection4 = DB[COLLECTIONS[4]]
-    collection4.insert_one({
+    collection3 = DB[COLLECTIONS[3]]
+    collection3.insert_one({
         "title": "progetto 1",
         "description": "prova",
         "company": id_B["_id"],

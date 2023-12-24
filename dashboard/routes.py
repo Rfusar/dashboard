@@ -239,14 +239,21 @@ def utenti___superadmin():
     if session.get('demo') in ["spike-admin", "admin"]:
         u = session.get('utente')
 
-
+        '''
         if session.get("demo") == "spike-admin":
             company = DB['companies'].find_one({'name': u['azienda']['nome']}, {"_id": 1})
             utenti = DB['users'].find({'company': company['_id']}, {"password": 0})
-            
-        elif session.get("demo") == "admin":
-            company = DB['companies'].find_one({}, {"_id": 1})
-            utenti = DB['users'].find({'company': company['_id']}, {"password": 0})
+        '''
+        if session.get("demo") == "spike-admin":
+            company = DB['companies'].find({}, {"_id": 1, "name": 1})
+            utenti = []
+            for c in company: 
+                users = DB['users'].find({'company': c['_id']}, {"password": 0})
+                for U in users:
+                    if U['company'] == c['_id']:
+                        U['nome_company'] = c['name']
+                        utenti.append(U)
+
 
         try:
             l=len(session.get('notifica')[0]['altri'])
@@ -296,7 +303,9 @@ def aziende___superadmin():
         u = session.get('utente')
 
         if session.get("demo") == "spike-admin":
-            company = DB['companies'].find()
+            company = DB['companies'].find({"name":{"$ne": u['azienda']['nome']}}) 
+            
+            
             
         elif session.get("demo") == "admin":
             company = DB['companies'].find({'name': u['azienda']['nome']})
@@ -473,6 +482,8 @@ def registrazione_documento_api(): return FUNCS_API(API___documento, request, No
 '''
 COSE DA FARE:
     - Gestione tickets
+        - capire assegnedTO ??? a spike_iniva oppure no?
+        - capire person ??? a spike_iniva oppure no?
     - Query Documenti (voce: file)
         --rilascio link?
 
