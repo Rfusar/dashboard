@@ -48,43 +48,43 @@
                         <form action="/Aggiungi" method="post" class="user" style="width: 60%;">
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="text" class="form-control form-control-user" id="RAGIONESOCIALE"
+                                    <input type="text" class="form-control form-control-user FORM" id="RAGIONESOCIALE"
                                         name="nome" placeholder="Nome" value="{{ azienda['name'] }}">
                                 </div>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control form-control-user" id="PARTITA_IVA"
+                                    <input type="text" class="form-control form-control-user FORM" id="PARTITA_IVA"
                                         name="partitaIVA" placeholder="Partita IVA" value="{{azienda['vatNum']}}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="email" class="form-control form-control-user" id="EMAIL" name="email"
+                                    <input type="email" class="form-control form-control-user FORM" id="EMAIL" name="email"
                                         placeholder="Email" value="{{azienda['contact']['email']}}">
                                 </div>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control form-control-user" id="TELEFONO"
+                                    <input type="text" class="form-control form-control-user FORM" id="TELEFONO"
                                         name="telefono" placeholder="Telelefono" value="{{azienda['contact']['phone']}}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="text" class="form-control form-control-user" id="INDIRIZZO"
+                                    <input type="text" class="form-control form-control-user FORM" id="INDIRIZZO"
                                         name="indirizzo" placeholder="indirizzo" value="{{azienda['address']['street']}}">
                                 </div>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control form-control-user" id="CITTA" name="citta"
+                                    <input type="text" class="form-control form-control-user FORM" id="CITTA" name="citta"
                                         placeholder="città" value="{{azienda['address']['city']}}">
                                 </div>
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="text" class="form-control form-control-user" id="PROVINCIA"
+                                    <input type="text" class="form-control form-control-user FORM" id="PROVINCIA"
                                         name="provincia" placeholder="Provincia" value="{{azienda['address']['state']}}">
                                 </div>
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="text" class="form-control form-control-user" id="CAP"
+                                    <input type="text" class="form-control form-control-user FORM" id="CAP"
                                         name="cap" placeholder="CAP" value="{{azienda['address']['postalCode']}}">
                                 </div>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control form-control-user" id="STATO" name="stato"
+                                    <input type="text" class="form-control form-control-user FORM" id="STATO" name="stato"
                                         placeholder="Stato" value="{{azienda['address']['country']}}">
                                 </div>
                             </div>
@@ -110,6 +110,8 @@
     <script src="../static/js/Admin/index/script.js"></script>
 
     <script src="../static/js/Admin/index/script_utenza_img.js"></script>
+
+    <script>document.querySelectorAll(".FORM").forEach(e => { e.style.fontSize = "25px" })</script>
 
 
 
