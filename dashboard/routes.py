@@ -262,6 +262,7 @@ def utenti___superadmin():
 
 
     return render_template("Admin/tabelleUtenti.html",
+                           title = "Lista colleghi",
                            Nmes = l, 
                            amici = session.get('users'), 
                            N_amici =usersL -1, 
@@ -317,6 +318,7 @@ def aziende___superadmin():
         usersL = len(session.get('users'))
 
         return render_template("Admin/tabelleAziende.html", 
+                               title = "Lista aziende",
                                 Nmes = l, 
                                 amici = session.get('users'), 
                                 N_amici =usersL -1, 
@@ -337,28 +339,31 @@ def check_aziende___superadmin():
 def report___superadmin(): return render_template("Admin/report.html")
 
 
-#*************************************************************************************************** ALTRO
-#Dettagli
-@app.route("/utente/<ID>")
-def area_utente(ID):
-    if session.get("demo") in ["spike-admin", "admin"]:
+#*************************************************************************************************** ALTRO    
+#area azienda
+@app.route("/<ID>/<azione>")
+def area_azienda(ID, azione):
+    if session.get("demo") == "spike-admin":
 
-        datiUSER = DB['users'].find()
+        if azione[-1] == "e":
+            datiUSER = DB['users'].find()
 
-        for i in datiUSER:
-            if str(i['_id']) == ID:  
-                id = i['_id']
+            for i in datiUSER:
+                if str(i['_id']) == ID:  
+                    id = i['_id']
         
-        user = DB['users'].find_one({'_id': id})
-        azienda = DB['companies'].find_one({"_id": user['company']})
+            user = DB['users'].find_one({'_id': id})
+            azienda = DB['companies'].find_one({"_id": user['company']})
 
-        tiks = [["sadas","blalbab","attivo","gigino","22/03/2023"],
+            tiks = [["sadas","blalbab","attivo","gigino","22/03/2023"],
                 ["sadas","blalbab","non attivo","---","23/12/2023"],
                 ["sadas","blalbab","attivo","gigino","22/03/2022"],
                 ["sadas","blalbab","attivo","gigino","22/03/2022"],
                 ["sadas","blalbab","non attivo","---","22/03/2022"]]
         
-        return render_template("area_utente.html", 
+            if azione == "modificaUtente":...
+            elif azione == "dettaglioUtente":
+                return render_template("area_utente.html", 
                                    check= session.get('demo'),
                                    nome= session.get('utente')['utente']["identificazione"]["nome"],
                                    ragionesociale= session.get('utente')['azienda']['nome'],
@@ -366,25 +371,21 @@ def area_utente(ID):
                                    azienda = azienda,
                                    ruolo = session.get("demo"), 
                                    tiks = tiks
-                                  )
-    
-#area azienda
-@app.route("/<ID>/<azione>")
-def area_azienda(ID, azione):
-    if session.get("demo") == "spike-admin":
+                                   )
 
-        datiAzienda = DB['companies'].find()
-        for i in datiAzienda:
-            if str(i['_id']) == ID: 
-                id = i['_id']
+        elif azione[-1] == "a":
+            datiAzienda = DB['companies'].find()
+            for i in datiAzienda:
+                if str(i['_id']) == ID: 
+                    id = i['_id']
 
-        azienda = DB['companies'].find_one({"_id":id})
-        datiUser = DB['users'].find({'company': id}, {"password": 0})
-        docs = [["sadas","titoli1","22/03/2022"], ["sadas","titoli1","22/03/2022"], ["sadas","titoli1","22/03/2022"]]
-        tiks = [["sadas","attivo","22/03/2022"],["sadas","non attivo","22/03/2022"],["sadas","attivo","22/03/2022"]]
-
-        if azione == "modifica":
-            return render_template("Admin/modifica_azienda.html", 
+            azienda = DB['companies'].find_one({"_id":id})
+            datiUser = DB['users'].find({'company': id}, {"password": 0})
+            docs = [["sadas","titoli1","22/03/2022"], ["sadas","titoli1","22/03/2022"], ["sadas","titoli1","22/03/2022"]]
+            tiks = [["sadas","attivo","22/03/2022"],["sadas","non attivo","22/03/2022"],["sadas","attivo","22/03/2022"]]
+        
+            if azione == "modificaAzienda":
+                return render_template("Admin/modifica_azienda.html", 
                                        check=session.get('demo'),
                                        nome= session.get('utente')['utente']['identificazione']['nome'],
                                        ragionesociale= session.get('utente')['azienda']['nome'],
@@ -395,8 +396,8 @@ def area_azienda(ID, azione):
                                        tiks = tiks
                                       )
 
-        elif azione == "dettaglio":
-            return render_template("area_azienda.html", 
+            elif azione == "dettaglioAzienda":
+                return render_template("area_azienda.html", 
                                        check=session.get('demo'),
                                        nome= session.get('utente')['utente']['identificazione']['nome'],
                                        ragionesociale= session.get('utente')['azienda']['nome'],

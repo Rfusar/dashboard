@@ -9,9 +9,6 @@ def LOGIN(request, DB, listaColleghi, session, bcrypt, redirect, url_for):
             try:
                 if bcrypt.checkpw(password.encode('utf-8'), check['password']):
                     utenti = listaColleghi(email)
-
-                    pprint.pprint(utenti)
-                    print()
                     #utente
                     for i in utenti: 
                         if i['utente']['contatti']['email'] == email: 

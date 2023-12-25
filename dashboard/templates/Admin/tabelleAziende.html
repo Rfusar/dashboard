@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>tabelle</title>
+    <title>{{ title }}</title>
 
     <!-- Custom fonts for this template -->
     <link href="../../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -99,76 +99,17 @@
 
                     </div>
                 </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">x</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="/logout">Logout</a>
-                </div>
             </div>
         </div>
     </div>
+
 
     {% include "Scripts/principali.html" %}
     <script src="../../static/js/base/element.js"></script>
     <script src="../../static/js/base/.script2.js"></script>
 
-    <script src="../static/js/Admin/index/script_utenza_img.js"></script>
-
-    <script>
-        function ELI_MOD_DET(classe, finale) {
-            let valore = document.querySelectorAll('.Ragionesociale')
-            let img = document.querySelectorAll(classe)
-            img.forEach((e, i) => {
-                img[i].addEventListener('click', () => {
-                    img[i].setAttribute('href', `/${valore[i].getAttribute('value')}/${finale}`)
-                })
-            })
-        }
-
-
-        ELI_MOD_DET(".elimina", "elimina")
-        ELI_MOD_DET(".modifica", "modifica")
-        ELI_MOD_DET(".piu_dettagli", "dettaglio")
-
-
-    </script>
+    <script src="../../static/js/Admin/index/elimina_dettagli.js"></script>
+ 
 
     <script>
         document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });

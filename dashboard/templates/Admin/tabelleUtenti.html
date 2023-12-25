@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>tabelle</title>
+    <title>{{ title }}</title>
 
     <!-- Custom fonts for this template -->
     <link href="../../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -189,6 +189,7 @@
         document.querySelectorAll(".riga_").forEach((e, i) => { if (i % 2 == 0) { e.style.backgroundColor = "#145d0012" } });
         quando('load')
         quando('click')
+
         function quando(azione){
             window.addEventListener(azione, () => {
             document.querySelectorAll(".riga_").forEach((e, i) => {
