@@ -6,7 +6,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        {%elif check in ["user", "referente", "spike-user", "spike-admin", "admin"]%}
+        {%elif check in ["user", "referent", "spike-user", "spike-admin"]%}
         <div class="sidebar-brand-text mx-3">{{ ragionesociale }}</div>
         {% endif %}
     </a>
@@ -15,7 +15,7 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    {%if check in ["user", "referente", "spike-user", "spike-admin", "admin"]%}
+    {%if check in ["user", "referent", "spike-user", "spike-admin"]%}
     <li class="nav-item active">
         <a class="nav-link" href="{{url_for('HOME')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -57,19 +57,31 @@
     </li>
 
 
-    {%elif check  in ["spike-admin", "admin"]%}
+    {%elif check in ["spike-admin"]%}
     <li class="nav-item" style="cursor: pointer;">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsePages0" aria-expanded="true"
             aria-controls="collapsePages">
             <i class="fas fa-fw fa-folder"></i>
-            <span>Utenza</span>
+            <span>myCompanies</span>
         </a>
         <div id="collapsePages0" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="/superadmin/aziende"><i
-                        class="fas fa-fw fa-table"></i><span>  Aziende</span></a>
-                <a class="collapse-item" href="/listaColleghi"><i
-                        class="fas fa-fw fa-table"></i><span>  Utenti</span></a>
+                <a class="collapse-item" href="/superadmin/aziende">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Aziende</span></a>
+
+                <a class="collapse-item" href="/listaColleghi">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Utenti</span></a>
+
+                <a class="collapse-item" href="{{url_for('table')}}">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Documenti</span></a>
+
+                <a class="collapse-item" href="{{url_for('charts')}}">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Statistiche</span></a>
+
             </div>
         </div>
     </li>
@@ -87,13 +99,13 @@
     <li class="nav-item">
         <a class="nav-link" href="{{url_for('table')}}">
             <i class="fas fa-fw fa-table"></i>
-            <span>Fatture</span></a>
+            <span>Documenti</span></a>
     </li>
 
 
 
 
-    {%elif check in ["user", "referente", "spike-user"]%}
+    {%elif check in ["user", "referent", "spike-user"]%}
     <li class="nav-item">
         <a class="nav-link" href="{{url_for('charts')}}">
             <i class="fas fa-laugh-wink"></i>
@@ -109,47 +121,13 @@
             <i class="fas fa-laugh-wink"></i>
             <span>Tickets</span></a>
     </li>
-    
+
 
 
 
     {%elif check == "spike-admin"%}
-    <li class="nav-item">
-        <a class="nav-link" href="{{url_for('charts')}}">
-            <i class="fas fa-laugh-wink"></i>
-            <span>Statistiche</span></a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{url_for('table')}}">
-            <i class="fas fa-laugh-wink"></i>
-            <span>Documenti</span></a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="/listaColleghi">
-            <i class="fas fa-laugh-wink"></i>
-            <span>Utenti</span></a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="/Tickets">
-            <i class="fas fa-laugh-wink"></i>
-            <span>Tickets</span></a>
-    </li>
-
-    
 
 
-
-    {%elif check ==  "admin"%}
-    <li class="nav-item">
-        <a class="nav-link" href="/table">
-            <i class="fas fa-laugh-wink"></i>
-            <span>Documenti</span></a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="/charts">
-            <i class="fas fa-laugh-wink"></i>
-            <span>Statistiche</span></a>
-    </li>
     <li class="nav-item">
         <a class="nav-link" href="/Tickets">
             <i class="fas fa-laugh-wink"></i>
@@ -160,6 +138,7 @@
             <i class="fas fa-laugh-wink"></i>
             <span>Query_api</span></a>
     </li>
+
     {%endif%}
 
 
@@ -167,7 +146,7 @@
 
 
     <!--cose comuni in tutte l'utenze-->
-    {%if check in ["user", "referente", "spike-user", "spike-admin", "admin"]%}
+    {%if check in ["user", "referent", "spike-user", "spike-admin"]%}
     <li class="nav-item">
         <a class="nav-link" href="/logout">
             <i class="fas fa-laugh-wink"></i>

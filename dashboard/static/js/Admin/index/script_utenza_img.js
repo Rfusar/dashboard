@@ -1,7 +1,8 @@
 function setImg(path, e, contenutoDescizione) {
     const img = document.createElement('img')
     const descrizione = document.createElement('abbr')
-    descrizione.setAttribute('title', contenutoDescizione)
+    descrizione.setAttribute('title', contenutoDescizione) 
+    descrizione.style.cursor = "default"
     
     img.style.width = "25px"
     img.setAttribute('src', path)

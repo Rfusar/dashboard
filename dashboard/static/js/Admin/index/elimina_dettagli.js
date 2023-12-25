@@ -15,7 +15,7 @@ else if (document.title == "Area utente") {
     //btn dettaglio azienda
     gestione___ELI_MOD_DET("#azienda", "#Ragionesociale", "dettaglioAzienda")
     // btn modifica utente
-    gestione___ELI_MOD_DETi("#modificaUtente", "#ruolo", "modificaUtente")
+    gestione___ELI_MOD_DET("#modificaUtente", "#ruolo", "modificaUtente")
 }
 
 
