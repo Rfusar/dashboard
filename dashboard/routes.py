@@ -8,6 +8,7 @@ from functools import wraps
 #from .classDefinition import RegistrazioneForm,LoginForm
 from datetime import datetime as dt
 #funzioni_per_semplificare
+from dashboard.funcs_routes.gestione_modifiche___aziende_utenti import Gestione
 from dashboard.funcs_routes.tickets import gestione_Tickets___admin, gestione_Ticktes___user
 from dashboard.funcs_routes.funcs1 import checkMese, Documenti__da_DB, Query, modify_DB, Token
 from dashboard.funcs_routes.Utenza import LOGIN, REGISTER, reset_password
@@ -152,36 +153,6 @@ def b(a,b,c,d):
     elif session.get("demo") == "superadmin":
         for A in DB['companies'].find({}, {"name":1}):
             notifica(a,b,c,d,A)
-
-@app.route("/modifica/<ID>")
-def modifica_utente(ID):
-    u = session.get('utente')
-
-    IDs = DB['users'].find({}, {"_id":1})
-    for i in IDs:
-        if str(i["_id"]) == ID:
-            id = i["_id"]
-
-    user = DB['users'].find_one({"_id": id}, {'password': 0})
-
-
-    try:
-        l=len(session['notifica'][0]['altri'])
-    except: l = 0
-    usersL = len(session.get('users'))
-    
-
-    return render_template("Admin/modifica_utente.html",
-                           Nmes = l, 
-                           amici = session.get('users'), 
-                           N_amici =usersL -1, 
-                           links = [], 
-                           UTENTE = user,
-
-                           nome = u['utente']['identificazione']['nome'], 
-                           check= session.get('demo'), 
-                           ruolo = session.get("demo"), 
-                           ragionesociale=u['azienda']['nome'])
 
 
 
@@ -344,69 +315,14 @@ def report___superadmin(): return render_template("Admin/report.html")
 @app.route("/<ID>/<azione>")
 def area_azienda(ID, azione):
     if session.get("demo") == "spike-admin":
+        u = session.get('utente')
 
-        if azione[-1] == "e":
-            datiUSER = DB['users'].find()
+        try:
+            l=len(session['notifica'][0]['altri'])
+        except: l = 0
+        usersL = len(session.get('users'))
 
-            for i in datiUSER:
-                if str(i['_id']) == ID:  
-                    id = i['_id']
-        
-            user = DB['users'].find_one({'_id': id})
-            azienda = DB['companies'].find_one({"_id": user['company']})
-
-            tiks = [["sadas","blalbab","attivo","gigino","22/03/2023"],
-                ["sadas","blalbab","non attivo","---","23/12/2023"],
-                ["sadas","blalbab","attivo","gigino","22/03/2022"],
-                ["sadas","blalbab","attivo","gigino","22/03/2022"],
-                ["sadas","blalbab","non attivo","---","22/03/2022"]]
-        
-            if azione == "modificaUtente":...
-            elif azione == "dettaglioUtente":
-                return render_template("area_utente.html", 
-                                   check= session.get('demo'),
-                                   nome= session.get('utente')['utente']["identificazione"]["nome"],
-                                   ragionesociale= session.get('utente')['azienda']['nome'],
-                                   user = user,
-                                   azienda = azienda,
-                                   ruolo = session.get("demo"), 
-                                   tiks = tiks
-                                   )
-
-        elif azione[-1] == "a":
-            datiAzienda = DB['companies'].find()
-            for i in datiAzienda:
-                if str(i['_id']) == ID: 
-                    id = i['_id']
-
-            azienda = DB['companies'].find_one({"_id":id})
-            datiUser = DB['users'].find({'company': id}, {"password": 0})
-            docs = [["sadas","titoli1","22/03/2022"], ["sadas","titoli1","22/03/2022"], ["sadas","titoli1","22/03/2022"]]
-            tiks = [["sadas","attivo","22/03/2022"],["sadas","non attivo","22/03/2022"],["sadas","attivo","22/03/2022"]]
-        
-            if azione == "modificaAzienda":
-                return render_template("Admin/modifica_azienda.html", 
-                                       check=session.get('demo'),
-                                       nome= session.get('utente')['utente']['identificazione']['nome'],
-                                       ragionesociale= session.get('utente')['azienda']['nome'],
-                                       azienda = azienda,
-                                       user = datiUser,
-                                       docs = docs,
-                                       ruolo = session.get("demo"), 
-                                       tiks = tiks
-                                      )
-
-            elif azione == "dettaglioAzienda":
-                return render_template("area_azienda.html", 
-                                       check=session.get('demo'),
-                                       nome= session.get('utente')['utente']['identificazione']['nome'],
-                                       ragionesociale= session.get('utente')['azienda']['nome'],
-                                       azienda = azienda,
-                                       user = datiUser,
-                                       docs = docs,
-                                       ruolo = session.get("demo"), 
-                                       tiks = tiks
-                                      )
+        return Gestione(azione, DB, render_template, ID, session, l, usersL)
 
         
 
