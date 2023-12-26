@@ -59,7 +59,7 @@
                                             <div>
                                                 <a id="modificaUtente">
                                                     <img src="../static/img/modifica.png" alt="modifica"
-                                                    style="width: 25px;margin-left: 5px;cursor: pointer;">
+                                                        style="width: 25px;margin-left: 5px;cursor: pointer;">
                                                 </a>
                                             </div>
                                         </h6>
@@ -103,7 +103,7 @@
                                             style="color:green;display: flex; justify-content: space-between;">
                                             <span>Azienda</span>
                                             <div>
-                                                <a id="azienda" >
+                                                <a id="azienda">
                                                     <img src="../static/img/piu_dettagli.png" alt="visualizza"
                                                         style="width: 25px;margin-left: 5px;cursor: pointer;">
                                                 </a>
@@ -124,7 +124,8 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td id="Ragionesociale" value="{{azienda['_id']}}">{{ azienda['name']}}</td>
+                                                        <td id="Ragionesociale" value="{{azienda['_id']}}">{{
+                                                            azienda['name']}}</td>
                                                         <td>{{ azienda['vatNum']}}</td>
                                                         <td>{{ azienda['address']['postalCode']}}</td>
                                                         <td>{{ azienda['address']['country']}}</td>
@@ -189,7 +190,10 @@
                 </div>
 
             </div>
-            <!-- End of Main Content -->
+        </div>
+
+
+    </div>
 
 
 
@@ -200,8 +204,6 @@
 
 
 
-
-         
 
     {% include "Scripts/principali.html" %}
     <script src="../static/js/base/element.js"></script>

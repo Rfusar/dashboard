@@ -57,7 +57,7 @@
     </li>
 
 
-    {%elif check in ["spike-admin"]%}
+    {%elif check == "spike-admin"%}
     <li class="nav-item" style="cursor: pointer;">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsePages0" aria-expanded="true"
             aria-controls="collapsePages">
@@ -105,7 +105,12 @@
 
 
 
-    {%elif check in ["user", "referent", "spike-user"]%}
+    {%elif check in ["user", "spike-user"]%}
+    <li class="nav-item">
+        <a class="nav-link" href="#">
+            <i class="fas fa-laugh-wink"></i>
+            <span>myCompany</span></a>
+    </li>
     <li class="nav-item">
         <a class="nav-link" href="{{url_for('charts')}}">
             <i class="fas fa-laugh-wink"></i>

@@ -27,19 +27,18 @@ def home():
 #-----> registrazione
 @app.route("/registrazione")#PAGINA
 def registrazione(): return render_template("user/register.html")
-@app.route("/fetchRegister", methods=["POST"])#FUNZIONE
+@app.route("/fetchRegister", methods=["POST"])#GESTIONE
 def logicaRegistrazione(): return REGISTER(request, bcrypt, DB, redirect, url_for, dt, Token)
 #-----> login 
 @app.route("/login")#PAGINA
 def login(): return render_template("user/login.html")
-@app.route("/fetchUtente", methods=["POST"])#FUNZIONE
+@app.route("/fetchUtente", methods=["POST"])#GESTIONE
 def logicaLogin(): return LOGIN(request, DB, listaColleghi, session, bcrypt, redirect, url_for)        
 #-----> resetPassword
 @app.route("/resetPassword")#PAGINA
 def resetPassword(): return render_template("user/forgot-password.html")
-@app.route("/fetchResetPassword", methods=["POST"])#FUNZIONE
+@app.route("/fetchResetPassword", methods=["POST"])#GESTIONE
 def logicaResetPassword(): return reset_password(request, bcrypt, DB, redirect, url_for)
-  
 #LOGOUT
 @app.route('/logout')
 def logout():
@@ -49,8 +48,7 @@ def logout():
     session['demo'] = True
     return redirect(url_for('home'))
 
-
-#*************************************************************************************************** Principale
+#*PRINCIPALE
 @app.route("/HOME")
 def HOME():
     if session.get('demo') == "spike-user":
@@ -65,7 +63,7 @@ def HOME():
     else:
         return render_template("informazioni/404.html")
 
-#PAGINE
+#*************************************************************************************************** Pagine +
 @app.route("/charts")
 def charts():
     if session.get('demo') in ["user", "referente", "spike-user", "spike-admin"]:
@@ -154,9 +152,7 @@ def b(a,b,c,d):
         for A in DB['companies'].find({}, {"name":1}):
             notifica(a,b,c,d,A)
 
-
-
-#*************************************************************************************************** Pagine AMMINISTRATORI
+#*************************************************************************************************** Pagine ++
 @app.route("/adminCheck")
 def adminCheck():
     if session.get('demo') == ["spike-admin", "admin"]:
@@ -244,31 +240,6 @@ def utenti___superadmin():
                            ragionesociale=u['azienda']['nome']
                            )
 
-@app.route("/Tickets")
-def Tickets():
-    u = session.get('utente')
-
-    tiks = []
-    if session.get('demo') in ["user", "spike-user"]: gestione_Ticktes___user(DB, tiks, u['utente']['contatti']['email'])
-
-    elif session.get('demo') == "spike-admin": gestione_Tickets___admin(DB, tiks)
-                  
-    try:
-        l=len(session['notifica'][0]['altri'])
-    except: l = 0
-    usersL = len(session.get('users'))
-
-
-    return render_template("/tickets.html",
-                           Nmes = l, 
-                           amici = session.get('users'), 
-                           N_amici =usersL -1, 
-                           links = tiks, 
-                           nome = u['utente']['identificazione']['nome'], 
-                           check= session.get('demo'), 
-                           ruolo = session.get("demo"), 
-                           ragionesociale=u['azienda']['nome'])
-
 @app.route("/superadmin/aziende")
 def aziende___superadmin(): 
     if session.get('demo') in [ "spike-admin", "admin"]:
@@ -306,12 +277,33 @@ def check_aziende___superadmin():
         aziende = DB['companies'].find()
         return jsonify(aziende)
 
-@app.route("/superadmin/report")
-def report___superadmin(): return render_template("Admin/report.html")
+@app.route("/Tickets")
+def Tickets():
+    u = session.get('utente')
 
+    tiks = []
+    if session.get('demo') in ["user", "spike-user"]: gestione_Ticktes___user(DB, tiks, u['utente']['contatti']['email'])
+
+    elif session.get('demo') == "spike-admin": gestione_Tickets___admin(DB, tiks)
+                  
+    try:
+        l=len(session['notifica'][0]['altri'])
+    except: l = 0
+    usersL = len(session.get('users'))
+
+
+    return render_template("/tickets.html",
+                           Nmes = l, 
+                           amici = session.get('users'), 
+                           N_amici =usersL -1, 
+                           links = tiks, 
+                           nome = u['utente']['identificazione']['nome'], 
+                           check= session.get('demo'), 
+                           ruolo = session.get("demo"), 
+                           ragionesociale=u['azienda']['nome'])
 
 #*************************************************************************************************** ALTRO    
-#area azienda
+#GESTIONE AZIONI (elimina - modifica - dettaglio)
 @app.route("/<ID>/<azione>")
 def area_azienda(ID, azione):
     if session.get("demo") == "spike-admin":
@@ -324,27 +316,13 @@ def area_azienda(ID, azione):
 
         return Gestione(azione, DB, render_template, ID, session, l, usersL)
 
-        
-
-
-
 #Help
 @app.route("/Help")
 def HELP(): return render_template('componenti/Help.html')  
-'''
-@app.route("/modificaDB", methods=['POST'])
-def modificaDB():
-    if session.get("demo") in ["admin", "superadmin"]:
-        utente = request.json
 
-        cur = connPOSTGRES.cursor()
-        risposta = modify_DB(utente, cur, connPOSTGRES)
-        cur.close()
-    
-        return jsonify(risposta)
-'''
-
-
+#REPORT GENERALE DB
+@app.route("/superadmin/report")
+def report___superadmin(): return render_template("Admin/report.html")
 
 #Check
 @app.route("/messaggi", methods=['GET'])
