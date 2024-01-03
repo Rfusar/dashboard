@@ -249,7 +249,6 @@ def aziende___superadmin():
             company = DB['companies'].find({"name":{"$ne": u['azienda']['nome']}}) 
             
             
-            
         elif session.get("demo") == "admin":
             company = DB['companies'].find({'name': u['azienda']['nome']})
 
@@ -303,7 +302,7 @@ def Tickets():
                            ragionesociale=u['azienda']['nome'])
 
 #*************************************************************************************************** ALTRO    
-#GESTIONE AZIONI (elimina - modifica - dettaglio)
+#GESTIONE PAGINE -> modifica/dettaglio
 @app.route("/<ID>/<azione>")
 def area_azienda(ID, azione):
     if session.get("demo") == "spike-admin":
@@ -315,6 +314,113 @@ def area_azienda(ID, azione):
         usersL = len(session.get('users'))
 
         return Gestione(azione, DB, render_template, ID, session, l, usersL)
+
+#GESTIONE FETCH -> modifica/elimina
+@app.route("/modificaDB/<azione>", methods=['POST'])
+def modificaDB(azione):
+
+    def elimina(Collection, ID):
+            for id in DB[Collection].find({}, {"_id":1}):
+                if str(id) == ID:  
+                    DB[Collection].delete_one({"_id": id})
+
+    def modifica(self):
+        ...
+
+    if session.get('demo') in ["spike-admin", "referent"]:
+        if azione == "elimina":
+            nome_foglio = request.json.get('nomeFoglioHTML')
+            ID = request.json.get('ID')
+            if nome_foglio == "Lista aziende": elimina("companies", ID)
+            elif nome_foglio == "Lista utenti": elimina("users", ID)
+
+        elif azione == "modifica":
+
+            if request.form.get('modificaAzienda'):
+                partitaIVA = request.form.get('vatNum')
+                nome = request.form.get('name')
+                email = request.form.get('contact-email')
+                phone = request.form.get('contact-phone')
+                via = request.form.get('address-street')
+                citta = request.form.get('address-city')
+                provincia = request.form.get('address-state')
+                cap = request.form.get('address-postalCode')
+                stato = request.form.get('address-country')
+
+                for company in DB['companies'].find():
+                    if partitaIVA == company['vatNum']:
+                        cambio = {"$set": {
+                            "name": nome,
+                            "vatNum": partitaIVA,
+                            "contact": {
+                                "phone": phone,
+                                "email": email,
+                            },
+                            "address": {
+                                "street": via,
+                                "city": citta,
+                                "state": provincia,
+                                "postalCode": cap,
+                                "country": stato,
+                            }
+                        }}
+                        DB['companies'].update_one({"_id": company["_id"]}, cambio)
+                    return redirect(url_for('aziende___superadmin'))
+            
+            elif request.form.get('modificaUtente'):
+                nome = request.form.get('name-fisrtName')
+                cognome = request.form.get('name-lastName')
+                email = request.form.get('contact-email')
+                phone = request.form.get('contact-phone')
+                ruolo = request.form.get('role')
+                ruolo_business = request.form.get('businessRole')
+
+                vecchiaPassword = request.form.get('vecchiaPassword')
+                nuovaPassword = request.form.get('password')
+
+                if vecchiaPassword == "" and nuovaPassword == "":
+                    for user in DB['users'].find():
+                        if email == user['contact']['email']:
+
+                            cambio = {"$set": {
+                                "name": {
+                                    "fisrtName": nome,
+                                    "lastName": cognome
+                                },
+                                "contact": {
+                                    "phone": phone,
+                                    "email": email,
+                                },
+                                "role": ruolo,
+                                "businessRole": ruolo_business,
+                            }}
+                            DB['users'].update_one({"_id":user['_id']}, cambio)
+                else:
+                    for user in DB['users'].find():
+                        if email == user['contact']['email']:
+                            if bcrypt.checkpw(vecchiaPassword.encode('utf-8'), user['password']):
+                                cambio = {"$set": {
+                                    "name": {
+                                        "fisrtName": nome,
+                                        "lastName": cognome
+                                    },
+                                    "contact": {
+                                        "phone": phone,
+                                        "email": email,
+                                    },
+                                    "role": ruolo,
+                                    "businessRole": ruolo_business,
+                                    "password": nuovaPassword
+                                }}
+                                DB['users'].update_one({"_id":user['_id']}, cambio)
+                return redirect(url_for('utenti___superadmin'))
+
+
+            
+        
+     
+
+
 
 #Help
 @app.route("/Help")
@@ -378,7 +484,7 @@ def registrazione_documento_api(): return FUNCS_API(API___documento, request, No
 COSE DA FARE:
     - Gestione tickets
         - capire assegnedTO ??? a spike_iniva oppure no?
-        - capire person ??? a spike_iniva oppure no?
+        - capire person ??? a spike_invia oppure no?
     - Query Documenti (voce: file)
         --rilascio link?
 

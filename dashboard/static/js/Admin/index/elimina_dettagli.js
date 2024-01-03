@@ -27,16 +27,19 @@ function gestione___ELI_MOD_DET(identificativo, pathFisso, pathFinale) {
             if (identificativo[1] == "e" && pathFinale[pathFinale.length - 1] == "e") {
                 document.querySelectorAll(identificativo).forEach((e, i) => {
                     e.addEventListener('click', () => {
-                        const R = window.confirm("sei sicuro di eliminare l'utente?")
-                        if (R) {
-                            fetch("/modificaDB", {
-                                method: 'POST',
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({
-                                    "email": document.querySelectorAll('.email_utente')[i].textContent,
-                                    "elimina": true
+                        if (window.confirm("sei sicuro di eliminare da DataBase?")) {
+                            (async () => {
+                                const res = await fetch("/modificaDB", {
+                                    method: 'POST',
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({
+                                        "ID": document.querySelectorAll('.Ragionesociale')[i].getAttribute('value'),
+                                        "nomeFoglioHTML": document.title
+                                    })
                                 })
-                            }).then(res => res.json()).then(d => { document.querySelector('#risposta').textContent = `${d}... aggiorna la pagina` })
+                                const data = await res.json()
+                                console.log(data)
+                            })()
                         }
                     })
                 })
@@ -48,6 +51,27 @@ function gestione___ELI_MOD_DET(identificativo, pathFisso, pathFinale) {
                 })
             }
             //*PAGINA => listaAziende
+            else if (identificativo[1] == "e" && pathFinale[pathFinale.length - 1] == "a") {
+                document.querySelectorAll(identificativo).forEach((e, i) => {
+                    e.addEventListener('click', () => {
+                        if (window.confirm("sei sicuro di eliminare da DataBase?")) {
+                            (async () => {
+                                const res = await fetch("/modificaDB/elimina", {
+                                    method: 'POST',
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({
+                                        "ID": document.querySelectorAll('.Ragionesociale')[i].getAttribute('value'),
+                                        "nomeFoglioHTML": document.title
+                                    })
+                                })
+                                const data = await res.json()
+                                console.log(data)
+                            })()
+                        }
+                    })
+                })
+            }
+
             else if (identificativo[1] != "e" && pathFinale[pathFinale.length - 1] == "a") {
                 let valore = document.querySelectorAll('.Ragionesociale')
                 let img = document.querySelectorAll(identificativo)

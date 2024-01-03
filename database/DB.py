@@ -25,6 +25,8 @@ DB = client[DATABASE[1]]
 
 
 
+
+
 '''
 for collection in COLLECTIONS: 
     DB[collection].delete_many({})
@@ -35,6 +37,9 @@ password = bcrypt.hashpw(password0.encode('utf-8'), bcrypt.gensalt(12))
 databaseDEFAULT(DB, COLLECTIONS, dt, password)
 
 '''
+
+
+
 
 
 

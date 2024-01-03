@@ -45,36 +45,36 @@
                 <div style="height: max-content; margin-top: 5%;font-size: 30px;">
                     <div class="container-fluid" style="display: flex; justify-content: center;">
                         <!--FORM-->
-                        <form action="/fetchRegister" method="post" class="user" style="width: 60%;">
+                        <form action="/modificaDB/modifica" method="post" class="user" style="width: 60%;" name="modificaUtente">
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                     <input type="text" class="form-control form-control-user FORM" id="exampleFirstName"
-                                        name="nome" placeholder="Nome" value="{{user['name']['firstName']}}">
+                                        name="name-firstName" placeholder="Nome" value="{{user['name']['firstName']}}">
                                 </div>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control form-control-user FORM" id="exampleLastName"
-                                        name="cognome" placeholder="Cognome" value="{{user['name']['lastName']}}">
+                                        name="name-lastName" placeholder="Cognome" value="{{user['name']['lastName']}}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                     <input type="email" class="form-control form-control-user FORM"
-                                        id="exampleInputEmail" name="email" placeholder="Email"
+                                        id="exampleInputEmail" name="contact-email" placeholder="Email"
                                         value="{{user['contact']['email']}}">
                                 </div>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control form-control-user FORM" id="telefono"
-                                        name="telefono" placeholder="Telelefono" value="{{user['contact']['phone']}}">
+                                        name="contact-phone" placeholder="Telelefono" value="{{user['contact']['phone']}}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="email" class="form-control form-control-user FORM" id="exampleRole"
-                                        name="ruolo" placeholder="Ruolo" value="{{user['role']}}">
+                                    <input type="text" class="form-control form-control-user FORM" id="exampleRole"
+                                        name="role" placeholder="Ruolo" value="{{user['role']}}">
                                 </div>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control form-control-user FORM" id="exampleBusinessRole"
-                                        name="businessRuolo" placeholder="RuoloBusiness"
+                                        name="businessRole" placeholder="RuoloBusiness"
                                         value="{{user['businessRole']}}">
                                 </div>
                             </div>
